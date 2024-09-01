@@ -1,1 +1,46 @@
-114514
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>中考倒计时 - C2201|中考必胜</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="css/styles.css">
+	</head>
+	<body>
+		<header>
+	        <nav class="navbar">
+	        	<div class="brand">C2201</div>
+	            <a href="https://c2201.github.io/">首页</a>
+	            <a href="https://c2201.github.io/countdown/">中考倒计时</a>
+	            <a href="https://c2201.github.io/chicken-soup/">心灵鸡汤</a>
+	        </nav>
+    	</header>
+    	<br>
+    	<br>
+    	<br>
+		<div class="small-title">距离2025年中考仅剩</div>
+    	<div id="daysUntil" class="big-title"></div>
+    	<div id="currentDateTime" class="small-title"></div>
+
+	    <script>
+	        function calculateDaysUntil(targetDate) {
+	            const currentDate = new Date();
+	            const target = new Date(targetDate);
+	            const timeDifference = target - currentDate;
+	            const days = Math.ceil(timeDifference / (1000 * 3600 * 24));
+	            return days;
+	        }
+	        const targetDate = new Date(2025, 5, 18);
+	        const daysUntil = calculateDaysUntil(targetDate);
+	        document.getElementById("daysUntil").innerHTML = `${daysUntil}天`;
+	        function displayCurrentDateTime() {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString();
+            const timeStr = now.toLocaleTimeString();
+            const dateTimeStr = `当前时间：${dateStr} ${timeStr}`;
+            document.getElementById("currentDateTime").innerHTML = dateTimeStr;
+        }
+        displayCurrentDateTime();
+        setInterval(displayCurrentDateTime, 1000);
+	    </script>
+	</body>
+</html>
