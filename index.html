@@ -4,7 +4,7 @@
     <title>中考倒计时 - C2201|中考必胜</title>
     <meta charset="utf-8">
     <style>
-    	/* 新增卡片样式 */
+    	/* 卡片样式（暂时没用） */
 		.term-card {
 		    position: absolute;
 		    background: white;
@@ -48,11 +48,11 @@
 		    color: #444;
 		}
 
-		/* 时间部分样式 */
+		/* 时间样式 */
         .time-section {
-		    font-family: 'Microsoft YaHei', sans-serif; /* 替换字体 */
+		    font-family: 'Microsoft YaHei', sans-serif;
 		    font-size: 40px;
-		    letter-spacing: 0; /* 去除字间距 */
+		    letter-spacing: 0;
 		    color: #1b5e20;
 		    margin: 8px 0;
 		    display: block;
@@ -62,9 +62,9 @@
         /* 日期样式 */
         .date-section {
 	        font-family: STZhongsong, serif;
-	        font-size: 18px;  /* 原16px */
+	        font-size: 18px;
 	        color: #666;
-	        letter-spacing: 0.5px;  /* 新增字间距 */
+	        letter-spacing: 0.5px;
 	        white-space: nowrap;  /* 防止换行 */
 	        display: block;
     		width: 100%;
@@ -86,13 +86,13 @@
         #currentDateTime {
 		    position: absolute;
 		    top: 78px;
-		    left: 25px;  /* 恢复原有定位 */
+		    left: 25px;
 		    z-index: 100;
 		    background: rgba(255,255,255,0.9);
 		    padding: 15px 25px;
 		    border-radius: 8px;
 		    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-		    text-align: center;  /* 新增文本居中 */
+		    text-align: center;
 		    min-width: 210px;
 		}
  
@@ -212,7 +212,7 @@
             transform: translateX(30%);
         }
 
-        /* 新增作息提示样式 */
+        /* 作息提示样式 */
         .schedule-container {
             position: absolute;
             top: 220px;
@@ -249,8 +249,8 @@
         }
 
         .timetable-item {
-		    font-size: 24px;  /* 字体调大 */
-		    font-family: STKaiti, cursive;  /* 改为楷体 */
+		    font-size: 24px;
+		    font-family: STKaiti, cursive;
 		    line-height: 1.8;
 		}
     </style>
@@ -272,7 +272,7 @@
         <div class="date-section">????年??月??日 星期?</div>
     </div>
 
-    <!-- 新增作息提示容器 -->
+    <!-- 作息提示容器 -->
     <div id="scheduleContainer" class="schedule-container">
         <div class="schedule-item">
             <span class="schedule-title">当前作息：</span>
@@ -303,7 +303,7 @@
     <div id="goldenPhrase"></div>
  
     <script>
-    	// 新增作息表数据
+    	// 作息表数据
         const schedule = {
             weekday: [
                 ["7:00-7:30", "早餐"],
@@ -342,7 +342,7 @@
             ]
         };
 
-        // 新增课程表数据
+        // 课程表数据
         const timetable = {
             monday: ["数学","英语","政治","物理","语文","语文","化学","数学","数学"],
             tuesday: ["英语","数学","数学","语文","体育","历史","政治","语文","历史"],
@@ -351,13 +351,13 @@
             friday: ["数学","语文","英语","体育","物理","化学","班会","文体活动","文体活动"]
         };
 
-        // 修改后的时间转换函数
+        // 时间转换函数
 		function timeToMinutes(time) {
 		    const [h, m] = time.split(':').map(Number);
 		    return h * 60 + m;
 		}
 
-        // 修改后的获取当前作息函数
+        // 获取当前作息函数
 		function getCurrentSchedule() {
 		    const now = new Date();
 		    const day = now.getDay();
@@ -440,7 +440,7 @@
                     nextText = getCourseName(day, nextLessonIndex);
                 }
             }
-            document.getElementById('nextSchedule').textContent   = nextText || "今日课程已结束";
+            document.getElementById('nextSchedule').textContent   = nextText || "课程已结束";
 
 		    // 今日课表
 		    if(day >=1 && day <=5) {
@@ -450,11 +450,11 @@
 		        ).join('');
 		    } else {
 		        document.getElementById('todayTimetable').innerHTML   = 
-		            '<div class="timetable-item">周末无固定课表</div>';
+		            '<div class="timetable-item">周末无课表</div>';
 		    }
 		}
 
-        // 节气数据（2025年）
+        // 节气数据（部分）（2025年）
         const solarTerms = [
             { name: '立春', month: 1, day: 3, color: '#8bc34a' },
             { name: '雨水', month: 1, day: 18, color: '#8bc34a' },
@@ -469,7 +469,7 @@
  
         // 金句功能配置 
         const GOLDEN_API = 'https://zj.v.api.aa1.cn/api/wenan-zl/'; 
-        const localPhrases = [
+        const localPhrases = [ // api失效时使用
             "宝剑锋从磨砺出，梅花香自苦寒来",
             "千淘万漉虽辛苦，吹尽狂沙始到金",
             "青春须早为，岂能长少年"
