@@ -4,54 +4,80 @@
     <title>中考倒计时 - C2201|中考必胜</title>
     <meta charset="utf-8">
     <style>
-    	/* 卡片样式（暂时没用） */
-		.term-card {
-		    position: absolute;
-		    background: white;
-		    border-radius: 12px;
-		    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-		    width: 280px;
-		    padding: 20px;
-		    z-index: 500;
-		    opacity: 0;
-		    transform: translateY(10px);
-		    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-		    pointer-events: none;
-		}
-		 
-		.term-card.active  {
-		    opacity: 1;
-		    transform: translateY(0);
-		    pointer-events: auto;
-		}
-		 
-		.term-card-title {
-		    font-family: STKaiti, cursive;
-		    font-size: 28px;
-		    text-align: center;
-		    margin-bottom: 15px;
-		    color: #1b5e20;
-		}
-		 
-		.term-card-image {
-		    width: 100%;
-		    height: 180px;
-		    border-radius: 8px;
-		    object-fit: cover;
-		    margin-bottom: 15px;
-		}
-		 
-		.term-card-desc {
-		    font-family: 'Microsoft YaHei', sans-serif;
-		    font-size: 14px;
-		    line-height: 1.6;
-		    color: #444;
-		}
+        /* 节气卡片样式 */
+        .solar-card {
+            position: absolute;
+            top: calc(100% + 20px);
+            left: 50%;
+            transform: translateX(-50%);
+            width: 500px;
+            background: rgba(255,255,255,0.96);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+            z-index: 300;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .solar-card::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 10px solid transparent;
+            border-bottom-color: rgba(255,255,255,0.96);
+        }
+
+        .solar-card.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .solar-card h3 {
+            text-align: center;
+            margin: 0 0 15px;
+            font-size: 24px;
+            color: #1b5e20;
+            font-family: STZhongsong, serif;
+        }
+
+        .solar-card img {
+            width: 160px;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .solar-card p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #444;
+            margin: 0;
+            font-family: 'Microsoft YaHei';
+            flex-grow: 1;
+            text-align: left;
+            text-indent: 2em;
+        }
+
+        /.solar-term-marker {
+            transition: all 0.3s ease;
+        }
+
+        .solar-card {
+            transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+        }
 
 		/* 时间样式 */
         .time-section {
-		    font-family: 'Microsoft YaHei', sans-serif;
-		    font-size: 40px;
+		    font-family: 'STZh', sans-serif;
+		    font-size: 44px;
 		    letter-spacing: 0;
 		    color: #1b5e20;
 		    margin: 8px 0;
@@ -61,8 +87,8 @@
 
         /* 日期样式 */
         .date-section {
-	        font-family: STZhongsong, serif;
-	        font-size: 18px;
+	        font-family: 'Microsoft YaHei', serif;
+	        font-size: 22px;
 	        color: #666;
 	        letter-spacing: 0.5px;
 	        white-space: nowrap;  /* 防止换行 */
@@ -77,7 +103,7 @@
             font-size: 24px;
             color: #1b5e20;
             min-height: 40px;
-            font-family: STKaiti, cursive;
+            font-family: STZhongSong, cursive;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
             transition: opacity 0.5s;
         }
@@ -93,7 +119,7 @@
 		    border-radius: 8px;
 		    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 		    text-align: center;
-		    min-width: 210px;
+		    min-width: 180px;
 		}
  
         /* 基础样式 */
@@ -219,27 +245,32 @@
             left: 25px;
             z-index: 100;
             background: rgba(255,255,255,0.9);
-            padding: 15px 25px;
+            padding: 18px 25px;
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            min-width: 210px;
+            min-width: 180px;
         }
 
         .schedule-item {
-            font-family: 'Microsoft YaHei', sans-serif;
-            margin: 8px 0;
+            font-family: 'STZhongSong', sans-serif;
+            margin: 12px 0;
         }
 
         .schedule-title {
-            font-size: 24px;
+            display: block;
+            font-size: 20px;
             color: #1b5e20;
             font-weight: 600;
+            text-align: left;
         }
 
         .schedule-value {
-            font-size: 24px;
+            display: block;
+            font-size: 22px;
             color: #2d2d2d;
-            margin-left: 8px;
+            text-align: center;
+            margin: 4px 0 0;
+            padding: 2px 0;
         }
 
         .timetable {
@@ -249,9 +280,10 @@
         }
 
         .timetable-item {
-		    font-size: 24px;
-		    font-family: STKaiti, cursive;
+		    font-size: 22px;
+		    font-family: STZhongSong, cursive;
 		    line-height: 1.8;
+            text-align: center;
 		}
     </style>
 </head>
@@ -268,14 +300,14 @@
  
     <!-- 实时时钟 -->
     <div id="currentDateTime">
-        <div class="time-section">??:??:??</div>
-        <div class="date-section">????年??月??日 星期?</div>
+        <div class="time-section"></div>
+        <div class="date-section"></div>
     </div>
 
     <!-- 作息提示容器 -->
     <div id="scheduleContainer" class="schedule-container">
         <div class="schedule-item">
-            <span class="schedule-title">当前作息：</span>
+            <span class="schedule-title">当前：</span>
             <span class="schedule-value" id="currentSchedule">加载中...</span>
         </div>
         <div class="schedule-item">
@@ -287,7 +319,7 @@
  
     <!-- 主内容 -->
     <div class="small-title">距离2025年中考仅剩</div>
-    <div id="daysUntil" class="big-title">加载中...</div>
+    <div id="daysUntil" class="big-title"></div>
  
     <!-- 时间轴 -->
     <div class="timeline-container">
@@ -363,7 +395,7 @@
 		    const day = now.getDay();
 		    const currentMinutes = now.getHours() * 60 + now.getMinutes();
 
-		    if(day === 0 || day === 6) return {current: "周末自主安排", nextLesson: ""};
+		    if(day === 0 || day === 6) return {current: "周末", nextLesson: ""};
 
 		    const todaySchedule = schedule.weekday;
 		    let current = "";
@@ -440,13 +472,13 @@
                     nextText = getCourseName(day, nextLessonIndex);
                 }
             }
-            document.getElementById('nextSchedule').textContent   = nextText || "课程已结束";
+            document.getElementById('nextSchedule').textContent   = nextText || "无";
 
 		    // 今日课表
 		    if(day >=1 && day <=5) {
 		        const courses = timetable[Object.keys(timetable)[day-1]];
 		        document.getElementById('todayTimetable').innerHTML   = courses.map((c,i)   => 
-		            `<div class="timetable-item">第${i+1}节：${c}</div>`
+		            `<div class="timetable-item">${i+1}&nbsp;${c}</div>`
 		        ).join('');
 		    } else {
 		        document.getElementById('todayTimetable').innerHTML   = 
@@ -456,23 +488,207 @@
 
         // 节气数据（部分）（2025年）
         const solarTerms = [
-            { name: '立春', month: 1, day: 3, color: '#8bc34a' },
-            { name: '雨水', month: 1, day: 18, color: '#8bc34a' },
-            { name: '惊蛰', month: 2, day: 5, color: '#8bc34a' },
-            { name: '春分', month: 2, day: 20, color: '#8bc34a' },
-            { name: '清明', month: 3, day: 4, color: '#8bc34a' },
-            { name: '谷雨', month: 3, day: 20, color: '#8bc34a' },
-            { name: '立夏', month: 4, day: 5, color: '#4caf50' },
-            { name: '小满', month: 4, day: 21, color: '#4caf50' },
-            { name: '芒种', month: 5, day: 5, color: '#4caf50' }
-        ];
+        { 
+            name: '立春', 
+            month: 1, 
+            day: 3, 
+            color: '#a5d6a7',
+            image: 'images/立春.png',
+            desc: '立春是二十四节气之首，标志着冬天的结束和春天的开始。此时气温开始回暖，万物复苏，东风送暖，柳树发芽，梅花绽放。古代有迎春仪式和咬春习俗，人们祈求新年吉祥如意。'
+        },
+        { 
+            name: '雨水', 
+            month: 1, 
+            day: 18, 
+            color: '#8bc34a',
+            image: 'images/雨水.png',
+            desc: '雨水节气正值仲春之初，气温继续回升，降水增多，冰雪融化。这个时节适宜春耕备耕，农民开始忙碌农事。古人有"獭祭鱼"、"鸿雁来"等物候现象观察记载。'
+        },
+        { 
+            name: '惊蛰', 
+            month: 2, 
+            day: 5, 
+            color: '#7cb342',
+            image: 'images/惊蛰.png',
+            desc: '惊蛰时节春雷始鸣，蛰伏的昆虫被惊醒而出。此时桃花盛开，杏花怒放，田间地头一片繁忙景象。古有"桃始华"、"仓庚鸣"的物候特征。'
+        },
+        { 
+            name: '春分', 
+            month: 2, 
+            day: 20, 
+            color: '#69a63d',
+            image: 'images/春分.png',
+            desc: '春分日昼夜平分，标志着春季中期。此时莺飞草长，小麦拔节孕穗，农事活动进入繁忙阶段。民间有竖蛋游戏和祭日习俗。'
+        },
+        { 
+            name: '清明', 
+            month: 3, 
+            day: 4, 
+            color: '#5d9536',
+            image: 'images/清明.png',
+            desc: '清明时节气温升高，春雨绵绵滋润大地。这是扫墓祭祖的重要日子，也是踏青赏花的好时机。古代有蹴鞠、荡秋千等娱乐活动。'
+        },
+        { 
+            name: '谷雨', 
+            month: 3, 
+            day: 20, 
+            color: '#4d802e',
+            image: 'images/谷雨.png',
+            desc: '谷雨是春季最后一个节气，降雨量增加利于谷物生长。此时牡丹盛开，茶树抽新芽，农忙季节全面到来。有"萍始生"、"鸣鸠拂其羽"等物候现象。'
+        },
+        { 
+            name: '立夏', 
+            month: 4, 
+            day: 5, 
+            color: '#467930',
+            image: 'images/立夏.png',
+            desc: '立夏标志着夏季的开始，气温显著上升。此时蝼蝈鸣叫，蚯蚓出地面，王瓜开始生长。古代有"迎夏"仪式和尝新活动。'
+        },
+        { 
+            name: '小满', 
+            month: 4, 
+            day: 21, 
+            color: '#3d6826',
+            image: 'images/小满.png',
+            desc: '小满时节麦类作物籽粒开始饱满但未成熟。此时蚕结茧，菜子成熟可以收割。农谚有"小满小满，麦粒渐满"的说法。'
+        },
+        { 
+            name: '芒种', 
+            month: 5, 
+            day: 5, 
+            color: '#30571f',
+            image: 'images/芒种.png',
+            desc: '芒种是农忙时节，北方麦收南方插秧。此时梅子成熟，天气潮湿闷热。农谚说"芒种忙忙种"，抓紧时间播种作物。'
+        },
+        { 
+            name: '夏至', 
+            month: 5, 
+            day: 21, 
+            color: '#254517',
+            image: '夏至.png',
+            desc: '夏至日北半球白昼最长，标志着盛夏到来。此时蝉鸣阵阵，荷花盛开，农作物生长旺盛。古人有祭天仪式和消夏活动。'
+        },
+        { 
+            name: '小暑', 
+            month: 6, 
+            day: 7, 
+            color: '#1c3611',
+            image: '小暑.png',
+            desc: '小暑时节天气逐渐炎热，雷雨增多。此时蟋蟀开始在墙角鸣叫，鹰隼捕食更加频繁。农谚有"小暑大暑，灌死老鼠"的说法。'
+        },
+        { 
+            name: '大暑', 
+            month: 6, 
+            day: 22, 
+            color: '#122408',
+            image: '大暑.png',
+            desc: '大暑是一年中最热的时节，高温酷暑考验着万物生长。此时荷花盛开至极，雷阵雨频繁出现。古人有饮伏茶、晒伏姜的习俗。'
+        },
+        { 
+            name: '立秋', 
+            month: 7, 
+            day: 7, 
+            color: '#1a3a4a',
+            image: '立秋.png',
+            desc: '立秋标志着秋天的开始，气温由热转凉。此时早晚温差加大，稻谷抽穗扬花。古人有"贴秋膘"、"啃秋"等习俗。'
+        },
+        { 
+            name: '处暑', 
+            month: 7, 
+            day: 23, 
+            color: '#2d4d5d',
+            image: '处暑.png',
+            desc: '处暑时节暑气消退，秋意渐浓。此时农作物进入成熟期，农民开始收割。古代有"祭蜡"和"迎秋"仪式。'
+        },
+        { 
+            name: '白露', 
+            month: 8, 
+            day: 7, 
+            color: '#3d5d6d',
+            image: '白露.png',
+            desc: '白露时节天气转凉，清晨露水凝结成霜。此时鸿雁南飞，菊花开放。农谚有"白露白茫茫，无谷满粮仓"的说法。'
+        },
+        { 
+            name: '秋分', 
+            month: 8, 
+            day: 23, 
+            color: '#4d6d7d',
+            image: '秋分.png',
+            desc: '秋分日昼夜平分，标志着秋季中期。此时秋高气爽，桂花飘香。古代有"竖蛋"和"送秋牛"的习俗。'
+        },
+        { 
+            name: '寒露', 
+            month: 9, 
+            day: 8, 
+            color: '#5d7d8d',
+            image: '寒露.png',
+            desc: '寒露时节气温降低，露水寒冷凝结。此时菊花盛开至极，农事进入抢收阶段。古人有赏菊和饮菊花酒的习俗。'
+        },
+        { 
+            name: '霜降', 
+            month: 9, 
+            day: 23, 
+            color: '#6d8da7',
+            image: '霜降.png',
+            desc: '霜降是秋季最后一个节气，天气渐冷初霜出现。此时柿子成熟红透，枫叶变红。农谚有"霜降见霜，米谷满仓"的说法。'
+        },
+        { 
+            name: '立冬', 
+            month: 10, 
+            day: 7, 
+            color: '#7d9dc3',
+            image: '立冬.png',
+            desc: '立冬标志着冬季的开始，气温明显下降。此时水始冰地始冻，农民开始准备越冬作物。古代有"贺冬"和"补冬"的习俗。'
+        },
+        { 
+            name: '小雪', 
+            month: 10, 
+            day: 22, 
+            color: '#8da6d9',
+            image: '小雪.png',
+            desc: '小雪时节天气寒冷降雪开始。此时阴气下降阳气上升，农事进入冬闲时期。古人有腌制腊肉和观赏雪景的习俗。'
+        },
+        { 
+            name: '大雪', 
+            month: 11, 
+            day: 7, 
+            color: '#9fb4e6',
+            image: '大雪.png',
+            desc: '大雪时节降雪量增加天气更加寒冷。此时鹖鸟不鸣虎始交，农事基本结束进入农闲。古人有赏雪和制作腊肉的习俗。'
+        },
+        { 
+            name: '冬至', 
+            month: 11, 
+            day: 21, 
+            color: '#b3c2ec',
+            image: '冬至.png',
+            desc: '冬至日北半球白昼最短标志着寒冬到来。此时蚯蚓结麋角解水泉动，古代有"冬至大如年"的说法和祭祀活动。'
+        },
+        { 
+            name: '小寒', 
+            month: 12, 
+            day: 6, 
+            color: '#c5d1f0',
+            image: '小寒.png',
+            desc: '小寒时节天气寒冷但未达极点。此时雁北乡鹊始巢雉雊鸲，农事基本停止进入农闲。古人有"数九消寒"的习俗。'
+        },
+        { 
+            name: '大寒', 
+            month: 12, 
+            day: 20, 
+            color: '#d9e0ff',
+            image: '大寒.png',
+            desc: '大寒是一年中最冷时节标志着冬季尾声。此时鸡乳泽腹水泉动，农事全部结束准备过年。古人有"除旧布新"的习俗迎接新春到来。'
+        }
+    ];
  
         // 金句功能配置 
         const GOLDEN_API = 'https://zj.v.api.aa1.cn/api/wenan-zl/'; 
         const localPhrases = [ // api失效时使用
-            "宝剑锋从磨砺出，梅花香自苦寒来",
-            "千淘万漉虽辛苦，吹尽狂沙始到金",
-            "青春须早为，岂能长少年"
+            "宝剑锋从磨砺出，梅花香自苦寒来。",
+            "千淘万漉虽辛苦，吹尽狂沙始到金。",
+            "青春须早为，岂能长少年。",
+            "冷知识：一加一其实等于二。"
         ];
  
         // 生成节气标记 
@@ -509,7 +725,7 @@
                 marker.addEventListener('mouseover',  () => {
                     if (!isPast) {
                         marker.style.transform  = 'translateX(-50%) scale(1.1)';
-                        marker.style.filter  = 'drop-shadow(0 4px 6px rgba(0,0,0,0.15))';
+                        // marker.style.filter  = 'drop-shadow(0 4px 6px rgba(0,0,0,0.15))';
                     }
                 });
                 marker.addEventListener('mouseout',  () => {
@@ -518,6 +734,29 @@
                 });
  
                 timeline.appendChild(marker); 
+
+                // 创建卡片
+                const card = document.createElement('div');
+                card.className = 'solar-card';
+                card.innerHTML = `
+                    <h3>${term.name}</h3>
+                    <img src="${term.image}" alt="${term.name}">
+                    <p>${term.desc}</p>
+                `;
+                marker.appendChild(card);
+
+                // 点击事件处理
+                marker.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const allCards = document.querySelectorAll('.solar-card');
+                    allCards.forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                });
+            });
+
+            // 点击其他区域隐藏卡片
+            document.addEventListener('click', () => {
+                document.querySelectorAll('.solar-card').forEach(c => c.classList.remove('active'));
             });
         }
  
@@ -565,7 +804,7 @@
  
             document.getElementById('currentDateTime').innerHTML  = `
                 <div class="time-section">${hh}:${mm}:${ss}</div>
-                <div class="date-section">${yyyy}年${m}月${d}日 星期${week}</div>
+                <div class="date-section">${yyyy}/${m}/${d} 周${week}</div>
             `;
             requestAnimationFrame(updateClock);
         }

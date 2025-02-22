@@ -18,7 +18,7 @@
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
-            z-index: 300;
+            z-index: 10;
             display: flex;
             align-items: center;
             gap: 20px;
@@ -98,22 +98,23 @@
 
         /* 金句样式 */
         #goldenPhrase {
-            text-align: center;
-            margin: 20px 0;
-            font-size: 24px;
-            color: #1b5e20;
-            min-height: 40px;
-            font-family: STZhongSong, cursive;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-            transition: opacity 0.5s;
-        }
+		    text-align: center;
+		    margin: 20px auto;
+		    width: 760px;
+		    font-size: 24px;
+		    color: #1b5e20;
+		    min-height: 40px;
+		    font-family: STZhongSong, cursive;
+		    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+		    transition: opacity 0.5s;
+		}
  
         /* 时间容器样式 */
         #currentDateTime {
 		    position: absolute;
 		    top: 78px;
 		    left: 25px;
-		    z-index: 100;
+		    z-index: 5;
 		    background: rgba(255,255,255,0.9);
 		    padding: 15px 25px;
 		    border-radius: 8px;
@@ -139,7 +140,7 @@
             width: 100%;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
             position: relative;
-            z-index: 200;
+            z-index: 6;
         }
  
         .brand {
@@ -182,7 +183,7 @@
         }
  
         .timeline-container {
-            max-width: 900px;
+            max-width: 750px;
             margin: 50px auto;
             position: relative;
             height: 120px;
@@ -243,7 +244,7 @@
             position: absolute;
             top: 220px;
             left: 25px;
-            z-index: 100;
+            z-index: 5;
             background: rgba(255,255,255,0.9);
             padding: 18px 25px;
             border-radius: 8px;
@@ -285,6 +286,95 @@
 		    line-height: 1.8;
             text-align: center;
 		}
+
+		.right-image-container {
+            position: fixed;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 5;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .right-image-container img {
+	        height: 80vh;  /* 设置高度为窗口高度的95% */
+	        object-fit: cover;
+	        display: block;
+	        margin: 0 auto;
+	    }
+
+        /* 滑块开关样式 */
+        input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .switch-container {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 40px;
+            z-index: 10;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            width: 140px;
+            height: 30px;
+            gap: 20px;
+        }
+
+        .switch-text {
+            font-size: 14px;
+            color: #1b5e20;
+            display: inline-block;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            width: 40px;
+            height: 24px;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+            left: 90px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #8bc34a;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(16px);
+        }
+
+        /* 开关选中状态文字颜色 */
+        input:checked ~ .switch-text {
+            color: #4CAF50;
+        }
     </style>
 </head>
 <body>
@@ -333,6 +423,24 @@
  
     <!-- 金句显示 -->
     <div id="goldenPhrase"></div>
+
+    <div class="right-image-container">
+        <img id="apiImage" src="" alt="每日60s">
+    </div>
+
+    <!-- 添加滑块开关容器 -->
+    <div class="switch-container">
+        <label class="switch">
+            <span class="switch-text">金句自动轮播</span>
+            <input type="checkbox" id="goldenSwitch" checked>
+            <span class="slider"></span>
+        </label>
+        <label class="switch">
+            <span class="switch-text">显示每日60s</span>
+            <input type="checkbox" id="imageSwitch">
+            <span class="slider"></span>
+        </label>
+    </div>
  
     <script>
     	// 作息表数据
@@ -376,7 +484,7 @@
 
         // 课程表数据
         const timetable = {
-            monday: ["数学","英语","政治","物理","语文","语文","化学","数学","数学"],
+            monday: ["数学","英语","政治","物理","语文","语文","化学","体育","数学"],
             tuesday: ["英语","数学","数学","语文","体育","历史","政治","语文","历史"],
             wednesday: ["数学","物理","英语","历史","音/美","化学","语文","化学","物理"],
             thursday: ["语文","物理","化学","数学","英语","政治","历史","英语","政治"],
@@ -683,12 +791,27 @@
     ];
  
         // 金句功能配置 
-        const GOLDEN_API = 'https://zj.v.api.aa1.cn/api/wenan-zl/'; 
+        const GOLDEN_APIs = [
+		    'https://img.8845.top/yiyan/index.php', 
+		    'https://api.mu-jie.cc/stray-birds/range?type=json', 
+		    'https://v.api.aa1.cn/api/api-wenan-mingrenmingyan/index.php?aa1=json' 
+		];
+		let currentApiIndex = 0;
         const localPhrases = [ // api失效时使用
             "宝剑锋从磨砺出，梅花香自苦寒来。",
             "千淘万漉虽辛苦，吹尽狂沙始到金。",
             "青春须早为，岂能长少年。",
-            "冷知识：一加一其实等于二。"
+            "冷知识：一加一其实等于二。",
+            "在晨曦的微光中，露珠轻吻着花瓣，如同繁星点缀于夜空的边际。",
+            "夕阳如熔金洒落，将天边染成一幅绚烂的画卷，静候那永不褪色的黄昏。",
+            "星光在夜的织锦上细细描绘，每一颗都是未完的故事，悬于无垠的宇宙之中。",
+            "风，穿越古老的巷弄，携带着时光的低语，轻抚过岁月的痕迹。",
+            "月光倾洒，如细丝般缠绕着树梢，编织着夜的静谧与温柔。",
+            "晨曦初破，霞光如织，天边渐渐泛起希望的色彩，迎接新日的诞生。",
+            "落叶在秋风中起舞，每一片都是季节的笔触，书写着岁月的诗篇。",
+            "雾气缭绕在山间，仿佛是大自然的呼吸，轻柔地覆盖着万物的梦境。",
+            "雨滴轻敲窗棂，如同天空在低语，诉说着未了的情缘。",
+            "在那遥远的天际，云彩编织着梦幻的城堡，等待着勇敢的探险者去探寻。"
         ];
  
         // 生成节气标记 
@@ -811,54 +934,107 @@
  
         // 金句功能 
         let phraseTimer;
-        async function fetchGoldenPhrase() {
-            try {
-                const response = await fetch(`${GOLDEN_API}?type=json&_t=${Date.now()}`); 
-                if (!response.ok)  throw new Error('网络异常');
-                
-                const data = await response.json(); 
-                if (data.msg  && data.msg.length  < 50) {
-                    updatePhraseDisplay(data.msg); 
-                } else {
-                    throw new Error('数据异常');
-                }
-            } catch (error) {
-                console.warn(' 金句获取失败:', error);
-                showLocalPhrase();
-            }
-        }
+		async function fetchGoldenPhrase() {
+		    // 70%概率使用API
+		    if (Math.random()  < 0.7) {
+		        try {
+		            const apiIndex = Math.floor(Math.random()  * GOLDEN_APIs.length); 
+		            const api = GOLDEN_APIs[1];
+		            const response = await fetch(api);
+		            if (!response.ok)  throw new Error('网络异常');
+		            const data = await response.json(); 
+		            let text = data.cn; 
+		            if (!text || text.length  < 5) {
+		                throw new Error('数据异常');
+		            }
+		            updatePhraseDisplay(text);
+		        } catch (error) {
+		            console.warn('  金句API获取失败:', error);
+		            showLocalPhrase();
+		        }
+		    } else {
+		        // 30%概率使用本地金句库
+		        showLocalPhrase();
+		    }
+		}
  
         function updatePhraseDisplay(text) {
-            const container = document.getElementById('goldenPhrase'); 
-            container.style.opacity  = 0;
-            setTimeout(() => {
-                container.textContent  = `「 ${text} 」`;
-                container.style.opacity  = 1;
-            }, 500);
-        }
+		    const container = document.getElementById('goldenPhrase'); 
+		    container.style.opacity  = 0;
+		    setTimeout(() => {
+		        container.textContent  = `「 ${text} 」`;
+		        container.style.opacity  = 1;
+		    }, 500);
+		}
  
         function showLocalPhrase() {
-            const randomIndex = Math.floor(Math.random()  * localPhrases.length); 
-            updatePhraseDisplay(localPhrases[randomIndex]);
-        }
+		    const randomIndex = Math.floor(Math.random()  * localPhrases.length); 
+		    updatePhraseDisplay(localPhrases[randomIndex]);
+		}
+
+		function fetchAndDisplayImage(url) {
+		    fetch('https://api.cenguigui.cn/api/60s/')
+		        .then(response => response.blob()) 
+		        .then(blob => {
+		            const img = document.getElementById('apiImage'); 
+		            img.src  = URL.createObjectURL(blob); 
+		            img.style.height  = '80vh';  // 设置高度为窗口高度的95%
+		        })
+		        .catch(error => console.error(' 图片加载失败:', error));
+		}
+
+        // 初始化开关状态
+        const goldenSwitch = document.getElementById('goldenSwitch'); 
+        const imageSwitch = document.getElementById('imageSwitch'); 
+        const apiImage = document.getElementById('apiImage'); 
+
+        // 金句自动轮播开关
+        goldenSwitch.addEventListener('change',  function() {
+            if (this.checked)  {
+                phraseTimer = setInterval(fetchGoldenPhrase, 15000);
+            } else {
+                clearInterval(phraseTimer);
+                phraseTimer = null;
+            }
+        });
+
+        // 显示每日60s开关
+        imageSwitch.addEventListener('change',  function() {
+            if (this.checked)  {
+                apiImage.style.display  = 'block';
+                fetchAndDisplayImage();
+                setInterval(fetchAndDisplayImage, 86400000); // 每天更新一次图片
+            } else {
+                apiImage.style.display  = 'none';
+                clearInterval(imageUpdateInterval);
+            }
+        });
+
+        // 初始化时设置默认状态
+        goldenSwitch.checked  = true; // 默认开启金句自动轮播
+        imageSwitch.checked  = true; // 默认开启每日60s显示
+
+        window.onload  = function() {
+            fetchAndDisplayImage();
+        };
  
         // 初始化 
         function init() {
-            updateCountdown();
-            updateClock();
-            updateTimelineColor();
-            generateSolarMarkers();
-            fetchGoldenPhrase();
-            phraseTimer = setInterval(fetchGoldenPhrase, 15000);
-            setInterval(updateScheduleDisplay, 1000);  // 新增定时更新
-        }
+		    updateCountdown();
+		    updateClock();
+		    updateTimelineColor();
+		    generateSolarMarkers();
+		    fetchGoldenPhrase();
+		    phraseTimer = setInterval(fetchGoldenPhrase, 15000);
+		    setInterval(updateScheduleDisplay, 1000); // 新增定时更新
+		}
  
         init();
-        window.addEventListener('unload',  () => clearInterval(phraseTimer));
-        setInterval(() => {
-            generateSolarMarkers();
-            updateCountdown();
-        }, 86400000);
+		window.addEventListener('unload',  () => clearInterval(phraseTimer));
+		setInterval(() => {
+		    generateSolarMarkers();
+		    updateCountdown();
+		}, 86400000);
     </script>
 </body>
 </html>
