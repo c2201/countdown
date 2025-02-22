@@ -4,6 +4,72 @@
     <title>中考倒计时 - C2201|中考必胜</title>
     <meta charset="utf-8">
     <style>
+    	/* 卡片样式（暂时没用） */
+		.term-card {
+		    position: absolute;
+		    background: white;
+		    border-radius: 12px;
+		    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+		    width: 280px;
+		    padding: 20px;
+		    z-index: 500;
+		    opacity: 0;
+		    transform: translateY(10px);
+		    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		    pointer-events: none;
+		}
+		 
+		.term-card.active  {
+		    opacity: 1;
+		    transform: translateY(0);
+		    pointer-events: auto;
+		}
+		 
+		.term-card-title {
+		    font-family: STKaiti, cursive;
+		    font-size: 28px;
+		    text-align: center;
+		    margin-bottom: 15px;
+		    color: #1b5e20;
+		}
+		 
+		.term-card-image {
+		    width: 100%;
+		    height: 180px;
+		    border-radius: 8px;
+		    object-fit: cover;
+		    margin-bottom: 15px;
+		}
+		 
+		.term-card-desc {
+		    font-family: 'Microsoft YaHei', sans-serif;
+		    font-size: 14px;
+		    line-height: 1.6;
+		    color: #444;
+		}
+
+		/* 时间样式 */
+        .time-section {
+		    font-family: 'Microsoft YaHei', sans-serif;
+		    font-size: 40px;
+		    letter-spacing: 0;
+		    color: #1b5e20;
+		    margin: 8px 0;
+		    display: block;
+   		 	width: 100%;
+		}
+
+        /* 日期样式 */
+        .date-section {
+	        font-family: STZhongsong, serif;
+	        font-size: 18px;
+	        color: #666;
+	        letter-spacing: 0.5px;
+	        white-space: nowrap;  /* 防止换行 */
+	        display: block;
+    		width: 100%;
+    	}
+
         /* 金句样式 */
         #goldenPhrase {
             text-align: center;
@@ -16,15 +82,19 @@
             transition: opacity 0.5s;
         }
  
-        /* 当前时间样式 */
+        /* 时间容器样式 */
         #currentDateTime {
-            font-size: 26px;
-            color: #666;
-            text-align: center;
-            margin: 30px 0 50px;
-            font-family: STZhongsong, serif;
-            letter-spacing: 1px;
-        }
+		    position: absolute;
+		    top: 78px;
+		    left: 25px;
+		    z-index: 100;
+		    background: rgba(255,255,255,0.9);
+		    padding: 15px 25px;
+		    border-radius: 8px;
+		    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+		    text-align: center;
+		    min-width: 210px;
+		}
  
         /* 基础样式 */
         body, html {
@@ -36,11 +106,14 @@
             background: linear-gradient(to bottom right, #f5fff5, #e8f5e9);
         }
  
+        /* 导航栏样式 */
         .navbar {
             background-color: #333;
             overflow: hidden;
             width: 100%;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 200;
         }
  
         .brand {
@@ -138,6 +211,48 @@
             text-shadow: 0 2px 4px rgba(211,47,47,0.2);
             transform: translateX(30%);
         }
+
+        /* 作息提示样式 */
+        .schedule-container {
+            position: absolute;
+            top: 220px;
+            left: 25px;
+            z-index: 100;
+            background: rgba(255,255,255,0.9);
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            min-width: 210px;
+        }
+
+        .schedule-item {
+            font-family: 'Microsoft YaHei', sans-serif;
+            margin: 8px 0;
+        }
+
+        .schedule-title {
+            font-size: 24px;
+            color: #1b5e20;
+            font-weight: 600;
+        }
+
+        .schedule-value {
+            font-size: 24px;
+            color: #2d2d2d;
+            margin-left: 8px;
+        }
+
+        .timetable {
+            margin-top: 15px;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+
+        .timetable-item {
+		    font-size: 24px;
+		    font-family: STKaiti, cursive;
+		    line-height: 1.8;
+		}
     </style>
 </head>
 <body>
@@ -150,6 +265,25 @@
             <a href="https://c2201.github.io/chicken-soup/">心灵鸡汤</a>
         </nav>
     </header>
+ 
+    <!-- 实时时钟 -->
+    <div id="currentDateTime">
+        <div class="time-section">??:??:??</div>
+        <div class="date-section">????年??月??日 星期?</div>
+    </div>
+
+    <!-- 作息提示容器 -->
+    <div id="scheduleContainer" class="schedule-container">
+        <div class="schedule-item">
+            <span class="schedule-title">当前作息：</span>
+            <span class="schedule-value" id="currentSchedule">加载中...</span>
+        </div>
+        <div class="schedule-item">
+            <span class="schedule-title">下节课：</span>
+            <span class="schedule-value" id="nextSchedule">加载中...</span>
+        </div>
+        <div class="timetable" id="todayTimetable"></div>
+    </div>
  
     <!-- 主内容 -->
     <div class="small-title">距离2025年中考仅剩</div>
@@ -168,11 +302,159 @@
     <!-- 金句显示 -->
     <div id="goldenPhrase"></div>
  
-    <!-- 实时时钟 -->
-    <div id="currentDateTime"></div>
- 
     <script>
-        // 节气数据（2025年）
+    	// 作息表数据
+        const schedule = {
+            weekday: [
+                ["7:00-7:30", "早餐"],
+                ["7:30-7:50", "早读"],
+                ["7:50-8:00", "课间"],
+                ["8:00-8:40", "第一节课"],
+                ["8:40-8:50", "课间"],
+                ["8:50-9:30", "第二节课"],
+                ["9:30-9:35", "眼保健操"],
+                ["9:35-9:55", "课间"],
+                ["9:55-10:35", "第三节课"],
+                ["10:35-11:00", "跑操"],
+                ["11:00-11:40", "第四节课"],
+                ["11:40-12:05", "听读训练"],
+                ["12:05-12:40", "午餐"],
+                ["12:40-13:40", "午休"],
+                ["13:40-13:50", "课间"],
+                ["13:50-14:00", "课前唱"],
+                ["14:00-14:40", "第五节课"],
+                ["14:40-14:50", "课间"],
+                ["14:50-15:30", "第六节课"],
+                ["15:30-15:40", "课间"],
+                ["15:40-16:20", "第七节课"],
+                ["16:20-16:25", "眼保健操"],
+                ["16:25-16:35", "课间"],
+                ["16:35-17:15", "第八节课"],
+                ["17:15-17:20", "课间"],
+                ["17:20-18:00", "第九节课"],
+                ["18:00-18:40", "晚餐"],
+                ["18:40-20:00", "第一节晚自习"],
+                ["20:00-20:10", "课间"],
+                ["20:10-21:30", "第二节晚自习"],
+                ["21:30-21:40", "课间"],
+                ["21:40-22:50", "第三节晚自习"],
+                ["22:50-7:00", "睡觉"]
+            ]
+        };
+
+        // 课程表数据
+        const timetable = {
+            monday: ["数学","英语","政治","物理","语文","语文","化学","数学","数学"],
+            tuesday: ["英语","数学","数学","语文","体育","历史","政治","语文","历史"],
+            wednesday: ["数学","物理","英语","历史","音/美","化学","语文","化学","物理"],
+            thursday: ["语文","物理","化学","数学","英语","政治","历史","英语","政治"],
+            friday: ["数学","语文","英语","体育","物理","化学","班会","文体活动","文体活动"]
+        };
+
+        // 时间转换函数
+		function timeToMinutes(time) {
+		    const [h, m] = time.split(':').map(Number);
+		    return h * 60 + m;
+		}
+
+        // 获取当前作息函数
+		function getCurrentSchedule() {
+		    const now = new Date();
+		    const day = now.getDay();
+		    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+		    if(day === 0 || day === 6) return {current: "周末自主安排", nextLesson: ""};
+
+		    const todaySchedule = schedule.weekday;
+		    let current = "";
+		    let nextLesson = "";
+
+		    // 处理跨天时段（22:50-7:00）
+		    if(currentMinutes >= timeToMinutes("22:50") || currentMinutes < timeToMinutes("7:00")) {
+		        current = "睡觉";
+		        // 查找明天第一个"节课"
+		        const firstLesson = todaySchedule.find(item => item[1].endsWith("节课"));
+		        nextLesson = firstLesson ? firstLesson[1] : "";
+		        return {current, nextLesson};
+		    }
+
+		    let currentIndex = -1;
+		    
+		    // 查找当前时间段
+		    for(let i = 0; i < todaySchedule.length; i++) {
+		        const [start, end] = todaySchedule[i][0].split('-');
+		        const startTime = timeToMinutes(start);
+		        const endTime = timeToMinutes(end);
+
+		        if(currentMinutes >= startTime && currentMinutes < endTime) {
+		            current = todaySchedule[i][1];
+		            currentIndex = i;
+		            break;
+		        }
+		    }
+
+		    // 查找下一个"节课"
+		    if(currentIndex >= 0) {
+		        for(let i = currentIndex + 1; i < todaySchedule.length; i++) {
+		            if(todaySchedule[i][1].endsWith("节课")) {
+		                nextLesson = todaySchedule[i][1];
+		                break;
+		            }
+		        }
+		    }
+
+		    return {current, nextLesson};
+		}
+
+        // 获取课程名称
+        function getCourseName(day, lessonIndex) {
+            const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+            const timetableDay = timetable[days[day]];
+            return timetableDay ? timetableDay[lessonIndex] : "";
+        }
+
+        // 修改后的更新作息显示
+		function updateScheduleDisplay() {
+            const now = new Date();
+            const day = now.getDay();  
+            const {current, nextLesson} = getCurrentSchedule();
+
+            // 当前作息
+            let currentText = current;
+            if(current.includes(" 课")) {
+                // 找到当前节课在课程表中的位置
+                const lessonItems = schedule.weekday.filter(item   => item[1].includes("节"));
+                const currentLessonIndex = lessonItems.findIndex(item   => item[1] === current);
+                if(currentLessonIndex >=0 && currentLessonIndex <9) {
+                    currentText = getCourseName(day, currentLessonIndex);
+                }
+            }
+            document.getElementById('currentSchedule').textContent   = currentText;
+
+            // 下节课
+            let nextText = nextLesson;
+            if(nextLesson) {
+                const lessonItems = schedule.weekday.filter(item   => item[1].includes("节"));
+                const nextLessonIndex = lessonItems.findIndex(item   => item[1] === nextLesson);
+                if(nextLessonIndex >=0 && nextLessonIndex <9) {
+                    nextText = getCourseName(day, nextLessonIndex);
+                }
+            }
+            document.getElementById('nextSchedule').textContent   = nextText || "课程已结束";
+
+		    // 今日课表
+		    if(day >=1 && day <=5) {
+		        const courses = timetable[Object.keys(timetable)[day-1]];
+		        document.getElementById('todayTimetable').innerHTML   = courses.map((c,i)   => 
+		            `<div class="timetable-item">第${i+1}节：${c}</div>`
+		        ).join('');
+		    } else {
+		        document.getElementById('todayTimetable').innerHTML   = 
+		            '<div class="timetable-item">周末无课表</div>';
+		    }
+		}
+
+        // 节气数据（部分）（2025年）
         const solarTerms = [
             { name: '立春', month: 1, day: 3, color: '#8bc34a' },
             { name: '雨水', month: 1, day: 18, color: '#8bc34a' },
@@ -187,7 +469,7 @@
  
         // 金句功能配置 
         const GOLDEN_API = 'https://zj.v.api.aa1.cn/api/wenan-zl/'; 
-        const localPhrases = [
+        const localPhrases = [ // api失效时使用
             "宝剑锋从磨砺出，梅花香自苦寒来",
             "千淘万漉虽辛苦，吹尽狂沙始到金",
             "青春须早为，岂能长少年"
@@ -265,17 +547,26 @@
             setTimeout(updateCountdown, msToNextDay);
         }
  
-        // 实时时钟 
+        // 更新时间显示函数 
         function updateClock() {
             const date = new Date();
-            const year = date.getFullYear(); 
-            const month = (date.getMonth()  + 1).toString().padStart(2, '0');
-            const day = date.getDate().toString().padStart(2,  '0');
-            const weekday = date.toLocaleDateString('zh-CN',  { weekday: 'short' });
-            const time = date.toLocaleTimeString('zh-CN',  { hour12: false });
+            const weekDays = ['日','一','二','三','四','五','六'];
+            
+            // 时间部分 
+            const hh = date.getHours().toString().padStart(2,  '0');
+            const mm = date.getMinutes().toString().padStart(2,  '0');
+            const ss = date.getSeconds().toString().padStart(2,  '0');
+            
+            // 日期部分 
+            const yyyy = date.getFullYear(); 
+            const m = (date.getMonth()  + 1).toString().padStart(2, '0');
+            const d = date.getDate().toString().padStart(2,  '0');
+            const week = weekDays[date.getDay()];
  
-            document.getElementById('currentDateTime').innerHTML  = 
-                `当前时间：${year}年${month}月${day}日 ${weekday} ${time}`;
+            document.getElementById('currentDateTime').innerHTML  = `
+                <div class="time-section">${hh}:${mm}:${ss}</div>
+                <div class="date-section">${yyyy}年${m}月${d}日 星期${week}</div>
+            `;
             requestAnimationFrame(updateClock);
         }
  
@@ -320,6 +611,7 @@
             generateSolarMarkers();
             fetchGoldenPhrase();
             phraseTimer = setInterval(fetchGoldenPhrase, 15000);
+            setInterval(updateScheduleDisplay, 1000);  // 新增定时更新
         }
  
         init();
