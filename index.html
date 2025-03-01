@@ -4,7 +4,7 @@
     <title>中考倒计时 - C2201|中考必胜</title>
     <meta charset="utf-8">
     <style>
-        /* 更新日志相关样式 */
+        /* 底部按钮样式 */
         .action-buttons {
             position: fixed;
             bottom: 20px;
@@ -37,6 +37,7 @@
             transform: scale(1.05);
         }
 
+        /* 更新日志样式 */
         .changelog-modal .settings-content {
             max-width: 600px;
             height: 75%;
@@ -49,7 +50,7 @@
             height: calc(100% - 50px);
         }
 
-        /* 设置相关样式 */
+        /* 设置样式 */
         .settings-button {
             position: fixed;
             bottom: 20px;
@@ -129,6 +130,14 @@
             color: #333;
         }
 
+        .settings-body {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            padding: 20px;
+        }
+
+        /* 模态框关闭按钮样式 */
         .close-btn {
             font-size: 28px;
             cursor: pointer;
@@ -138,13 +147,6 @@
 
         .close-btn:hover {
             color: #333;
-        }
-
-        .settings-body {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-            padding: 20px;
         }
 
         /* 节气卡片样式 */
@@ -217,7 +219,21 @@
             transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
         }
 
-		/* 时间样式 */
+        /* 时间容器样式 */
+        #currentDateTime {
+            position: absolute;
+            top: 78px;
+            left: 25px;
+            z-index: 5;
+            background: rgba(255,255,255,0.9);
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            min-width: 180px;
+        }
+
+		/* 左上角时间样式 */
         .time-section {
 		    font-family: 'STZh', sans-serif;
 		    font-size: 44px;
@@ -228,7 +244,7 @@
    		 	width: 100%;
 		}
 
-        /* 日期样式 */
+        /* 左上角日期样式 */
         .date-section {
 	        font-family: 'Microsoft YaHei', serif;
 	        font-size: 22px;
@@ -241,30 +257,16 @@
 
         /* 金句样式 */
         #goldenPhrase {
-		    text-align: center;
-		    margin: 20px auto;
-		    width: 760px;
-		    font-size: 24px;
-		    color: #1b5e20;
-		    min-height: 40px;
-		    font-family: STZhongSong, cursive;
-		    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-		    transition: opacity 0.5s;
-		}
- 
-        /* 时间容器样式 */
-        #currentDateTime {
-		    position: absolute;
-		    top: 78px;
-		    left: 25px;
-		    z-index: 5;
-		    background: rgba(255,255,255,0.9);
-		    padding: 15px 25px;
-		    border-radius: 8px;
-		    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-		    text-align: center;
-		    min-width: 180px;
-		}
+            text-align: center;
+            margin: 20px auto;
+            width: 760px;
+            font-size: 24px;
+            color: #1b5e20;
+            min-height: 40px;
+            font-family: STZhongSong, cursive;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            transition: opacity 0.5s;
+        }
  
         /* 基础样式 */
         body, html {
@@ -306,7 +308,8 @@
             font-size: 16px;
             transition: all 0.3s;
         }
- 
+
+        /* 中考倒计时样式 */
         .small-title {
             text-align: center;
             color: #2d2d2d;
@@ -324,7 +327,8 @@
             margin: 20px 0;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
- 
+
+        /* 时间轴样式 */ 
         .timeline-container {
             max-width: 750px;
             margin: 50px auto;
@@ -346,7 +350,8 @@
             position: relative;
             margin-top: 60px;
         }
- 
+
+        /* 节气标记样式 */
         .solar-term-marker {
             position: absolute;
             top: -45px;
@@ -369,7 +374,8 @@
             transition: left 0.5s ease-out;
             box-shadow: 0 2px 4px rgba(255,87,34,0.3);
         }
- 
+
+        /* 中考日标记样式 */
         .end-marker {
             position: absolute;
             right: -15px;
@@ -419,6 +425,7 @@
             line-height: 1;
         }
 
+        /* 课表样式 */
         .timetable {
             margin-top: 10px;
             border-top: 1px solid #eee;
@@ -432,6 +439,7 @@
             text-align: center;
 		}
 
+        /* 每日60s样式 */
 		.right-image-container {
             position: fixed;
             right: 25px;
@@ -511,12 +519,11 @@
             transform: translateX(16px);
         }
 
-        /* 开关选中状态文字颜色 */
         input:checked ~ .switch-text {
             color: #4CAF50;
         }
 
-        /* 新增公告卡片样式 */
+        /* 公告卡片样式 */
         .announcement-card {
             background: #fff;
             border-radius: 8px;
@@ -527,35 +534,35 @@
         }
 
         .announcement-title {
-            font-size: 1.6em;  /* 增大字号 */
+            font-size: 1.6em;
             color: #1b5e20;
             font-weight: 600;
             margin-bottom: 8px;
             border-bottom: 2px solid #8bc34a;
             padding-bottom: 5px;
-            text-align: center;  /* 标题居中 */
+            text-align: center;
         }
 
         .announcement-time {
-            font-size: 0.95em;  /* 增大字号 */
+            font-size: 0.95em;
             color: #666;
             margin-bottom: 15px;
-            text-align: center;  /* 时间居中 */
+            text-align: center;
         }
 
         .announcement-body {
-            line-height: 1.2;  /* 缩小行高 */
+            line-height: 1.2;
             color: #444;
-            font-size: 1.2em;  /* 增大正文字号 */
+            font-size: 1.2em;
         }
 
         .announcement-body ul {
-            margin: 8px 0;  /* 缩小间距 */
+            margin: 8px 0;
             padding-left: 25px;
         }
 
         .announcement-body li {
-            margin: 6px 0;  /* 缩小行距 */
+            margin: 6px 0;
         }
 
         .announcement-footnote {
@@ -566,14 +573,12 @@
             padding-top: 10px;
         }
 
-        /* 滚动支持 */
         .announcement-content {
-            height: calc(100% - 60px);  /* 自动计算高度 */
-            overflow-y: auto;  /* 垂直滚动 */
+            height: calc(100% - 60px);
+            overflow-y: auto;
             padding: 0 10px;
         }
 
-        /* 自定义滚动条 */
         .announcement-content::-webkit-scrollbar {
             width: 6px;
         }
@@ -592,6 +597,7 @@
             background: #8bc34a;
         }
 
+        /* 概率控制样式 */
         .probability-control {
             display: flex;
             align-items: center;
@@ -610,12 +616,12 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            width: 40%; /* 滑动条容器宽度 */
-            justify-content: flex-end; /* 右对齐 */
+            width: 40%;
+            justify-content: flex-end;
         }
 
         #apiProbability {
-            width: 100%; /* 滑动条占满容器宽度 */
+            width: 100%;
             height: 4px;
             background: #ddd;
             border-radius: 2px;
@@ -623,53 +629,23 @@
             margin: 0 8px;
         }
 
-        #intervalSlider {
-            width: 100%; /* 滑动条占满容器宽度 */
-            height: 4px;
-            background: #ddd;
-            border-radius: 2px;
-            -webkit-appearance: none;
-            margin: 0 8px;
-        }
-
-        /* 滑块样式 */
         #apiProbability::-webkit-slider-thumb {
             -webkit-appearance: none;
             width: 16px;
             height: 16px;
-            background: #8bc34a; /* 确保绿色主题色 */
+            background: #8bc34a;
             border-radius: 50%;
             cursor: pointer;
-            border: none; /* 移除默认边框 */
-            box-shadow: none; /* 移除阴影 */
-        }
-
-        #intervalSlider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 16px;
-            height: 16px;
-            background: #8bc34a; /* 确保绿色主题色 */
-            border-radius: 50%;
-            cursor: pointer;
-            border: none; /* 移除默认边框 */
-            box-shadow: none; /* 移除阴影 */
+            border: none;
+            box-shadow: none;
         }
 
         #apiProbability::-moz-range-thumb {
             width: 16px;
             height: 16px;
-            background: #8bc34a; /* Firefox触点颜色 */
+            background: #8bc34a;
             border-radius: 50%;
-            border: none; /* 重要：移除Firefox默认边框 */
-            cursor: pointer;
-        }
-
-        #intervalSlider::-moz-range-thumb {
-            width: 16px;
-            height: 16px;
-            background: #8bc34a; /* Firefox触点颜色 */
-            border-radius: 50%;
-            border: none; /* 重要：移除Firefox默认边框 */
+            border: none;
             cursor: pointer;
         }
 
@@ -682,6 +658,36 @@
             font-size: 13px;
         }
 
+        /* 间隔时间控制样式 */
+        #intervalSlider {
+            width: 100%;
+            height: 4px;
+            background: #ddd;
+            border-radius: 2px;
+            -webkit-appearance: none;
+            margin: 0 8px;
+        }
+
+        #intervalSlider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #8bc34a;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            box-shadow: none;
+        }
+
+        #intervalSlider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: #8bc34a;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+        }
+
         #intervalValue {
             width: 50px;
             padding: 5px;
@@ -691,10 +697,11 @@
             font-size: 13px;
         }
 
+        /* 重置按钮样式 */
         .reset-btn {
             padding: 5px 12px;
-            min-width: 50px; /* 保证最小宽度 */
-            white-space: nowrap; /* 禁止文字换行 */
+            min-width: 50px;
+            white-space: nowrap;
             background: #8bc34a;
             border-radius: 4px;
             color: white;
@@ -707,7 +714,7 @@
         .reset-btn:hover {
             background: #7cb342;
             transform: scale(1.05);
-            box-shadow: none; /* 移除阴影 */
+            box-shadow: none;
         }
     </style>
 </head>
@@ -722,7 +729,7 @@
         </nav>
     </header>
  
-    <!-- 实时时钟 -->
+    <!-- 时钟 -->
     <div id="currentDateTime">
         <div class="time-section"></div>
         <div class="date-section"></div>
@@ -745,7 +752,7 @@
         <div class="timetable" id="todayTimetable"></div>
     </div>
  
-    <!-- 主内容 -->
+    <!-- 中考倒计时 -->
     <div class="small-title">距离2025年中考仅剩</div>
     <div id="daysUntil" class="big-title"></div>
  
@@ -759,15 +766,15 @@
         </div>
     </div>
  
-    <!-- 金句显示 -->
+    <!-- 金句 -->
     <div id="goldenPhrase"></div>
 
-    <!-- 每日60s显示 -->
+    <!-- 每日60s -->
     <div class="right-image-container">
         <img id="apiImage" src="" alt="每日60s">
     </div>
 
-    <!-- 底部按钮显示 -->
+    <!-- 底部按钮 -->
     <div class="action-buttons">
         <button id="settingsButton" class="action-button">⚙️ 设置</button>
         <button id="changelogButton" class="action-button">📝 更新日志</button>
@@ -782,7 +789,6 @@
                 <span class="close-btn" id="closeSettings">&times;</span>
             </div>
             <div class="settings-body">
-                <!-- 移动原来的开关到这里 -->
                 <div class="switch-container">
                     <label class="switch">
                         <span class="switch-text">金句自动轮播</span>
@@ -797,8 +803,8 @@
                     <div class="probability-control">
                         <span class="switch-text">联网获取金句的概率(%)</span>
                         <div class="range-group">
-                            <input type="range" id="apiProbability" min="0" max="100" value="70">
-                            <input type="number" id="apiProbabilityValue" min="0" max="100" value="70">
+                            <input type="range" id="apiProbability" min="0" max="100" value="50">
+                            <input type="number" id="apiProbabilityValue" min="0" max="100" value="50">
                             <button class="reset-btn" onclick="resetProbability()">重置</button>
                         </div>
                     </div>
@@ -826,6 +832,7 @@
         </div>
     </div>
 
+    <!-- 公告板模态框 -->
     <div class="settings-modal" id="announcementModal">
         <div class="settings-content">
             <div class="settings-header" style="padding-bottom: 8px;">
@@ -833,16 +840,15 @@
                 <span class="close-btn" id="closeAnnouncement">&times;</span>
             </div>
             <div class="announcement-content">
-                <!-- 公告卡片容器 -->
                 <div class="announcement-card">
                     <div class="announcement-title">📢 倒计时网站征稿活动开始啦！</div>
                     <div class="announcement-time">2025.3.1</div>
                     <div class="announcement-body">
-                        C2201倒计时网站底部金句轮播内容开始征稿了！
+                        C2201倒计时网站底部金句轮播内容<strong>开始征稿了</strong>！选上的作品可以放在网站上<strong>轮播展示</strong>！
                         <ul>
                             <li><strong>参与条件：</strong>是个人都能参加</li>
                             <li><strong>时间：</strong>即日起至毕业</li>
-                            <li><strong>征稿内容：</strong>励志文字、优美作文素材或整活（不能八卦）等（特别地，既可以原创，也可以投你在其他地方看到的很好的句子上来，但是要标明出处；若是原创句子可选择展示时是否显示署名）（一个句子展示的概率：励志文字 = 优美作文素材 > 整活，可根据具体情况调整，特别地，若原创句子写的过于好，可以提高展示概率）</li>
+                            <li><strong>征稿内容：</strong><strong>励志文字</strong>、优美<strong>作文素材</strong>、<strong>诗歌</strong>或<strong>整活</strong>（<strong>不能八卦</strong>）等（特别地，既可以原创，也可以投你在其他地方看到的很好的句子上来，但是要<strong>标明出处</strong>；若是原创句子可选择展示时是否显示署名）（一个句子展示的概率：励志文字 = 优美作文素材 > 整活，可根据具体情况调整，特别地，若原创句子写的<strong>过于精妙</strong>，可以<strong>提高展示概率</strong>）</li>
                             <li><strong>字数要求：</strong>1~80字（包含标点）</li>
                             <li><strong>提交格式：</strong>你的名字+句子内容+是否原创（+若非原创，标明出处）</li>
                             <li><strong>提交方式：</strong>写在便利贴上交给TQC</li>
@@ -855,123 +861,8 @@
     </div>
  
     <script>
-        let intervalDuration = 15 * 1000; // 默认15秒
-        let phraseTimer = null;
-
-        // 滑动条和输入框事件
-        document.getElementById('intervalSlider').addEventListener('input', function(e) {
-            const value = Math.min(120, Math.max(1, parseInt(e.target.value) || 15));
-            intervalDuration = value * 1000;
-            document.getElementById('intervalValue').value = value;
-            
-            // 如果自动轮播开启则立即应用新间隔
-            if (goldenSwitch.checked && phraseTimer) {
-                clearInterval(phraseTimer);
-                phraseTimer = setInterval(fetchGoldenPhrase, intervalDuration);
-            }
-        });
-
-        document.getElementById('intervalValue').addEventListener('input', function(e) {
-            const value = Math.min(120, Math.max(1, parseInt(e.target.value) || 15));
-            intervalDuration = value * 1000;
-            document.getElementById('intervalSlider').value = value;
-        });
-
-        // 重置间隔函数
-        function resetInterval() {
-            intervalDuration = 15 * 1000;
-            document.getElementById('intervalSlider').value = 15;
-            document.getElementById('intervalValue').value = 15;
-            
-            if (goldenSwitch.checked && phraseTimer) {
-                clearInterval(phraseTimer);
-                phraseTimer = setInterval(fetchGoldenPhrase, intervalDuration);
-            }
-        }
-
-        let apiProbability = 50; // 默认概率值
-
-        // 滑动条输入事件监听
-        document.getElementById('apiProbability').addEventListener('input', function(e) {
-            const value = Math.min(100, Math.max(0, parseInt(e.target.value) || 0));
-            apiProbability = value;
-            document.getElementById('apiProbabilityValue').value = value;
-        });
-
-        // 数值输入框事件监听
-        document.getElementById('apiProbabilityValue').addEventListener('input', function(e) {
-            const value = Math.min(100, Math.max(0, parseInt(e.target.value) || 0));
-            apiProbability = value;
-            document.getElementById('apiProbability').value = value;
-        });
-
-        // 重置按钮函数
-        function resetProbability() {
-            apiProbability = 70;
-            document.getElementById('apiProbability').value = 70;
-            document.getElementById('apiProbabilityValue').value = 70;
-        }
-
-        // 公告相关脚本
-        const announcementButton = document.getElementById('announcementButton');
-        const announcementModal = document.getElementById('announcementModal');
-        const closeAnnouncement = document.getElementById('closeAnnouncement');
-
-        // 打开公告
-        announcementButton.addEventListener('click', () => {
-            announcementModal.classList.add('active');
-        });
-
-        // 关闭公告
-        closeAnnouncement.addEventListener('click', () => {
-            announcementModal.classList.remove('active');
-        });
-
-        // 更新日志功能
-        const changelogButton = document.getElementById('changelogButton');
-        const changelogModal = document.getElementById('changelogModal');
-        const closeChangelog = document.getElementById('closeChangelog');
-
-        // 打开更新日志
-        changelogButton.addEventListener('click', async () => {
-            try {
-                const response = await fetch('update.t·xt');
-                if (!response.ok) throw new Error('文件加载失败');
-                const text = await response.text();
-                
-                document.getElementById('changelogContent').textContent = 
-                    text || "当前没有更新日志内容";
-                
-                changelogModal.classList.add('active');
-            } catch (error) {
-                console.error('加载失败:', error);
-                document.getElementById('changelogContent').textContent = 
-                    "无法加载更新日志，错误码1145141919810(bushi";
-                changelogModal.classList.add('active');
-            }
-        });
-
-        // 关闭弹窗
-        closeChangelog.addEventListener('click', () => {
-            changelogModal.classList.remove('active');
-        });
-
-        // 设置相关脚本
-        const settingsButton = document.getElementById('settingsButton');
-        const settingsModal = document.getElementById('settingsModal');
-        const closeButton = document.getElementById('closeSettings');
-
-        // 打开设置
-        settingsButton.addEventListener('click', () => {
-            settingsModal.classList.add('active');
-        });
-
-        // 关闭设置
-        closeButton.addEventListener('click', () => {
-            settingsModal.classList.remove('active');
-        });
-
-    	// 作息表数据
+        // Part0 各种数据
+        // 作息表数据
         const schedule = {
             weekday: [
                 ["7:00-7:30", "早餐"],
@@ -1019,312 +910,203 @@
             friday: ["数学","语文","英语","体育","物理","化学","班会","文体活动","文体活动"]
         };
 
-        // 时间转换函数
-		function timeToMinutes(time) {
-		    const [h, m] = time.split(':').map(Number);
-		    return h * 60 + m;
-		}
-
-        // 获取当前作息函数
-		function getCurrentSchedule() {
-		    const now = new Date();
-		    const day = now.getDay();
-		    const currentMinutes = now.getHours() * 60 + now.getMinutes();
-
-		    if(day === 0 || day === 6) return {current: "周末", nextLesson: ""};
-
-		    const todaySchedule = schedule.weekday;
-		    let current = "";
-		    let nextLesson = "";
-
-		    // 处理跨天时段（22:50-7:00）
-		    if(currentMinutes >= timeToMinutes("22:50") || currentMinutes < timeToMinutes("7:00")) {
-		        current = "睡觉";
-		        // 查找明天第一个"节课"
-		        const firstLesson = todaySchedule.find(item => item[1].endsWith("节课"));
-		        nextLesson = firstLesson ? firstLesson[1] : "";
-		        return {current, nextLesson};
-		    }
-
-		    let currentIndex = -1;
-		    
-		    // 查找当前时间段
-		    for(let i = 0; i < todaySchedule.length; i++) {
-		        const [start, end] = todaySchedule[i][0].split('-');
-		        const startTime = timeToMinutes(start);
-		        const endTime = timeToMinutes(end);
-
-		        if(currentMinutes >= startTime && currentMinutes < endTime) {
-		            current = todaySchedule[i][1];
-		            currentIndex = i;
-		            break;
-		        }
-		    }
-
-		    // 查找下一个"节课"
-		    if(currentIndex >= 0) {
-		        for(let i = currentIndex + 1; i < todaySchedule.length; i++) {
-		            if(todaySchedule[i][1].endsWith("节课")) {
-		                nextLesson = todaySchedule[i][1];
-		                break;
-		            }
-		        }
-		    }
-
-		    return {current, nextLesson};
-		}
-
-        // 获取课程名称
-        function getCourseName(day, lessonIndex) {
-            const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
-            const timetableDay = timetable[days[day]];
-            return timetableDay ? timetableDay[lessonIndex] : "";
-        }
-
-        // 更新作息显示
-		function updateScheduleDisplay() {
-            const now = new Date();
-            const day = now.getDay();  
-            const {current, nextLesson} = getCurrentSchedule();
-
-            // 当前作息
-            let currentText = current;
-            if(current.includes(" 课")) {
-                // 找到当前节课在课程表中的位置
-                const lessonItems = schedule.weekday.filter(item   => item[1].includes("节"));
-                const currentLessonIndex = lessonItems.findIndex(item   => item[1] === current);
-                if(currentLessonIndex >=0 && currentLessonIndex <9) {
-                    currentText = getCourseName(day, currentLessonIndex);
-                }
-            }
-            document.getElementById('currentSchedule').textContent   = currentText;
-
-            // 下节课
-            let nextText = nextLesson;
-            if(nextLesson) {
-                const lessonItems = schedule.weekday.filter(item   => item[1].includes("节"));
-                const nextLessonIndex = lessonItems.findIndex(item   => item[1] === nextLesson);
-                if(nextLessonIndex >=0 && nextLessonIndex <9) {
-                    nextText = getCourseName(day, nextLessonIndex);
-                }
-            }
-            document.getElementById('nextSchedule').textContent   = nextText || "无";
-
-		    // 今日课表
-		    if(day >=1 && day <=5) {
-		        const courses = timetable[Object.keys(timetable)[day-1]];
-		        document.getElementById('todayTimetable').innerHTML   = courses.map((c,i)   => 
-		            `<div class="timetable-item">${i+1}&nbsp;${c}</div>`
-		        ).join('');
-		    } else {
-		        document.getElementById('todayTimetable').innerHTML   = 
-		            '<div class="timetable-item">周末无课表</div>';
-		    }
-		}
-
         // 节气数据（部分）（2025年）
         const solarTerms = [
-        { 
-            name: '立春', 
-            month: 1, 
-            day: 3, 
-            color: '#a5d6a7',
-            image: 'images/立春.png',
-            desc: '立春是二十四节气之首，标志着冬天的结束和春天的开始。此时气温开始回暖，万物复苏，东风送暖，柳树发芽，梅花绽放。古代有迎春仪式和咬春习俗，人们祈求新年吉祥如意。'
-        },
-        { 
-            name: '雨水', 
-            month: 1, 
-            day: 18, 
-            color: '#8bc34a',
-            image: 'images/雨水.png',
-            desc: '雨水节气正值仲春之初，气温继续回升，降水增多，冰雪融化。这个时节适宜春耕备耕，农民开始忙碌农事。古人有"獭祭鱼"、"鸿雁来"等物候现象观察记载。'
-        },
-        { 
-            name: '惊蛰', 
-            month: 2, 
-            day: 5, 
-            color: '#7cb342',
-            image: 'images/惊蛰.png',
-            desc: '惊蛰时节春雷始鸣，蛰伏的昆虫被惊醒而出。此时桃花盛开，杏花怒放，田间地头一片繁忙景象。古有"桃始华"、"仓庚鸣"的物候特征。'
-        },
-        { 
-            name: '春分', 
-            month: 2, 
-            day: 20, 
-            color: '#69a63d',
-            image: 'images/春分.png',
-            desc: '春分日昼夜平分，标志着春季中期。此时莺飞草长，小麦拔节孕穗，农事活动进入繁忙阶段。民间有竖蛋游戏和祭日习俗。'
-        },
-        { 
-            name: '清明', 
-            month: 3, 
-            day: 4, 
-            color: '#5d9536',
-            image: 'images/清明.png',
-            desc: '清明时节气温升高，春雨绵绵滋润大地。这是扫墓祭祖的重要日子，也是踏青赏花的好时机。古代有蹴鞠、荡秋千等娱乐活动。'
-        },
-        { 
-            name: '谷雨', 
-            month: 3, 
-            day: 20, 
-            color: '#4d802e',
-            image: 'images/谷雨.png',
-            desc: '谷雨是春季最后一个节气，降雨量增加利于谷物生长。此时牡丹盛开，茶树抽新芽，农忙季节全面到来。有"萍始生"、"鸣鸠拂其羽"等物候现象。'
-        },
-        { 
-            name: '立夏', 
-            month: 4, 
-            day: 5, 
-            color: '#467930',
-            image: 'images/立夏.png',
-            desc: '立夏标志着夏季的开始，气温显著上升。此时蝼蝈鸣叫，蚯蚓出地面，王瓜开始生长。古代有"迎夏"仪式和尝新活动。'
-        },
-        { 
-            name: '小满', 
-            month: 4, 
-            day: 21, 
-            color: '#3d6826',
-            image: 'images/小满.png',
-            desc: '小满时节麦类作物籽粒开始饱满但未成熟。此时蚕结茧，菜子成熟可以收割。农谚有"小满小满，麦粒渐满"的说法。'
-        },
-        { 
-            name: '芒种', 
-            month: 5, 
-            day: 5, 
-            color: '#30571f',
-            image: 'images/芒种.png',
-            desc: '芒种是农忙时节，北方麦收南方插秧。此时梅子成熟，天气潮湿闷热。农谚说"芒种忙忙种"，抓紧时间播种作物。'
-        },
-        { 
-            name: '夏至', 
-            month: 5, 
-            day: 21, 
-            color: '#254517',
-            image: '夏至.png',
-            desc: '夏至日北半球白昼最长，标志着盛夏到来。此时蝉鸣阵阵，荷花盛开，农作物生长旺盛。古人有祭天仪式和消夏活动。'
-        },
-        { 
-            name: '小暑', 
-            month: 6, 
-            day: 7, 
-            color: '#1c3611',
-            image: '小暑.png',
-            desc: '小暑时节天气逐渐炎热，雷雨增多。此时蟋蟀开始在墙角鸣叫，鹰隼捕食更加频繁。农谚有"小暑大暑，灌死老鼠"的说法。'
-        },
-        { 
-            name: '大暑', 
-            month: 6, 
-            day: 22, 
-            color: '#122408',
-            image: '大暑.png',
-            desc: '大暑是一年中最热的时节，高温酷暑考验着万物生长。此时荷花盛开至极，雷阵雨频繁出现。古人有饮伏茶、晒伏姜的习俗。'
-        },
-        { 
-            name: '立秋', 
-            month: 7, 
-            day: 7, 
-            color: '#1a3a4a',
-            image: '立秋.png',
-            desc: '立秋标志着秋天的开始，气温由热转凉。此时早晚温差加大，稻谷抽穗扬花。古人有"贴秋膘"、"啃秋"等习俗。'
-        },
-        { 
-            name: '处暑', 
-            month: 7, 
-            day: 23, 
-            color: '#2d4d5d',
-            image: '处暑.png',
-            desc: '处暑时节暑气消退，秋意渐浓。此时农作物进入成熟期，农民开始收割。古代有"祭蜡"和"迎秋"仪式。'
-        },
-        { 
-            name: '白露', 
-            month: 8, 
-            day: 7, 
-            color: '#3d5d6d',
-            image: '白露.png',
-            desc: '白露时节天气转凉，清晨露水凝结成霜。此时鸿雁南飞，菊花开放。农谚有"白露白茫茫，无谷满粮仓"的说法。'
-        },
-        { 
-            name: '秋分', 
-            month: 8, 
-            day: 23, 
-            color: '#4d6d7d',
-            image: '秋分.png',
-            desc: '秋分日昼夜平分，标志着秋季中期。此时秋高气爽，桂花飘香。古代有"竖蛋"和"送秋牛"的习俗。'
-        },
-        { 
-            name: '寒露', 
-            month: 9, 
-            day: 8, 
-            color: '#5d7d8d',
-            image: '寒露.png',
-            desc: '寒露时节气温降低，露水寒冷凝结。此时菊花盛开至极，农事进入抢收阶段。古人有赏菊和饮菊花酒的习俗。'
-        },
-        { 
-            name: '霜降', 
-            month: 9, 
-            day: 23, 
-            color: '#6d8da7',
-            image: '霜降.png',
-            desc: '霜降是秋季最后一个节气，天气渐冷初霜出现。此时柿子成熟红透，枫叶变红。农谚有"霜降见霜，米谷满仓"的说法。'
-        },
-        { 
-            name: '立冬', 
-            month: 10, 
-            day: 7, 
-            color: '#7d9dc3',
-            image: '立冬.png',
-            desc: '立冬标志着冬季的开始，气温明显下降。此时水始冰地始冻，农民开始准备越冬作物。古代有"贺冬"和"补冬"的习俗。'
-        },
-        { 
-            name: '小雪', 
-            month: 10, 
-            day: 22, 
-            color: '#8da6d9',
-            image: '小雪.png',
-            desc: '小雪时节天气寒冷降雪开始。此时阴气下降阳气上升，农事进入冬闲时期。古人有腌制腊肉和观赏雪景的习俗。'
-        },
-        { 
-            name: '大雪', 
-            month: 11, 
-            day: 7, 
-            color: '#9fb4e6',
-            image: '大雪.png',
-            desc: '大雪时节降雪量增加天气更加寒冷。此时鹖鸟不鸣虎始交，农事基本结束进入农闲。古人有赏雪和制作腊肉的习俗。'
-        },
-        { 
-            name: '冬至', 
-            month: 11, 
-            day: 21, 
-            color: '#b3c2ec',
-            image: '冬至.png',
-            desc: '冬至日北半球白昼最短标志着寒冬到来。此时蚯蚓结麋角解水泉动，古代有"冬至大如年"的说法和祭祀活动。'
-        },
-        { 
-            name: '小寒', 
-            month: 12, 
-            day: 6, 
-            color: '#c5d1f0',
-            image: '小寒.png',
-            desc: '小寒时节天气寒冷但未达极点。此时雁北乡鹊始巢雉雊鸲，农事基本停止进入农闲。古人有"数九消寒"的习俗。'
-        },
-        { 
-            name: '大寒', 
-            month: 12, 
-            day: 20, 
-            color: '#d9e0ff',
-            image: '大寒.png',
-            desc: '大寒是一年中最冷时节标志着冬季尾声。此时鸡乳泽腹水泉动，农事全部结束准备过年。古人有"除旧布新"的习俗迎接新春到来。'
-        }
-    ];
- 
-        // 金句功能配置 
-        const GOLDEN_APIs = [
-		    'https://img.8845.top/yiyan/index.php', 
-		    'https://api.mu-jie.cc/stray-birds/range?type=json', 
-		    'https://v.api.aa1.cn/api/api-wenan-mingrenmingyan/index.php?aa1=json' 
-		];
-		let currentApiIndex = 0;
+            { 
+                name: '立春', 
+                month: 1, 
+                day: 3, 
+                color: '#a5d6a7',
+                image: 'images/立春.png',
+                desc: '立春是二十四节气之首，标志着冬天的结束和春天的开始。此时气温开始回暖，万物复苏，东风送暖，柳树发芽，梅花绽放。古代有迎春仪式和咬春习俗，人们祈求新年吉祥如意。'
+            },
+            { 
+                name: '雨水', 
+                month: 1, 
+                day: 18, 
+                color: '#8bc34a',
+                image: 'images/雨水.png',
+                desc: '雨水节气正值仲春之初，气温继续回升，降水增多，冰雪融化。这个时节适宜春耕备耕，农民开始忙碌农事。古人有"獭祭鱼"、"鸿雁来"等物候现象观察记载。'
+            },
+            { 
+                name: '惊蛰', 
+                month: 2, 
+                day: 5, 
+                color: '#7cb342',
+                image: 'images/惊蛰.png',
+                desc: '惊蛰时节春雷始鸣，蛰伏的昆虫被惊醒而出。此时桃花盛开，杏花怒放，田间地头一片繁忙景象。古有"桃始华"、"仓庚鸣"的物候特征。'
+            },
+            { 
+                name: '春分', 
+                month: 2, 
+                day: 20, 
+                color: '#69a63d',
+                image: 'images/春分.png',
+                desc: '春分日昼夜平分，标志着春季中期。此时莺飞草长，小麦拔节孕穗，农事活动进入繁忙阶段。民间有竖蛋游戏和祭日习俗。'
+            },
+            { 
+                name: '清明', 
+                month: 3, 
+                day: 4, 
+                color: '#5d9536',
+                image: 'images/清明.png',
+                desc: '清明时节气温升高，春雨绵绵滋润大地。这是扫墓祭祖的重要日子，也是踏青赏花的好时机。古代有蹴鞠、荡秋千等娱乐活动。'
+            },
+            { 
+                name: '谷雨', 
+                month: 3, 
+                day: 20, 
+                color: '#4d802e',
+                image: 'images/谷雨.png',
+                desc: '谷雨是春季最后一个节气，降雨量增加利于谷物生长。此时牡丹盛开，茶树抽新芽，农忙季节全面到来。有"萍始生"、"鸣鸠拂其羽"等物候现象。'
+            },
+            { 
+                name: '立夏', 
+                month: 4, 
+                day: 5, 
+                color: '#467930',
+                image: 'images/立夏.png',
+                desc: '立夏标志着夏季的开始，气温显著上升。此时蝼蝈鸣叫，蚯蚓出地面，王瓜开始生长。古代有"迎夏"仪式和尝新活动。'
+            },
+            { 
+                name: '小满', 
+                month: 4, 
+                day: 21, 
+                color: '#3d6826',
+                image: 'images/小满.png',
+                desc: '小满时节麦类作物籽粒开始饱满但未成熟。此时蚕结茧，菜子成熟可以收割。农谚有"小满小满，麦粒渐满"的说法。'
+            },
+            { 
+                name: '芒种', 
+                month: 5, 
+                day: 5, 
+                color: '#30571f',
+                image: 'images/芒种.png',
+                desc: '芒种是农忙时节，北方麦收南方插秧。此时梅子成熟，天气潮湿闷热。农谚说"芒种忙忙种"，抓紧时间播种作物。'
+            },
+            { 
+                name: '夏至', 
+                month: 5, 
+                day: 21, 
+                color: '#254517',
+                image: '夏至.png',
+                desc: '夏至日北半球白昼最长，标志着盛夏到来。此时蝉鸣阵阵，荷花盛开，农作物生长旺盛。古人有祭天仪式和消夏活动。'
+            },
+            { 
+                name: '小暑', 
+                month: 6, 
+                day: 7, 
+                color: '#1c3611',
+                image: '小暑.png',
+                desc: '小暑时节天气逐渐炎热，雷雨增多。此时蟋蟀开始在墙角鸣叫，鹰隼捕食更加频繁。农谚有"小暑大暑，灌死老鼠"的说法。'
+            },
+            { 
+                name: '大暑', 
+                month: 6, 
+                day: 22, 
+                color: '#122408',
+                image: '大暑.png',
+                desc: '大暑是一年中最热的时节，高温酷暑考验着万物生长。此时荷花盛开至极，雷阵雨频繁出现。古人有饮伏茶、晒伏姜的习俗。'
+            },
+            { 
+                name: '立秋', 
+                month: 7, 
+                day: 7, 
+                color: '#1a3a4a',
+                image: '立秋.png',
+                desc: '立秋标志着秋天的开始，气温由热转凉。此时早晚温差加大，稻谷抽穗扬花。古人有"贴秋膘"、"啃秋"等习俗。'
+            },
+            { 
+                name: '处暑', 
+                month: 7, 
+                day: 23, 
+                color: '#2d4d5d',
+                image: '处暑.png',
+                desc: '处暑时节暑气消退，秋意渐浓。此时农作物进入成熟期，农民开始收割。古代有"祭蜡"和"迎秋"仪式。'
+            },
+            { 
+                name: '白露', 
+                month: 8, 
+                day: 7, 
+                color: '#3d5d6d',
+                image: '白露.png',
+                desc: '白露时节天气转凉，清晨露水凝结成霜。此时鸿雁南飞，菊花开放。农谚有"白露白茫茫，无谷满粮仓"的说法。'
+            },
+            { 
+                name: '秋分', 
+                month: 8, 
+                day: 23, 
+                color: '#4d6d7d',
+                image: '秋分.png',
+                desc: '秋分日昼夜平分，标志着秋季中期。此时秋高气爽，桂花飘香。古代有"竖蛋"和"送秋牛"的习俗。'
+            },
+            { 
+                name: '寒露', 
+                month: 9, 
+                day: 8, 
+                color: '#5d7d8d',
+                image: '寒露.png',
+                desc: '寒露时节气温降低，露水寒冷凝结。此时菊花盛开至极，农事进入抢收阶段。古人有赏菊和饮菊花酒的习俗。'
+            },
+            { 
+                name: '霜降', 
+                month: 9, 
+                day: 23, 
+                color: '#6d8da7',
+                image: '霜降.png',
+                desc: '霜降是秋季最后一个节气，天气渐冷初霜出现。此时柿子成熟红透，枫叶变红。农谚有"霜降见霜，米谷满仓"的说法。'
+            },
+            { 
+                name: '立冬', 
+                month: 10, 
+                day: 7, 
+                color: '#7d9dc3',
+                image: '立冬.png',
+                desc: '立冬标志着冬季的开始，气温明显下降。此时水始冰地始冻，农民开始准备越冬作物。古代有"贺冬"和"补冬"的习俗。'
+            },
+            { 
+                name: '小雪', 
+                month: 10, 
+                day: 22, 
+                color: '#8da6d9',
+                image: '小雪.png',
+                desc: '小雪时节天气寒冷降雪开始。此时阴气下降阳气上升，农事进入冬闲时期。古人有腌制腊肉和观赏雪景的习俗。'
+            },
+            { 
+                name: '大雪', 
+                month: 11, 
+                day: 7, 
+                color: '#9fb4e6',
+                image: '大雪.png',
+                desc: '大雪时节降雪量增加天气更加寒冷。此时鹖鸟不鸣虎始交，农事基本结束进入农闲。古人有赏雪和制作腊肉的习俗。'
+            },
+            { 
+                name: '冬至', 
+                month: 11, 
+                day: 21, 
+                color: '#b3c2ec',
+                image: '冬至.png',
+                desc: '冬至日北半球白昼最短标志着寒冬到来。此时蚯蚓结麋角解水泉动，古代有"冬至大如年"的说法和祭祀活动。'
+            },
+            { 
+                name: '小寒', 
+                month: 12, 
+                day: 6, 
+                color: '#c5d1f0',
+                image: '小寒.png',
+                desc: '小寒时节天气寒冷但未达极点。此时雁北乡鹊始巢雉雊鸲，农事基本停止进入农闲。古人有"数九消寒"的习俗。'
+            },
+            { 
+                name: '大寒', 
+                month: 12, 
+                day: 20, 
+                color: '#d9e0ff',
+                image: '大寒.png',
+                desc: '大寒是一年中最冷时节标志着冬季尾声。此时鸡乳泽腹水泉动，农事全部结束准备过年。古人有"除旧布新"的习俗迎接新春到来。'
+            }
+        ];
+
+        // 本地金句库
         const localPhrases = {
             high: [ // 60% 概率
                 "在晨曦的微光中，露珠轻吻着花瓣，如同繁星点缀于夜空的边际。",
@@ -1347,23 +1129,289 @@
                 "冷知识：一加一其实等于二。"
             ]
         };
+
+        // Part1 时间间隔设置
+        let intervalDuration = 15 * 1000;
+        let phraseTimer = null;
+
+        // 滑动条和输入框事件
+        document.getElementById('intervalSlider').addEventListener('input', function(e) {
+            const value = Math.min(120, Math.max(1, parseInt(e.target.value) || 15));
+            intervalDuration = value * 1000;
+            document.getElementById('intervalValue').value = value;
+            // 如果自动轮播开启则立即应用新间隔
+            if (goldenSwitch.checked && phraseTimer) {
+                clearInterval(phraseTimer);
+                phraseTimer = setInterval(fetchGoldenPhrase, intervalDuration);
+            }
+        });
+
+        document.getElementById('intervalValue').addEventListener('input', function(e) {
+            const value = Math.min(120, Math.max(1, parseInt(e.target.value) || 15));
+            intervalDuration = value * 1000;
+            document.getElementById('intervalSlider').value = value;
+        });
+
+        // 重置间隔
+        function resetInterval() {
+            intervalDuration = 15 * 1000;
+            document.getElementById('intervalSlider').value = 15;
+            document.getElementById('intervalValue').value = 15;
+            
+            if (goldenSwitch.checked && phraseTimer) {
+                clearInterval(phraseTimer);
+                phraseTimer = setInterval(fetchGoldenPhrase, intervalDuration);
+            }
+        }
+
+        // Part2 概率控制
+        let apiProbability = 50;
+
+        // 滑动条输入事件监听
+        document.getElementById('apiProbability').addEventListener('input', function(e) {
+            const value = Math.min(100, Math.max(0, parseInt(e.target.value) || 0));
+            apiProbability = value;
+            document.getElementById('apiProbabilityValue').value = value;
+        });
+
+        // 数值输入框事件监听
+        document.getElementById('apiProbabilityValue').addEventListener('input', function(e) {
+            const value = Math.min(100, Math.max(0, parseInt(e.target.value) || 0));
+            apiProbability = value;
+            document.getElementById('apiProbability').value = value;
+        });
+
+        // 重置按钮
+        function resetProbability() {
+            apiProbability = 50;
+            document.getElementById('apiProbability').value = 50;
+            document.getElementById('apiProbabilityValue').value = 50;
+        }
+
+        // Part3 公告板
+        const announcementButton = document.getElementById('announcementButton');
+        const announcementModal = document.getElementById('announcementModal');
+        const closeAnnouncement = document.getElementById('closeAnnouncement');
+
+        // 打开公告
+        announcementButton.addEventListener('click', () => {
+            announcementModal.classList.add('active');
+        });
+
+        // 关闭公告
+        closeAnnouncement.addEventListener('click', () => {
+            announcementModal.classList.remove('active');
+        });
+
+        // Part4 更新日志功能
+        const changelogButton = document.getElementById('changelogButton');
+        const changelogModal = document.getElementById('changelogModal');
+        const closeChangelog = document.getElementById('closeChangelog');
+
+        // 打开更新日志
+        changelogButton.addEventListener('click', async () => {
+            try {
+                const response = await fetch('update.txt');
+                if (!response.ok) throw new Error('文件加载失败');
+                const text = await response.text();
+                
+                document.getElementById('changelogContent').textContent = 
+                    text || "当前没有更新日志内容";
+                
+                changelogModal.classList.add('active');
+            } catch (error) {
+                console.error('加载失败:', error);
+                document.getElementById('changelogContent').textContent = 
+                    "无法加载更新日志，错误码 1145141919810 (bushi";
+                changelogModal.classList.add('active');
+            }
+        });
+
+        // 关闭更新日志
+        closeChangelog.addEventListener('click', () => {
+            changelogModal.classList.remove('active');
+        });
+
+        // Part5 设置
+        const settingsButton = document.getElementById('settingsButton');
+        const settingsModal = document.getElementById('settingsModal');
+        const closeButton = document.getElementById('closeSettings');
+
+        // 打开设置
+        settingsButton.addEventListener('click', () => {
+            settingsModal.classList.add('active');
+        });
+
+        // 关闭设置
+        closeButton.addEventListener('click', () => {
+            settingsModal.classList.remove('active');
+        });
+
+        // Part6 作息显示功能
+        // 时间转换函数
+		function timeToMinutes(time) {
+		    const [h, m] = time.split(':').map(Number);
+		    return h * 60 + m;
+		}
+
+        // 获取当前作息
+		function getCurrentSchedule() {
+		    const now = new Date();
+		    const day = now.getDay();
+		    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+		    if(day === 0 || day === 6) return {current: "周末", nextLesson: ""};
+		    const todaySchedule = schedule.weekday;
+		    let current = "";
+		    let nextLesson = "";
+		    // 处理跨天时段（22:50-7:00）
+		    if(currentMinutes >= timeToMinutes("22:50") || currentMinutes < timeToMinutes("7:00")) {
+		        current = "睡觉";
+		        const firstLesson = todaySchedule.find(item => item[1].endsWith("节课"));
+		        nextLesson = firstLesson ? firstLesson[1] : "";
+		        return {current, nextLesson};
+		    }
+		    let currentIndex = -1;
+		    // 查找当前时间段
+		    for(let i = 0; i < todaySchedule.length; i++) {
+		        const [start, end] = todaySchedule[i][0].split('-');
+		        const startTime = timeToMinutes(start);
+		        const endTime = timeToMinutes(end);
+		        if(currentMinutes >= startTime && currentMinutes < endTime) {
+		            current = todaySchedule[i][1];
+		            currentIndex = i;
+		            break;
+		        }
+		    }
+		    // 查找下一个"节课"
+		    if(currentIndex >= 0) {
+		        for(let i = currentIndex + 1; i < todaySchedule.length; i++) {
+		            if(todaySchedule[i][1].endsWith("节课")) {
+		                nextLesson = todaySchedule[i][1];
+		                break;
+		            }
+		        }
+		    }
+		    return {current, nextLesson};
+		}
+
+        // 获取课程名称
+        function getCourseName(day, lessonIndex) {
+            const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+            const timetableDay = timetable[days[day]];
+            return timetableDay ? timetableDay[lessonIndex] : "";
+        }
+
+        // 更新作息显示
+		function updateScheduleDisplay() {
+            const now = new Date();
+            const day = now.getDay();  
+            const {current, nextLesson} = getCurrentSchedule();
+            // 当前作息
+            let currentText = current;
+            if(current.includes(" 课")) {
+                // 找到当前节课在课程表中的位置
+                const lessonItems = schedule.weekday.filter(item   => item[1].includes("节"));
+                const currentLessonIndex = lessonItems.findIndex(item   => item[1] === current);
+                if(currentLessonIndex >=0 && currentLessonIndex <9) {
+                    currentText = getCourseName(day, currentLessonIndex);
+                }
+            }
+            document.getElementById('currentSchedule').textContent   = currentText;
+            // 下节课
+            let nextText = nextLesson;
+            if(nextLesson) {
+                const lessonItems = schedule.weekday.filter(item   => item[1].includes("节"));
+                const nextLessonIndex = lessonItems.findIndex(item   => item[1] === nextLesson);
+                if(nextLessonIndex >=0 && nextLessonIndex <9) {
+                    nextText = getCourseName(day, nextLessonIndex);
+                }
+            }
+            document.getElementById('nextSchedule').textContent   = nextText || "无";
+		    // 课表
+		    if(day >=1 && day <=5) {
+		        const courses = timetable[Object.keys(timetable)[day-1]];
+		        document.getElementById('todayTimetable').innerHTML   = courses.map((c,i)   => 
+		            `<div class="timetable-item">${i+1}&nbsp;${c}</div>`
+		        ).join('');
+		    } else {
+		        document.getElementById('todayTimetable').innerHTML   = 
+		            '<div class="timetable-item">周末无课表</div>';
+		    }
+		}
  
+        // Part7 金句功能
+        const GOLDEN_APIs = [
+		    'https://img.8845.top/yiyan/index.php', 
+		    'https://api.mu-jie.cc/stray-birds/range?type=json', 
+		    'https://v.api.aa1.cn/api/api-wenan-mingrenmingyan/index.php?aa1=json' 
+		];
+
+		let currentApiIndex = 0;
+
+        async function fetchGoldenPhrase() {
+            if (Math.random()  < apiProbability / 100) {
+                try {
+                    const apiIndex = Math.floor(Math.random()  * GOLDEN_APIs.length); 
+                    const api = GOLDEN_APIs[1];
+                    const response = await fetch(api);
+                    if (!response.ok)  throw new Error('网络异常');
+                    const data = await response.json(); 
+                    let text = data.cn + "——泰戈尔"; 
+                    if (!text) {
+                        throw new Error('数据异常');
+                    }
+                    updatePhraseDisplay(text);
+                } catch (error) {
+                    console.warn('  金句API获取失败:', error);
+                    showLocalPhrase();
+                }
+            } else {
+                showLocalPhrase();
+            }
+        }
+ 
+        function updatePhraseDisplay(text) {
+            const container = document.getElementById('goldenPhrase'); 
+            container.style.opacity  = 0;
+            setTimeout(() => {
+                container.textContent  = `「 ${text} 」`;
+                container.style.opacity  = 1;
+            }, 500);
+        }
+ 
+        function showLocalPhrase() {
+            // 加权选择池
+            const weightedPool = [
+                ...localPhrases.high.map(p => ({ p, w: 6 })),   // 高概率区：权重6
+                ...localPhrases.medium.map(p => ({ p, w: 3 })), // 中概率区：权重3 
+                ...localPhrases.low.map(p => ({ p, w: 1 }))     // 低概率区：权重1
+            ];
+            // 计算总权重
+            const totalWeight = weightedPool.reduce((sum, item) => sum + item.w, 0);
+            // 生成随机数
+            let random = Math.random() * totalWeight;
+            // 遍历选择池寻找命中项
+            for (const item of weightedPool) {
+                if (random < item.w) {
+                    return updatePhraseDisplay(item.p);
+                }
+                random -= item.w;
+            }
+        }
+ 
+        // Part8 二十四节气时间轴
         // 生成节气标记 
         function generateSolarMarkers() {
             const springStart = solarTerms.find(t  => t.name  === '立春');
             const startDate = new Date(2025, springStart.month,  springStart.day); 
             const endDate = new Date(2025, 5, 18);
             const totalDays = (endDate - startDate) / 86400000;
- 
             document.querySelectorAll('.solar-term-marker').forEach(m  => m.remove()); 
- 
             solarTerms.forEach(term  => {
                 const termDate = new Date(2025, term.month,  term.day); 
                 if (termDate < startDate || termDate > endDate) return;
- 
                 const position = ((termDate - startDate) / 86400000 / totalDays) * 100;
                 const isPast = termDate < new Date();
- 
                 const marker = document.createElement('div'); 
                 marker.className  = 'solar-term-marker';
                 marker.style.left  = `${position}%`;
@@ -1378,7 +1426,6 @@
                         ${termDate.getMonth()+1}  月${termDate.getDate()}  日 
                     </div>
                 `;
- 
                 marker.addEventListener('mouseover',  () => {
                     if (!isPast) {
                         marker.style.transform  = 'translateX(-50%) scale(1.1)';
@@ -1389,9 +1436,7 @@
                     marker.style.transform  = 'translateX(-50%) scale(1)';
                     marker.style.filter  = 'none';
                 });
- 
                 timeline.appendChild(marker); 
-
                 // 创建卡片
                 const card = document.createElement('div');
                 card.className = 'solar-card';
@@ -1401,7 +1446,6 @@
                     <p>${term.desc}</p>
                 `;
                 marker.appendChild(card);
-
                 // 点击事件处理
                 marker.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -1410,28 +1454,25 @@
                     card.classList.add('active');
                 });
             });
-
             // 点击其他区域隐藏卡片
             document.addEventListener('click', () => {
                 document.querySelectorAll('.solar-card').forEach(c => c.classList.remove('active'));
             });
         }
  
-        // 时间轴进度 
+        // 时间轴
         function updateTimelineColor() {
             const springStart = solarTerms.find(t  => t.name  === '立春');
             const startDate = new Date(2025, springStart.month,  springStart.day); 
             const endDate = new Date(2025, 5, 18);
             const now = new Date();
- 
             const total = endDate - startDate;
             const progress = Math.min(1,  Math.max(0,  (now - startDate) / total));
- 
             timeline.style.setProperty('--progress-percent',  `${progress * 100}%`);
             requestAnimationFrame(updateTimelineColor);
         }
  
-        // 倒计时更新 
+        // Part9 中考倒计时
         function updateCountdown() {
             const target = new Date(2025, 5, 18);
             const diff = target - new Date();
@@ -1443,82 +1484,25 @@
             setTimeout(updateCountdown, msToNextDay);
         }
  
-        // 更新时间显示函数 
+        // Part10 时钟显示
         function updateClock() {
             const date = new Date();
             const weekDays = ['日','一','二','三','四','五','六'];
-            
             // 时间部分 
             const hh = date.getHours().toString().padStart(2,  '0');
             const mm = date.getMinutes().toString().padStart(2,  '0');
             const ss = date.getSeconds().toString().padStart(2,  '0');
-            
             // 日期部分 
             const yyyy = date.getFullYear(); 
             const m = (date.getMonth()  + 1).toString().padStart(2, '0');
             const d = date.getDate().toString().padStart(2,  '0');
             const week = weekDays[date.getDay()];
- 
             document.getElementById('currentDateTime').innerHTML  = `
                 <div class="time-section">${hh}:${mm}:${ss}</div>
                 <div class="date-section">${yyyy}/${m}/${d} 周${week}</div>
             `;
             requestAnimationFrame(updateClock);
         }
- 
-        // 金句功能 
-		async function fetchGoldenPhrase() {
-		    // 70%概率使用API
-		    if (Math.random()  < apiProbability / 100) {
-		        try {
-		            const apiIndex = Math.floor(Math.random()  * GOLDEN_APIs.length); 
-		            const api = GOLDEN_APIs[1];
-		            const response = await fetch(api);
-		            if (!response.ok)  throw new Error('网络异常');
-		            const data = await response.json(); 
-		            let text = data.cn + "——泰戈尔"; 
-		            if (!text) {
-		                throw new Error('数据异常');
-		            }
-		            updatePhraseDisplay(text);
-		        } catch (error) {
-		            console.warn('  金句API获取失败:', error);
-		            showLocalPhrase();
-		        }
-		    } else {
-		        // 30%概率使用本地金句库
-		        showLocalPhrase();
-		    }
-		}
- 
-        function updatePhraseDisplay(text) {
-		    const container = document.getElementById('goldenPhrase'); 
-		    container.style.opacity  = 0;
-		    setTimeout(() => {
-		        container.textContent  = `「 ${text} 」`;
-		        container.style.opacity  = 1;
-		    }, 500);
-		}
- 
-        function showLocalPhrase() {
-            // 创建加权选择池
-            const weightedPool = [
-                ...localPhrases.high.map(p => ({ p, w: 6 })),   // 高概率区：权重6
-                ...localPhrases.medium.map(p => ({ p, w: 3 })), // 中概率区：权重3 
-                ...localPhrases.low.map(p => ({ p, w: 1 }))     // 低概率区：权重1
-            ];
-		    // 计算总权重
-            const totalWeight = weightedPool.reduce((sum, item) => sum + item.w, 0);
-            // 生成随机选择数
-            let random = Math.random() * totalWeight;
-            // 遍历选择池寻找命中项
-            for (const item of weightedPool) {
-                if (random < item.w) {
-                    return updatePhraseDisplay(item.p);
-                }
-                random -= item.w;
-            }
-		}
 
 		function fetchAndDisplayImage(url) {
 		    fetch('https://api.cenguigui.cn/api/60s/')
@@ -1531,6 +1515,7 @@
 		        .catch(error => console.error(' 图片加载失败:', error));
 		}
 
+        // Part11 金句自动轮播和显示每日60s开关
         // 初始化开关状态
         const goldenSwitch = document.getElementById('goldenSwitch'); 
         const imageSwitch = document.getElementById('imageSwitch'); 
@@ -1562,6 +1547,7 @@
         goldenSwitch.checked  = true; // 默认开启金句自动轮播
         imageSwitch.checked  = true; // 默认开启每日60s显示
 
+        // Part12 天气
         function fetchWeather() {
             fetch('https://v2.api-m.com/api/weather?city=%E5%B2%B3%E9%BA%93%E5%8C%BA')
                 .then(response => {
@@ -1573,10 +1559,8 @@
                     // 获取当前星期（示例返回格式："周五"）
                     const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
                     const currentDay = '周' + weekDays[new Date().getDay()];
-
                     // 查找匹配的天气数据
                     const todayWeather = data.data.data.find(item => item.date === currentDay);
-
                     if (todayWeather) {
                         // 格式化温度显示（7-10℃ → 7~10℃）
                         const tempRange = todayWeather.temperature.replace('-', '~');
@@ -1599,7 +1583,7 @@
             fetchAndDisplayImage();
         };
  
-        // 初始化 
+        // Part13 初始化 
         function init() {
 		    updateCountdown();
 		    updateClock();
@@ -1613,6 +1597,7 @@
 		}
  
         init();
+        
 		window.addEventListener('unload',  () => clearInterval(phraseTimer));
 		setInterval(() => {
 		    generateSolarMarkers();
