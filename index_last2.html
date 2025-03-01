@@ -4,149 +4,6 @@
     <title>中考倒计时 - C2201|中考必胜</title>
     <meta charset="utf-8">
     <style>
-        /* 更新日志相关样式 */
-        .action-buttons {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 15px;
-            z-index: 10;
-        }
-
-        .action-button {
-            width: auto;
-            padding: 0 20px;
-            height: 40px;
-            border-radius: 20px;
-            background: #8bc34a;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            color: white;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-            white-space: nowrap;
-        }
-
-        .action-button:hover {
-            transform: scale(1.05);
-        }
-
-        .changelog-modal .settings-content {
-            max-width: 600px;
-            height: 70%;
-        }
-
-        .text-content {
-            padding: 15px;
-            white-space: pre-wrap;
-            line-height: 1.6;
-            overflow-y: auto;
-            height: calc(100% - 40px);
-        }
-
-        /* 设置相关样式 */
-        .settings-button {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #8bc34a;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: white;
-            transition: transform 0.3s;
-        }
-
-        .settings-button:hover {
-            transform: translateX(-50%) scale(1.1);
-        }
-
-        .settings-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s;
-            z-index: 999;
-        }
-
-        .settings-modal.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .settings-content {
-            background: white;
-            width: 60%;
-            height: 60%;
-            border-radius: 12px;
-            transform: scale(0.8);
-            opacity: 0;
-            transition: all 0.3s;
-            position: relative;
-            padding: 20px;
-        }
-
-        .settings-modal.active .settings-content {
-            transform: scale(1);
-            opacity: 1;
-        }
-
-        .settings-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-
-        .settings-header h3 {
-            margin: 0;
-            font-size: 24px;
-            color: #333;
-        }
-
-        .close-btn {
-            font-size: 28px;
-            cursor: pointer;
-            padding: 0 10px;
-            color: #666;
-        }
-
-        .close-btn:hover {
-            color: #333;
-        }
-
-        .settings-body {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-            padding: 20px;
-        }
-
         /* 节气卡片样式 */
         .solar-card {
             position: absolute;
@@ -445,7 +302,7 @@
         }
         
         .right-image-container img {
-	        height: 80vh;
+	        height: 80vh;  /* 设置高度为窗口高度的95% */
 	        object-fit: cover;
 	        display: block;
 	        margin: 0 auto;
@@ -461,34 +318,39 @@
         }
 
         .switch-container {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
-            flex-direction: column;
             gap: 40px;
-            margin-top: 20px;
+            z-index: 10;
         }
 
         .switch {
             position: relative;
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            justify-content: space-between;
-            width: 100%;
-        }
-
-        .slider {
-            position: relative;
-            cursor: pointer;
-            width: 40px;
-            height: 24px;
-            background-color: #ccc;
-            transition: 0.4s;
-            border-radius: 24px;
+            width: 140px;
+            height: 30px;
+            gap: 20px;
         }
 
         .switch-text {
             font-size: 14px;
             color: #1b5e20;
             display: inline-block;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            width: 40px;
+            height: 24px;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+            left: 90px;
         }
 
         .slider:before {
@@ -499,7 +361,7 @@
             left: 2px;
             bottom: 2px;
             background-color: white;
-            transition: 0.4s;
+            transition: .4s;
             border-radius: 50%;
         }
 
@@ -568,136 +430,25 @@
     <!-- 金句显示 -->
     <div id="goldenPhrase"></div>
 
-    <!-- 每日60s显示 -->
     <div class="right-image-container">
         <img id="apiImage" src="" alt="每日60s">
     </div>
 
-    <!-- 底部按钮显示 -->
-    <div class="action-buttons">
-        <button id="settingsButton" class="action-button">⚙️ 设置</button>
-        <button id="changelogButton" class="action-button">📝 更新日志</button>
-        <button id="announcementButton" class="action-button">📢 公告</button>
-    </div>
-
-    <!-- 设置模态框 -->
-    <div class="settings-modal" id="settingsModal">
-        <div class="settings-content">
-            <div class="settings-header">
-                <h3>设置</h3>
-                <span class="close-btn" id="closeSettings">&times;</span>
-            </div>
-            <div class="settings-body">
-                <!-- 移动原来的开关到这里 -->
-                <div class="switch-container">
-                    <label class="switch">
-                        <span class="switch-text">金句自动轮播</span>
-                        <input type="checkbox" id="goldenSwitch" checked>
-                        <span class="slider"></span>
-                    </label>
-                    <label class="switch">
-                        <span class="switch-text">显示每日60s</span>
-                        <input type="checkbox" id="imageSwitch">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 更新日志模态框 -->
-    <div class="settings-modal" id="changelogModal">
-        <div class="settings-content">
-            <div class="settings-header">
-                <h3>更新日志</h3>
-                <span class="close-btn" id="closeChangelog">&times;</span>
-            </div>
-            <div class="text-content" id="changelogContent"></div>
-        </div>
-    </div>
-
-    <div class="settings-modal" id="announcementModal">
-        <div class="settings-content">
-            <div class="settings-header">
-                <h3>公告</h3>
-                <span class="close-btn" id="closeAnnouncement">&times;</span>
-            </div>
-            <div class="text-content" id="announcementContent"></div>
-        </div>
+    <!-- 添加滑块开关容器 -->
+    <div class="switch-container">
+        <label class="switch">
+            <span class="switch-text">金句自动轮播</span>
+            <input type="checkbox" id="goldenSwitch" checked>
+            <span class="slider"></span>
+        </label>
+        <label class="switch">
+            <span class="switch-text">显示每日60s</span>
+            <input type="checkbox" id="imageSwitch">
+            <span class="slider"></span>
+        </label>
     </div>
  
     <script>
-        // 公告相关脚本
-        const announcementButton = document.getElementById('announcementButton');
-        const announcementModal = document.getElementById('announcementModal');
-        const closeAnnouncement = document.getElementById('closeAnnouncement');
-
-        // 打开公告
-        announcementButton.addEventListener('click', async () => {
-            try {
-                const response = await fetch('announcement.html');
-                if (!response.ok) throw new Error('公告加载失败');
-                const html = await response.text();
-                
-                document.getElementById('announcementContent').innerHTML = html;
-                announcementModal.classList.add('active');
-            } catch (error) {
-                console.error('加载失败:', error);
-                document.getElementById('announcementContent').innerHTML = 
-                    "无法加载公告内容，请稍后再试";
-                announcementModal.classList.add('active');
-            }
-        });
-
-        // 关闭公告
-        closeAnnouncement.addEventListener('click', () => {
-            announcementModal.classList.remove('active');
-        });
-
-        // 更新日志功能
-        const changelogButton = document.getElementById('changelogButton');
-        const changelogModal = document.getElementById('changelogModal');
-        const closeChangelog = document.getElementById('closeChangelog');
-
-        // 打开更新日志
-        changelogButton.addEventListener('click', async () => {
-            try {
-                const response = await fetch('update.txt');
-                if (!response.ok) throw new Error('文件加载失败');
-                const text = await response.text();
-                
-                document.getElementById('changelogContent').textContent = 
-                    text || "当前没有更新日志内容";
-                
-                changelogModal.classList.add('active');
-            } catch (error) {
-                console.error('加载失败:', error);
-                document.getElementById('changelogContent').textContent = 
-                    "无法加载更新日志，错误码1145141919810(bushi";
-                changelogModal.classList.add('active');
-            }
-        });
-
-        // 关闭弹窗
-        closeChangelog.addEventListener('click', () => {
-            changelogModal.classList.remove('active');
-        });
-
-        // 设置相关脚本
-        const settingsButton = document.getElementById('settingsButton');
-        const settingsModal = document.getElementById('settingsModal');
-        const closeButton = document.getElementById('closeSettings');
-
-        // 打开设置
-        settingsButton.addEventListener('click', () => {
-            settingsModal.classList.add('active');
-        });
-
-        // 关闭设置
-        closeButton.addEventListener('click', () => {
-            settingsModal.classList.remove('active');
-        });
-
     	// 作息表数据
         const schedule = {
             weekday: [
@@ -808,7 +559,7 @@
             return timetableDay ? timetableDay[lessonIndex] : "";
         }
 
-        // 更新作息显示
+        // 修改后的更新作息显示
 		function updateScheduleDisplay() {
             const now = new Date();
             const day = now.getDay();  
@@ -1217,7 +968,7 @@
 		    const container = document.getElementById('goldenPhrase'); 
 		    container.style.opacity  = 0;
 		    setTimeout(() => {
-		        container.textContent  = `「 ${text} ——泰戈尔」`;
+		        container.textContent  = `「 ${text} 」`;
 		        container.style.opacity  = 1;
 		    }, 500);
 		}
@@ -1233,7 +984,7 @@
 		        .then(blob => {
 		            const img = document.getElementById('apiImage'); 
 		            img.src  = URL.createObjectURL(blob); 
-		            img.style.height  = '80vh';
+		            img.style.height  = '80vh';  // 设置高度为窗口高度的95%
 		        })
 		        .catch(error => console.error(' 图片加载失败:', error));
 		}
@@ -1258,7 +1009,7 @@
             if (this.checked)  {
                 apiImage.style.display  = 'block';
                 fetchAndDisplayImage();
-                setInterval(fetchAndDisplayImage, 86400000);
+                setInterval(fetchAndDisplayImage, 86400000); // 每天更新一次图片
             } else {
                 apiImage.style.display  = 'none';
                 clearInterval(imageUpdateInterval);

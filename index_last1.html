@@ -4,7 +4,7 @@
     <title>中考倒计时 - C2201|中考必胜</title>
     <meta charset="utf-8">
     <style>
-        /* 更新日志相关样式 */
+        /* 新增更新日志相关样式 */
         .action-buttons {
             position: fixed;
             bottom: 20px;
@@ -50,7 +50,7 @@
             height: calc(100% - 40px);
         }
 
-        /* 设置相关样式 */
+        /* 新增设置相关样式 */
         .settings-button {
             position: fixed;
             bottom: 20px;
@@ -445,7 +445,7 @@
         }
         
         .right-image-container img {
-	        height: 80vh;
+	        height: 80vh;  /* 设置高度为窗口高度的95% */
 	        object-fit: cover;
 	        display: block;
 	        margin: 0 auto;
@@ -460,6 +460,7 @@
             width: 0;
         }
 
+        /* 原滑块开关样式修改 */
         .switch-container {
             display: flex;
             flex-direction: column;
@@ -568,19 +569,17 @@
     <!-- 金句显示 -->
     <div id="goldenPhrase"></div>
 
-    <!-- 每日60s显示 -->
     <div class="right-image-container">
         <img id="apiImage" src="" alt="每日60s">
     </div>
 
-    <!-- 底部按钮显示 -->
+    <!-- 在原有HTML基础上添加以下内容 -->
     <div class="action-buttons">
         <button id="settingsButton" class="action-button">⚙️ 设置</button>
         <button id="changelogButton" class="action-button">📝 更新日志</button>
-        <button id="announcementButton" class="action-button">📢 公告</button>
     </div>
 
-    <!-- 设置模态框 -->
+    <!-- 新增设置模态框 -->
     <div class="settings-modal" id="settingsModal">
         <div class="settings-content">
             <div class="settings-header">
@@ -605,7 +604,7 @@
         </div>
     </div>
 
-    <!-- 更新日志模态框 -->
+    <!-- 更新日志弹窗 -->
     <div class="settings-modal" id="changelogModal">
         <div class="settings-content">
             <div class="settings-header">
@@ -615,46 +614,9 @@
             <div class="text-content" id="changelogContent"></div>
         </div>
     </div>
-
-    <div class="settings-modal" id="announcementModal">
-        <div class="settings-content">
-            <div class="settings-header">
-                <h3>公告</h3>
-                <span class="close-btn" id="closeAnnouncement">&times;</span>
-            </div>
-            <div class="text-content" id="announcementContent"></div>
-        </div>
-    </div>
  
     <script>
-        // 公告相关脚本
-        const announcementButton = document.getElementById('announcementButton');
-        const announcementModal = document.getElementById('announcementModal');
-        const closeAnnouncement = document.getElementById('closeAnnouncement');
-
-        // 打开公告
-        announcementButton.addEventListener('click', async () => {
-            try {
-                const response = await fetch('announcement.html');
-                if (!response.ok) throw new Error('公告加载失败');
-                const html = await response.text();
-                
-                document.getElementById('announcementContent').innerHTML = html;
-                announcementModal.classList.add('active');
-            } catch (error) {
-                console.error('加载失败:', error);
-                document.getElementById('announcementContent').innerHTML = 
-                    "无法加载公告内容，请稍后再试";
-                announcementModal.classList.add('active');
-            }
-        });
-
-        // 关闭公告
-        closeAnnouncement.addEventListener('click', () => {
-            announcementModal.classList.remove('active');
-        });
-
-        // 更新日志功能
+        // 新增更新日志功能
         const changelogButton = document.getElementById('changelogButton');
         const changelogModal = document.getElementById('changelogModal');
         const closeChangelog = document.getElementById('closeChangelog');
@@ -683,6 +645,13 @@
             changelogModal.classList.remove('active');
         });
 
+        // 点击外部关闭
+        changelogModal.addEventListener('click', (e) => {
+            if (e.target === changelogModal) {
+                changelogModal.classList.remove('active');
+            }
+        });
+
         // 设置相关脚本
         const settingsButton = document.getElementById('settingsButton');
         const settingsModal = document.getElementById('settingsModal');
@@ -696,6 +665,13 @@
         // 关闭设置
         closeButton.addEventListener('click', () => {
             settingsModal.classList.remove('active');
+        });
+
+        // 点击模态框外部关闭
+        settingsModal.addEventListener('click', (e) => {
+            if (e.target === settingsModal) {
+                settingsModal.classList.remove('active');
+            }
         });
 
     	// 作息表数据
@@ -808,7 +784,7 @@
             return timetableDay ? timetableDay[lessonIndex] : "";
         }
 
-        // 更新作息显示
+        // 修改后的更新作息显示
 		function updateScheduleDisplay() {
             const now = new Date();
             const day = now.getDay();  
@@ -1217,7 +1193,7 @@
 		    const container = document.getElementById('goldenPhrase'); 
 		    container.style.opacity  = 0;
 		    setTimeout(() => {
-		        container.textContent  = `「 ${text} ——泰戈尔」`;
+		        container.textContent  = `「 ${text} 」`;
 		        container.style.opacity  = 1;
 		    }, 500);
 		}
@@ -1233,7 +1209,7 @@
 		        .then(blob => {
 		            const img = document.getElementById('apiImage'); 
 		            img.src  = URL.createObjectURL(blob); 
-		            img.style.height  = '80vh';
+		            img.style.height  = '80vh';  // 设置高度为窗口高度的95%
 		        })
 		        .catch(error => console.error(' 图片加载失败:', error));
 		}
@@ -1258,7 +1234,7 @@
             if (this.checked)  {
                 apiImage.style.display  = 'block';
                 fetchAndDisplayImage();
-                setInterval(fetchAndDisplayImage, 86400000);
+                setInterval(fetchAndDisplayImage, 86400000); // 每天更新一次图片
             } else {
                 apiImage.style.display  = 'none';
                 clearInterval(imageUpdateInterval);
