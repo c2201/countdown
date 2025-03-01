@@ -39,15 +39,14 @@
 
         .changelog-modal .settings-content {
             max-width: 600px;
-            height: 70%;
+            height: 75%;
         }
 
         .text-content {
             padding: 15px;
             white-space: pre-wrap;
-            line-height: 1.6;
             overflow-y: auto;
-            height: calc(100% - 40px);
+            height: calc(100% - 50px);
         }
 
         /* 设置相关样式 */
@@ -98,16 +97,17 @@
         }
 
         .settings-content {
-            background: white;
-            width: 60%;
-            height: 60%;
-            border-radius: 12px;
-            transform: scale(0.8);
-            opacity: 0;
-            transition: all 0.3s;
-            position: relative;
-            padding: 20px;
-        }
+        background: white;
+        width: 60%;
+        height: 75%;
+        border-radius: 12px;
+        transform: scale(0.8);
+        opacity: 0;
+        transition: all 0.3s;
+        position: relative;
+        padding: 20px;
+        overflow: hidden; 
+    }
 
         .settings-modal.active .settings-content {
             transform: scale(1);
@@ -515,6 +515,200 @@
         input:checked ~ .switch-text {
             color: #4CAF50;
         }
+
+        /* 新增公告卡片样式 */
+        .announcement-card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin: 15px;
+            border: 1px solid #eee;
+        }
+
+        .announcement-title {
+            font-size: 1.6em;  /* 增大字号 */
+            color: #1b5e20;
+            font-weight: 600;
+            margin-bottom: 8px;
+            border-bottom: 2px solid #8bc34a;
+            padding-bottom: 5px;
+            text-align: center;  /* 标题居中 */
+        }
+
+        .announcement-time {
+            font-size: 0.95em;  /* 增大字号 */
+            color: #666;
+            margin-bottom: 15px;
+            text-align: center;  /* 时间居中 */
+        }
+
+        .announcement-body {
+            line-height: 1.2;  /* 缩小行高 */
+            color: #444;
+            font-size: 1.2em;  /* 增大正文字号 */
+        }
+
+        .announcement-body ul {
+            margin: 8px 0;  /* 缩小间距 */
+            padding-left: 25px;
+        }
+
+        .announcement-body li {
+            margin: 6px 0;  /* 缩小行距 */
+        }
+
+        .announcement-footnote {
+            font-size: 0.85em;
+            color: #999;
+            margin-top: 15px;
+            border-top: 1px dashed #ddd;
+            padding-top: 10px;
+        }
+
+        /* 滚动支持 */
+        .announcement-content {
+            height: calc(100% - 60px);  /* 自动计算高度 */
+            overflow-y: auto;  /* 垂直滚动 */
+            padding: 0 10px;
+        }
+
+        /* 自定义滚动条 */
+        .announcement-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .announcement-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .announcement-content::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+
+        .announcement-content::-webkit-scrollbar-thumb:hover {
+            background: #8bc34a;
+        }
+
+        .probability-control {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            margin: 12px 0;
+        }
+
+        .probability-control .switch-text {
+            flex: 1;
+            font-size: 14px;
+            color: #1b5e20;
+        }
+
+        .range-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 40%; /* 滑动条容器宽度 */
+            justify-content: flex-end; /* 右对齐 */
+        }
+
+        #apiProbability {
+            width: 100%; /* 滑动条占满容器宽度 */
+            height: 4px;
+            background: #ddd;
+            border-radius: 2px;
+            -webkit-appearance: none;
+            margin: 0 8px;
+        }
+
+        #intervalSlider {
+            width: 100%; /* 滑动条占满容器宽度 */
+            height: 4px;
+            background: #ddd;
+            border-radius: 2px;
+            -webkit-appearance: none;
+            margin: 0 8px;
+        }
+
+        /* 滑块样式 */
+        #apiProbability::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #8bc34a; /* 确保绿色主题色 */
+            border-radius: 50%;
+            cursor: pointer;
+            border: none; /* 移除默认边框 */
+            box-shadow: none; /* 移除阴影 */
+        }
+
+        #intervalSlider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #8bc34a; /* 确保绿色主题色 */
+            border-radius: 50%;
+            cursor: pointer;
+            border: none; /* 移除默认边框 */
+            box-shadow: none; /* 移除阴影 */
+        }
+
+        #apiProbability::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: #8bc34a; /* Firefox触点颜色 */
+            border-radius: 50%;
+            border: none; /* 重要：移除Firefox默认边框 */
+            cursor: pointer;
+        }
+
+        #intervalSlider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: #8bc34a; /* Firefox触点颜色 */
+            border-radius: 50%;
+            border: none; /* 重要：移除Firefox默认边框 */
+            cursor: pointer;
+        }
+
+        #apiProbabilityValue {
+            width: 50px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        #intervalValue {
+            width: 50px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .reset-btn {
+            padding: 5px 12px;
+            min-width: 50px; /* 保证最小宽度 */
+            white-space: nowrap; /* 禁止文字换行 */
+            background: #8bc34a;
+            border-radius: 4px;
+            color: white;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .reset-btn:hover {
+            background: #7cb342;
+            transform: scale(1.05);
+            box-shadow: none; /* 移除阴影 */
+        }
     </style>
 </head>
 <body>
@@ -600,6 +794,22 @@
                         <input type="checkbox" id="imageSwitch">
                         <span class="slider"></span>
                     </label>
+                    <div class="probability-control">
+                        <span class="switch-text">联网获取金句的概率(%)</span>
+                        <div class="range-group">
+                            <input type="range" id="apiProbability" min="0" max="100" value="70">
+                            <input type="number" id="apiProbabilityValue" min="0" max="100" value="70">
+                            <button class="reset-btn" onclick="resetProbability()">重置</button>
+                        </div>
+                    </div>
+                    <div class="probability-control">
+                        <span class="switch-text">金句轮播时间间隔（秒）</span>
+                        <div class="range-group">
+                            <input type="range" id="intervalSlider" min="1" max="120" value="15">
+                            <input type="number" id="intervalValue" min="1" max="120" value="15">
+                            <button class="reset-btn" onclick="resetInterval()">重置</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -618,35 +828,98 @@
 
     <div class="settings-modal" id="announcementModal">
         <div class="settings-content">
-            <div class="settings-header">
-                <h3>公告</h3>
+            <div class="settings-header" style="padding-bottom: 8px;">
+                <h3 style="font-size: 1.2em;">公告</h3>
                 <span class="close-btn" id="closeAnnouncement">&times;</span>
             </div>
-            <div class="text-content" id="announcementContent"></div>
+            <div class="announcement-content">
+                <!-- 公告卡片容器 -->
+                <div class="announcement-card">
+                    <div class="announcement-title">📢 倒计时网站征稿活动开始啦！</div>
+                    <div class="announcement-time">2025.3.1</div>
+                    <div class="announcement-body">
+                        C2201倒计时网站底部金句轮播内容开始征稿了！
+                        <ul>
+                            <li><strong>参与条件：</strong>是个人都能参加</li>
+                            <li><strong>时间：</strong>即日起至毕业</li>
+                            <li><strong>征稿内容：</strong>励志文字、优美作文素材或整活（不能八卦）等（特别地，既可以原创，也可以投你在其他地方看到的很好的句子上来，但是要标明出处；若是原创句子可选择展示时是否显示署名）（一个句子展示的概率：励志文字 = 优美作文素材 > 整活，可根据具体情况调整，特别地，若原创句子写的过于好，可以提高展示概率）</li>
+                            <li><strong>字数要求：</strong>1~80字（包含标点）</li>
+                            <li><strong>提交格式：</strong>你的名字+句子内容+是否原创（+若非原创，标明出处）</li>
+                            <li><strong>提交方式：</strong>写在便利贴上交给TQC</li>
+                        </ul>
+                        <p class="announcement-footnote">最终解释权归TQC所有</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
  
     <script>
+        let intervalDuration = 15 * 1000; // 默认15秒
+        let phraseTimer = null;
+
+        // 滑动条和输入框事件
+        document.getElementById('intervalSlider').addEventListener('input', function(e) {
+            const value = Math.min(120, Math.max(1, parseInt(e.target.value) || 15));
+            intervalDuration = value * 1000;
+            document.getElementById('intervalValue').value = value;
+            
+            // 如果自动轮播开启则立即应用新间隔
+            if (goldenSwitch.checked && phraseTimer) {
+                clearInterval(phraseTimer);
+                phraseTimer = setInterval(fetchGoldenPhrase, intervalDuration);
+            }
+        });
+
+        document.getElementById('intervalValue').addEventListener('input', function(e) {
+            const value = Math.min(120, Math.max(1, parseInt(e.target.value) || 15));
+            intervalDuration = value * 1000;
+            document.getElementById('intervalSlider').value = value;
+        });
+
+        // 重置间隔函数
+        function resetInterval() {
+            intervalDuration = 15 * 1000;
+            document.getElementById('intervalSlider').value = 15;
+            document.getElementById('intervalValue').value = 15;
+            
+            if (goldenSwitch.checked && phraseTimer) {
+                clearInterval(phraseTimer);
+                phraseTimer = setInterval(fetchGoldenPhrase, intervalDuration);
+            }
+        }
+
+        let apiProbability = 50; // 默认概率值
+
+        // 滑动条输入事件监听
+        document.getElementById('apiProbability').addEventListener('input', function(e) {
+            const value = Math.min(100, Math.max(0, parseInt(e.target.value) || 0));
+            apiProbability = value;
+            document.getElementById('apiProbabilityValue').value = value;
+        });
+
+        // 数值输入框事件监听
+        document.getElementById('apiProbabilityValue').addEventListener('input', function(e) {
+            const value = Math.min(100, Math.max(0, parseInt(e.target.value) || 0));
+            apiProbability = value;
+            document.getElementById('apiProbability').value = value;
+        });
+
+        // 重置按钮函数
+        function resetProbability() {
+            apiProbability = 70;
+            document.getElementById('apiProbability').value = 70;
+            document.getElementById('apiProbabilityValue').value = 70;
+        }
+
         // 公告相关脚本
         const announcementButton = document.getElementById('announcementButton');
         const announcementModal = document.getElementById('announcementModal');
         const closeAnnouncement = document.getElementById('closeAnnouncement');
 
         // 打开公告
-        announcementButton.addEventListener('click', async () => {
-            try {
-                const response = await fetch('announcement.html');
-                if (!response.ok) throw new Error('公告加载失败');
-                const html = await response.text();
-                
-                document.getElementById('announcementContent').innerHTML = html;
-                announcementModal.classList.add('active');
-            } catch (error) {
-                console.error('加载失败:', error);
-                document.getElementById('announcementContent').innerHTML = 
-                    "无法加载公告内容，请稍后再试";
-                announcementModal.classList.add('active');
-            }
+        announcementButton.addEventListener('click', () => {
+            announcementModal.classList.add('active');
         });
 
         // 关闭公告
@@ -662,7 +935,7 @@
         // 打开更新日志
         changelogButton.addEventListener('click', async () => {
             try {
-                const response = await fetch('update.txt');
+                const response = await fetch('update.t·xt');
                 if (!response.ok) throw new Error('文件加载失败');
                 const text = await response.text();
                 
@@ -1052,22 +1325,28 @@
 		    'https://v.api.aa1.cn/api/api-wenan-mingrenmingyan/index.php?aa1=json' 
 		];
 		let currentApiIndex = 0;
-        const localPhrases = [ // api失效时使用
-            "宝剑锋从磨砺出，梅花香自苦寒来。",
-            "千淘万漉虽辛苦，吹尽狂沙始到金。",
-            "青春须早为，岂能长少年。",
-            "冷知识：一加一其实等于二。",
-            "在晨曦的微光中，露珠轻吻着花瓣，如同繁星点缀于夜空的边际。",
-            "夕阳如熔金洒落，将天边染成一幅绚烂的画卷，静候那永不褪色的黄昏。",
-            "星光在夜的织锦上细细描绘，每一颗都是未完的故事，悬于无垠的宇宙之中。",
-            "风，穿越古老的巷弄，携带着时光的低语，轻抚过岁月的痕迹。",
-            "月光倾洒，如细丝般缠绕着树梢，编织着夜的静谧与温柔。",
-            "晨曦初破，霞光如织，天边渐渐泛起希望的色彩，迎接新日的诞生。",
-            "落叶在秋风中起舞，每一片都是季节的笔触，书写着岁月的诗篇。",
-            "雾气缭绕在山间，仿佛是大自然的呼吸，轻柔地覆盖着万物的梦境。",
-            "雨滴轻敲窗棂，如同天空在低语，诉说着未了的情缘。",
-            "在那遥远的天际，云彩编织着梦幻的城堡，等待着勇敢的探险者去探寻。"
-        ];
+        const localPhrases = {
+            high: [ // 60% 概率
+                "在晨曦的微光中，露珠轻吻着花瓣，如同繁星点缀于夜空的边际。",
+                "夕阳如熔金洒落，将天边染成一幅绚烂的画卷，静候那永不褪色的黄昏。",
+                "星光在夜的织锦上细细描绘，每一颗都是未完的故事，悬于无垠的宇宙之中。",
+                "风，穿越古老的巷弄，携带着时光的低语，轻抚过岁月的痕迹。",
+                "月光倾洒，如细丝般缠绕着树梢，编织着夜的静谧与温柔。",
+                "晨曦初破，霞光如织，天边渐渐泛起希望的色彩，迎接新日的诞生。",
+                "落叶在秋风中起舞，每一片都是季节的笔触，书写着岁月的诗篇。",
+                "雾气缭绕在山间，仿佛是大自然的呼吸，轻柔地覆盖着万物的梦境。",
+                "雨滴轻敲窗棂，如同天空在低语，诉说着未了的情缘。",
+                "在那遥远的天际，云彩编织着魔法的城堡，等待着勇敢的探险者去探寻。"
+            ],
+            medium: [ // 30% 概率
+                "宝剑锋从磨砺出，梅花香自苦寒来。——《警世贤文·勤奋篇》",
+                "千淘万漉虽辛苦，吹尽狂沙始到金。——刘禹锡《浪淘沙·莫道谗言如浪深》",
+                "青春须早为，岂能长少年。——孟郊《劝学》"
+            ],
+            low: [ // 10% 概率
+                "冷知识：一加一其实等于二。"
+            ]
+        };
  
         // 生成节气标记 
         function generateSolarMarkers() {
@@ -1188,18 +1467,17 @@
         }
  
         // 金句功能 
-        let phraseTimer;
 		async function fetchGoldenPhrase() {
 		    // 70%概率使用API
-		    if (Math.random()  < 0.7) {
+		    if (Math.random()  < apiProbability / 100) {
 		        try {
 		            const apiIndex = Math.floor(Math.random()  * GOLDEN_APIs.length); 
 		            const api = GOLDEN_APIs[1];
 		            const response = await fetch(api);
 		            if (!response.ok)  throw new Error('网络异常');
 		            const data = await response.json(); 
-		            let text = data.cn; 
-		            if (!text || text.length  < 5) {
+		            let text = data.cn + "——泰戈尔"; 
+		            if (!text) {
 		                throw new Error('数据异常');
 		            }
 		            updatePhraseDisplay(text);
@@ -1217,14 +1495,29 @@
 		    const container = document.getElementById('goldenPhrase'); 
 		    container.style.opacity  = 0;
 		    setTimeout(() => {
-		        container.textContent  = `「 ${text} ——泰戈尔」`;
+		        container.textContent  = `「 ${text} 」`;
 		        container.style.opacity  = 1;
 		    }, 500);
 		}
  
         function showLocalPhrase() {
-		    const randomIndex = Math.floor(Math.random()  * localPhrases.length); 
-		    updatePhraseDisplay(localPhrases[randomIndex]);
+            // 创建加权选择池
+            const weightedPool = [
+                ...localPhrases.high.map(p => ({ p, w: 6 })),   // 高概率区：权重6
+                ...localPhrases.medium.map(p => ({ p, w: 3 })), // 中概率区：权重3 
+                ...localPhrases.low.map(p => ({ p, w: 1 }))     // 低概率区：权重1
+            ];
+		    // 计算总权重
+            const totalWeight = weightedPool.reduce((sum, item) => sum + item.w, 0);
+            // 生成随机选择数
+            let random = Math.random() * totalWeight;
+            // 遍历选择池寻找命中项
+            for (const item of weightedPool) {
+                if (random < item.w) {
+                    return updatePhraseDisplay(item.p);
+                }
+                random -= item.w;
+            }
 		}
 
 		function fetchAndDisplayImage(url) {
@@ -1244,9 +1537,9 @@
         const apiImage = document.getElementById('apiImage'); 
 
         // 金句自动轮播开关
-        goldenSwitch.addEventListener('change',  function() {
-            if (this.checked)  {
-                phraseTimer = setInterval(fetchGoldenPhrase, 15000);
+        goldenSwitch.addEventListener('change', function() {
+            if (this.checked) {
+                phraseTimer = setInterval(fetchGoldenPhrase, intervalDuration);
             } else {
                 clearInterval(phraseTimer);
                 phraseTimer = null;
@@ -1313,7 +1606,7 @@
 		    updateTimelineColor();
 		    generateSolarMarkers();
 		    fetchGoldenPhrase();
-		    phraseTimer = setInterval(fetchGoldenPhrase, 15000);
+		    phraseTimer = setInterval(fetchGoldenPhrase, intervalDuration);
 		    setInterval(updateScheduleDisplay, 1000);
             fetchWeather();
             setInterval(fetchWeather, 15000);

@@ -246,15 +246,15 @@
             left: 25px;
             z-index: 5;
             background: rgba(255,255,255,0.9);
-            padding: 18px 25px;
+            padding: 15px 20px;
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            min-width: 180px;
+            min-width: 190px;
         }
 
         .schedule-item {
             font-family: 'STZhongSong', sans-serif;
-            margin: 12px 0;
+            margin: 8px 0;
         }
 
         .schedule-title {
@@ -263,6 +263,7 @@
             color: #1b5e20;
             font-weight: 600;
             text-align: left;
+            line-height: 1;
         }
 
         .schedule-value {
@@ -272,18 +273,19 @@
             text-align: center;
             margin: 4px 0 0;
             padding: 2px 0;
+            line-height: 1;
         }
 
         .timetable {
-            margin-top: 15px;
+            margin-top: 10px;
             border-top: 1px solid #eee;
-            padding-top: 10px;
+            padding-top: 8px;
         }
 
         .timetable-item {
 		    font-size: 22px;
 		    font-family: STZhongSong, cursive;
-		    line-height: 1.8;
+		    line-height: 1.4;
             text-align: center;
 		}
 
@@ -396,6 +398,10 @@
 
     <!-- 作息提示容器 -->
     <div id="scheduleContainer" class="schedule-container">
+        <div class="schedule-item">
+            <span class="schedule-title">天气：</span>
+            <span class="schedule-value" id="weatherInfo">加载中...</span>
+        </div>
         <div class="schedule-item">
             <span class="schedule-title">当前：</span>
             <span class="schedule-value" id="currentSchedule">加载中...</span>
@@ -1014,6 +1020,39 @@
         goldenSwitch.checked  = true; // 默认开启金句自动轮播
         imageSwitch.checked  = true; // 默认开启每日60s显示
 
+        function fetchWeather() {
+            fetch('https://v2.api-m.com/api/weather?city=%E5%B2%B3%E9%BA%93%E5%8C%BA')
+                .then(response => {
+                    if (!response.ok) throw new Error('网络响应异常');
+                    return response.json();
+                })
+                .then(data => {
+                if (data.code === 200) {
+                    // 获取当前星期（示例返回格式："周五"）
+                    const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
+                    const currentDay = '周' + weekDays[new Date().getDay()];
+
+                    // 查找匹配的天气数据
+                    const todayWeather = data.data.data.find(item => item.date === currentDay);
+
+                    if (todayWeather) {
+                        // 格式化温度显示（7-10℃ → 7~10℃）
+                        const tempRange = todayWeather.temperature.replace('-', '~');
+                        document.getElementById('weatherInfo').textContent = 
+                        `${todayWeather.weather} ${tempRange}`;
+                    } else {
+                        document.getElementById('weatherInfo').textContent = '天气数据异常';
+                    }
+                } else {
+                    throw new Error(data.msg);
+                }
+                })
+            .catch(error => {
+                console.error('天气获取失败:', error);
+                document.getElementById('weatherInfo').textContent = '天气获取失败';
+            });
+        }
+
         window.onload  = function() {
             fetchAndDisplayImage();
         };
@@ -1026,7 +1065,9 @@
 		    generateSolarMarkers();
 		    fetchGoldenPhrase();
 		    phraseTimer = setInterval(fetchGoldenPhrase, 15000);
-		    setInterval(updateScheduleDisplay, 1000); // 新增定时更新
+		    setInterval(updateScheduleDisplay, 1000);
+            fetchWeather();
+            setInterval(fetchWeather, 15000);
 		}
  
         init();

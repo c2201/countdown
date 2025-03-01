@@ -4,6 +4,149 @@
     <title>中考倒计时 - C2201|中考必胜</title>
     <meta charset="utf-8">
     <style>
+        /* 新增更新日志相关样式 */
+        .action-buttons {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 10;
+        }
+
+        .action-button {
+            width: auto;
+            padding: 0 20px;
+            height: 40px;
+            border-radius: 20px;
+            background: #8bc34a;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            color: white;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .action-button:hover {
+            transform: scale(1.05);
+        }
+
+        .changelog-modal .settings-content {
+            max-width: 600px;
+            height: 70%;
+        }
+
+        .text-content {
+            padding: 15px;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            overflow-y: auto;
+            height: calc(100% - 40px);
+        }
+
+        /* 新增设置相关样式 */
+        .settings-button {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #8bc34a;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            transition: transform 0.3s;
+        }
+
+        .settings-button:hover {
+            transform: translateX(-50%) scale(1.1);
+        }
+
+        .settings-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 999;
+        }
+
+        .settings-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .settings-content {
+            background: white;
+            width: 60%;
+            height: 60%;
+            border-radius: 12px;
+            transform: scale(0.8);
+            opacity: 0;
+            transition: all 0.3s;
+            position: relative;
+            padding: 20px;
+        }
+
+        .settings-modal.active .settings-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .settings-header h3 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .close-btn {
+            font-size: 28px;
+            cursor: pointer;
+            padding: 0 10px;
+            color: #666;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        .settings-body {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            padding: 20px;
+        }
+
         /* 节气卡片样式 */
         .solar-card {
             position: absolute;
@@ -317,40 +460,36 @@
             width: 0;
         }
 
+        /* 原滑块开关样式修改 */
         .switch-container {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
             display: flex;
+            flex-direction: column;
             gap: 40px;
-            z-index: 10;
+            margin-top: 20px;
         }
 
         .switch {
             position: relative;
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            width: 140px;
-            height: 30px;
-            gap: 20px;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .slider {
+            position: relative;
+            cursor: pointer;
+            width: 40px;
+            height: 24px;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 24px;
         }
 
         .switch-text {
             font-size: 14px;
             color: #1b5e20;
             display: inline-block;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            width: 40px;
-            height: 24px;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 24px;
-            left: 90px;
         }
 
         .slider:before {
@@ -361,7 +500,7 @@
             left: 2px;
             bottom: 2px;
             background-color: white;
-            transition: .4s;
+            transition: 0.4s;
             border-radius: 50%;
         }
 
@@ -434,21 +573,107 @@
         <img id="apiImage" src="" alt="每日60s">
     </div>
 
-    <!-- 添加滑块开关容器 -->
-    <div class="switch-container">
-        <label class="switch">
-            <span class="switch-text">金句自动轮播</span>
-            <input type="checkbox" id="goldenSwitch" checked>
-            <span class="slider"></span>
-        </label>
-        <label class="switch">
-            <span class="switch-text">显示每日60s</span>
-            <input type="checkbox" id="imageSwitch">
-            <span class="slider"></span>
-        </label>
+    <!-- 在原有HTML基础上添加以下内容 -->
+    <div class="action-buttons">
+        <button id="settingsButton" class="action-button">⚙️ 设置</button>
+        <button id="changelogButton" class="action-button">📝 更新日志</button>
+    </div>
+
+    <!-- 新增设置模态框 -->
+    <div class="settings-modal" id="settingsModal">
+        <div class="settings-content">
+            <div class="settings-header">
+                <h3>设置</h3>
+                <span class="close-btn" id="closeSettings">&times;</span>
+            </div>
+            <div class="settings-body">
+                <!-- 移动原来的开关到这里 -->
+                <div class="switch-container">
+                    <label class="switch">
+                        <span class="switch-text">金句自动轮播</span>
+                        <input type="checkbox" id="goldenSwitch" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <label class="switch">
+                        <span class="switch-text">显示每日60s</span>
+                        <input type="checkbox" id="imageSwitch">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 更新日志弹窗 -->
+    <div class="settings-modal" id="changelogModal">
+        <div class="settings-content">
+            <div class="settings-header">
+                <h3>更新日志</h3>
+                <span class="close-btn" id="closeChangelog">&times;</span>
+            </div>
+            <div class="text-content" id="changelogContent"></div>
+        </div>
     </div>
  
     <script>
+        // 新增更新日志功能
+        const changelogButton = document.getElementById('changelogButton');
+        const changelogModal = document.getElementById('changelogModal');
+        const closeChangelog = document.getElementById('closeChangelog');
+
+        // 打开更新日志
+        changelogButton.addEventListener('click', async () => {
+            try {
+                const response = await fetch('update.txt');
+                if (!response.ok) throw new Error('文件加载失败');
+                const text = await response.text();
+                
+                document.getElementById('changelogContent').textContent = 
+                    text || "当前没有更新日志内容";
+                
+                changelogModal.classList.add('active');
+            } catch (error) {
+                console.error('加载失败:', error);
+                document.getElementById('changelogContent').textContent = 
+                    "无法加载更新日志，错误码1145141919810(bushi";
+                changelogModal.classList.add('active');
+            }
+        });
+
+        // 关闭弹窗
+        closeChangelog.addEventListener('click', () => {
+            changelogModal.classList.remove('active');
+        });
+
+        // 点击外部关闭
+        changelogModal.addEventListener('click', (e) => {
+            if (e.target === changelogModal) {
+                changelogModal.classList.remove('active');
+            }
+        });
+
+        // 设置相关脚本
+        const settingsButton = document.getElementById('settingsButton');
+        const settingsModal = document.getElementById('settingsModal');
+        const closeButton = document.getElementById('closeSettings');
+
+        // 打开设置
+        settingsButton.addEventListener('click', () => {
+            settingsModal.classList.add('active');
+        });
+
+        // 关闭设置
+        closeButton.addEventListener('click', () => {
+            settingsModal.classList.remove('active');
+        });
+
+        // 点击模态框外部关闭
+        settingsModal.addEventListener('click', (e) => {
+            if (e.target === settingsModal) {
+                settingsModal.classList.remove('active');
+            }
+        });
+
     	// 作息表数据
         const schedule = {
             weekday: [
