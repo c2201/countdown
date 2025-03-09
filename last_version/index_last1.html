@@ -258,16 +258,14 @@
         /* 金句样式 */
         #goldenPhrase {
             text-align: center;
-            margin: 10px auto;
+            margin: 20px auto;
             width: 760px;
-            font-size: 26px;
+            font-size: 24px;
             color: #1b5e20;
             min-height: 40px;
             font-family: STZhongSong, cursive;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
             transition: opacity 0.5s;
-            position: relative;
-            top: -50px; /* 向上移动40像素 */
         }
  
         /* 基础样式 */
@@ -419,7 +417,7 @@
 
         .schedule-value {
             display: block;
-            font-size: 25px;
+            font-size: 22px;
             color: #2d2d2d;
             text-align: center;
             margin: 4px 0 0;
@@ -435,7 +433,7 @@
         }
 
         .timetable-item {
-		    font-size: 25px;
+		    font-size: 22px;
 		    font-family: STZhongSong, cursive;
 		    line-height: 1.4;
             text-align: center;
@@ -773,7 +771,7 @@
 
     <!-- 每日60s -->
     <div class="right-image-container">
-        <img id="apiImage" src="" alt="每日60s">
+        <img id="apiImage" src="" alt="每日60s读懂世界（若无法加载请在设置中关闭“显示每日60s”开关，再打开）">
     </div>
 
     <!-- 底部按钮 -->
@@ -830,40 +828,7 @@
                 <h3>更新日志</h3>
                 <span class="close-btn" id="closeChangelog">&times;</span>
             </div>
-            <div class="text-content" id="changelogContent">
-                <strong># 20250309.1 更新</strong>
-
-                功能性更新：
-                    • 调大金句和左侧作息显示、课程表的字体
-                技术性更新：
-                    • 更新日志内容不再从文件读取，而是直接添加在index.html中
-
-                <strong># 20250301.3 更新</strong>
-                
-                • 修复已知问题，提升系统稳定性
-                
-                <strong># 20250301.2 更新</strong>
-                
-                功能性更新：
-                    • 新增"金句轮播时间间隔"设置
-                    • 新增"联网获取金句的概率"设置
-                    • 给金句添加了出处显示
-                    • 将所有本地金句库中的金句分为3个等级，分别对应不同的展示概率
-                技术性更新：
-                    • 公告板内容不再从文件读取，而是直接添加在index.html中
-                
-                <strong># 20250301.1 更新</strong>
-                
-                • 更新了公告板
-                
-                <strong># 20250224.2 更新</strong>
-                
-                • 更新了更新日志
-                
-                <strong># 20250224.1 更新</strong>
-                
-                • 更新了设置中心
-            </div>
+            <div class="text-content" id="changelogContent"></div>
         </div>
     </div>
 
@@ -899,7 +864,7 @@
         // Part0 各种数据
         // 本地金句库
         const localPhrases = {
-            high: [ // 45% 概率
+            high: [ // 55% 概率
                 "在晨曦的微光中，露珠轻吻着花瓣，如同繁星点缀于夜空的边际。",
                 "夕阳如熔金洒落，将天边染成一幅绚烂的画卷，静候那永不褪色的黄昏。",
                 "星光在夜的织锦上细细描绘，每一颗都是未完的故事，悬于无垠的宇宙之中。",
@@ -924,8 +889,7 @@
                 "傲慢使别人无法爱我，偏见使我无法爱别人。——[英]简·奥斯汀《傲慢与偏见》",
                 "少年振衣，岂不可作千里风幡看？少年瞬目，亦可壮作万古清流想。——张晓风《林中杂想》",
                 "希望是好事，也许是人间至善，而美好的事永不消逝。——《肖申克的救赎》",
-                "当落叶枯去，你会不会为它闭上眼睛？——《小雨中》",
-                "人心中的成见就像一座大山，任你怎么努力也休想搬动。——申公豹"
+                "当落叶枯去，你会不会为它闭上眼睛？——《小雨中》"
             ],
             medium: [ // 35% 概率
                 "宝剑锋从磨砺出，梅花香自苦寒来。——《警世贤文·勤奋篇》",
@@ -939,10 +903,9 @@
                 "要么忙着活，要么忙着死。——《肖申克的救赎》",
                 "如果有一天，你来到我们的所抵达的终点，能为我们献上一束花吗？"
             ],
-            low: [ // 20% 概率
+            low: [ // 10% 概率
                 "冷知识：一加一其实等于二。",
-                "天雷滚滚我好怕怕，劈的我浑身掉渣渣~——哪吒",
-                "申公豹：“人心中的成见就像一座大山……” 石矶娘娘：“太好了每个人心里有有我。”"
+                "天雷滚滚我好怕怕，劈的我浑身掉渣渣~——哪吒"
             ]
         };
 
@@ -1269,8 +1232,22 @@
         const closeChangelog = document.getElementById('closeChangelog');
 
         // 打开更新日志
-        changelogButton.addEventListener('click', () => {
-            changelogModal.classList.add('active');
+        changelogButton.addEventListener('click', async () => {
+            try {
+                const response = await fetch('update.txt');
+                if (!response.ok) throw new Error('文件加载失败');
+                const text = await response.text();
+                
+                document.getElementById('changelogContent').textContent = 
+                    text || "当前没有更新日志内容";
+                
+                changelogModal.classList.add('active');
+            } catch (error) {
+                console.error('加载失败:', error);
+                document.getElementById('changelogContent').textContent = 
+                    "无法加载更新日志，错误码 1145141919810 (bushi";
+                changelogModal.classList.add('active');
+            }
         });
 
         // 关闭更新日志
@@ -1428,9 +1405,9 @@
         function showLocalPhrase() {
             // 加权选择池
             const weightedPool = [
-                ...localPhrases.high.map(p => ({ p, w: 45 })),   // 高概率区：权重4.5
+                ...localPhrases.high.map(p => ({ p, w: 55 })),   // 高概率区：权重5.5
                 ...localPhrases.medium.map(p => ({ p, w: 35 })), // 中概率区：权重3.5
-                ...localPhrases.low.map(p => ({ p, w: 20 }))     // 低概率区：权重2.0
+                ...localPhrases.low.map(p => ({ p, w: 10 }))     // 低概率区：权重1.0
             ];
             // 计算总权重
             const totalWeight = weightedPool.reduce((sum, item) => sum + item.w, 0);
