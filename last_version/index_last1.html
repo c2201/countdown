@@ -233,39 +233,41 @@
             min-width: 180px;
         }
 
-		/* 左上角时间样式 */
+        /* 左上角时间样式 */
         .time-section {
-		    font-family: 'STZh', sans-serif;
-		    font-size: 44px;
-		    letter-spacing: 0;
-		    color: #1b5e20;
-		    margin: 8px 0;
-		    display: block;
-   		 	width: 100%;
-		}
+            font-family: 'STZh', sans-serif;
+            font-size: 44px;
+            letter-spacing: 0;
+            color: #1b5e20;
+            margin: 8px 0;
+            display: block;
+            width: 100%;
+        }
 
         /* 左上角日期样式 */
         .date-section {
-	        font-family: 'Microsoft YaHei', serif;
-	        font-size: 22px;
-	        color: #666;
-	        letter-spacing: 0.5px;
-	        white-space: nowrap;  /* 防止换行 */
-	        display: block;
-    		width: 100%;
-    	}
+            font-family: 'Microsoft YaHei', serif;
+            font-size: 22px;
+            color: #666;
+            letter-spacing: 0.5px;
+            white-space: nowrap;  /* 防止换行 */
+            display: block;
+            width: 100%;
+        }
 
         /* 金句样式 */
         #goldenPhrase {
             text-align: center;
-            margin: 20px auto;
+            margin: 10px auto;
             width: 760px;
-            font-size: 24px;
+            font-size: 26px;
             color: #1b5e20;
             min-height: 40px;
             font-family: STZhongSong, cursive;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
             transition: opacity 0.5s;
+            position: relative;
+            top: -50px; /* 向上移动40像素 */
         }
  
         /* 基础样式 */
@@ -417,7 +419,7 @@
 
         .schedule-value {
             display: block;
-            font-size: 22px;
+            font-size: 25px;
             color: #2d2d2d;
             text-align: center;
             margin: 4px 0 0;
@@ -433,14 +435,14 @@
         }
 
         .timetable-item {
-		    font-size: 22px;
-		    font-family: STZhongSong, cursive;
-		    line-height: 1.4;
+            font-size: 25px;
+            font-family: STZhongSong, cursive;
+            line-height: 1.4;
             text-align: center;
-		}
+        }
 
         /* 每日60s样式 */
-		.right-image-container {
+        .right-image-container {
             position: fixed;
             right: 25px;
             top: 50%;
@@ -453,11 +455,11 @@
         }
         
         .right-image-container img {
-	        height: 80vh;
-	        object-fit: cover;
-	        display: block;
-	        margin: 0 auto;
-	    }
+            height: 80vh;
+            object-fit: cover;
+            display: block;
+            margin: 0 auto;
+        }
 
         /* 滑块开关样式 */
         input[type="checkbox"] {
@@ -771,7 +773,7 @@
 
     <!-- 每日60s -->
     <div class="right-image-container">
-        <img id="apiImage" src="" alt="每日60s读懂世界（若无法加载请在设置中关闭“显示每日60s”开关，再打开）">
+        <img id="apiImage" src="" alt="每日60s">
     </div>
 
     <!-- 底部按钮 -->
@@ -828,7 +830,40 @@
                 <h3>更新日志</h3>
                 <span class="close-btn" id="closeChangelog">&times;</span>
             </div>
-            <div class="text-content" id="changelogContent"></div>
+            <div class="text-content" id="changelogContent">
+                <strong># 20250309.1 更新</strong>
+
+                功能性更新：
+                    • 调大金句和左侧作息显示、课程表的字体
+                技术性更新：
+                    • 更新日志内容不再从文件读取，而是直接添加在index.html中
+
+                <strong># 20250301.3 更新</strong>
+                
+                • 修复已知问题，提升系统稳定性
+                
+                <strong># 20250301.2 更新</strong>
+                
+                功能性更新：
+                    • 新增"金句轮播时间间隔"设置
+                    • 新增"联网获取金句的概率"设置
+                    • 给金句添加了出处显示
+                    • 将所有本地金句库中的金句分为3个等级，分别对应不同的展示概率
+                技术性更新：
+                    • 公告板内容不再从文件读取，而是直接添加在index.html中
+                
+                <strong># 20250301.1 更新</strong>
+                
+                • 更新了公告板
+                
+                <strong># 20250224.2 更新</strong>
+                
+                • 更新了更新日志
+                
+                <strong># 20250224.1 更新</strong>
+                
+                • 更新了设置中心
+            </div>
         </div>
     </div>
 
@@ -848,7 +883,7 @@
                         <ul>
                             <li><strong>参与条件：</strong>是个人都能参加</li>
                             <li><strong>时间：</strong>即日起至毕业</li>
-                            <li><strong>征稿内容：</strong><strong>励志文字</strong>、优美<strong>作文素材</strong>、<strong>诗歌</strong>或<strong>整活</strong>（<strong>不能八卦</strong>）等（特别地，既可以原创，也可以投你在其他地方看到的很好的句子上来，但是要<strong>标明出处</strong>；若是原创句子可选择展示时是否显示署名）（一个句子展示的概率：励志文字 = 优美作文素材 > 整活，可根据具体情况调整，特别地，若原创句子写的<strong>过于精妙</strong>，可以<strong>提高展示概率</strong>）</li>
+                            <li><strong>征稿内容：</strong><strong>励志文字</strong>、优美<strong>作文素材</strong>、<strong>诗歌（含现代诗）</strong>或<strong>整活</strong>（<strong>不能八卦</strong>）等（特别地，既可以原创，也可以投你在其他地方看到的很好的句子上来，但是要<strong>标明出处</strong>；若是原创句子可选择展示时是否显示署名）（一个句子展示的概率：励志文字 = 优美作文素材 > 整活，可根据具体情况调整，特别地，若原创句子写的<strong>过于精妙</strong>，可以<strong>提高展示概率</strong>）</li>
                             <li><strong>字数要求：</strong>1~80字（包含标点）</li>
                             <li><strong>提交格式：</strong>你的名字+句子内容+是否原创（+若非原创，标明出处）</li>
                             <li><strong>提交方式：</strong>写在便利贴上交给TQC</li>
@@ -864,7 +899,7 @@
         // Part0 各种数据
         // 本地金句库
         const localPhrases = {
-            high: [ // 55% 概率
+            high: [ // 45% 概率
                 "在晨曦的微光中，露珠轻吻着花瓣，如同繁星点缀于夜空的边际。",
                 "夕阳如熔金洒落，将天边染成一幅绚烂的画卷，静候那永不褪色的黄昏。",
                 "星光在夜的织锦上细细描绘，每一颗都是未完的故事，悬于无垠的宇宙之中。",
@@ -889,7 +924,16 @@
                 "傲慢使别人无法爱我，偏见使我无法爱别人。——[英]简·奥斯汀《傲慢与偏见》",
                 "少年振衣，岂不可作千里风幡看？少年瞬目，亦可壮作万古清流想。——张晓风《林中杂想》",
                 "希望是好事，也许是人间至善，而美好的事永不消逝。——《肖申克的救赎》",
-                "当落叶枯去，你会不会为它闭上眼睛？——《小雨中》"
+                "当落叶枯去，你会不会为它闭上眼睛？——《小雨中》",
+                "人心中的成见就像一座大山，任你怎么努力也休想搬动。——申公豹",
+                "再次相见，不必寒暄。",
+                "颠倒世界的一万六千亩玫瑰凋落了，但你的长夏永远不会凋落，那是连神明都夸口称赞过的美丽的夏天。——《惊封》",
+                "远村秋色如画，红树间疏黄。——晏殊《诉衷情·芙蓉金菊斗馨香》",
+                "绿水本无忧，因风皱面。青山原不老，为雪白头。——李文甫",
+                "脉脉花疏天淡，云来去、数枝雪。——范成大《霜天晓角·梅》",
+                "每个人所谓的悲欢离合都只是天地的一瞬间而已，眨眼就会被冲散，从此万籁俱寂，再也找不到踪迹。相遇是件何其珍贵的事情！",
+                "我没法活成光，只好活成它的影子。——吴桐",
+                "重逢很难，不如从未相见。——吴桐"
             ],
             medium: [ // 35% 概率
                 "宝剑锋从磨砺出，梅花香自苦寒来。——《警世贤文·勤奋篇》",
@@ -901,11 +945,15 @@
                 "我们与万物同行，星辰指引方向，云与光铺展成大地的模样。",
                 "但屈指西风几时来，又不道流年暗中偷换。——苏轼《洞仙歌·冰肌玉骨》",
                 "要么忙着活，要么忙着死。——《肖申克的救赎》",
-                "如果有一天，你来到我们的所抵达的终点，能为我们献上一束花吗？"
+                "如果有一天，你来到我们的所抵达的终点，能为我们献上一束花吗？",
+                "天雷滚滚我好怕怕，劈的我浑身掉渣渣~ ——哪吒",
+                "千门万户曈曈日，总把新桃换旧符。——王安石《元日》",
+                "申公豹：“人心中的成见就像一座大山……” 石矶娘娘：“太好了每个人心里有有我。”"
+
             ],
-            low: [ // 10% 概率
+            low: [ // 20% 概率
                 "冷知识：一加一其实等于二。",
-                "天雷滚滚我好怕怕，劈的我浑身掉渣渣~——哪吒"
+                "截神之力，引为柴薪，依人之智，烹然烈火。——游戏《尘白禁区》角色芙提雅·伊格妮丝，由班上某（可能是唯一一个）该游戏玩家投稿"
             ]
         };
 
@@ -1232,22 +1280,8 @@
         const closeChangelog = document.getElementById('closeChangelog');
 
         // 打开更新日志
-        changelogButton.addEventListener('click', async () => {
-            try {
-                const response = await fetch('update.txt');
-                if (!response.ok) throw new Error('文件加载失败');
-                const text = await response.text();
-                
-                document.getElementById('changelogContent').textContent = 
-                    text || "当前没有更新日志内容";
-                
-                changelogModal.classList.add('active');
-            } catch (error) {
-                console.error('加载失败:', error);
-                document.getElementById('changelogContent').textContent = 
-                    "无法加载更新日志，错误码 1145141919810 (bushi";
-                changelogModal.classList.add('active');
-            }
+        changelogButton.addEventListener('click', () => {
+            changelogModal.classList.add('active');
         });
 
         // 关闭更新日志
@@ -1272,50 +1306,50 @@
 
         // Part6 作息显示功能
         // 时间转换函数
-		function timeToMinutes(time) {
-		    const [h, m] = time.split(':').map(Number);
-		    return h * 60 + m;
-		}
+        function timeToMinutes(time) {
+            const [h, m] = time.split(':').map(Number);
+            return h * 60 + m;
+        }
 
         // 获取当前作息
-		function getCurrentSchedule() {
-		    const now = new Date();
-		    const day = now.getDay();
-		    const currentMinutes = now.getHours() * 60 + now.getMinutes();
-		    if(day === 0 || day === 6) return {current: "周末", nextLesson: ""};
-		    const todaySchedule = schedule.weekday;
-		    let current = "";
-		    let nextLesson = "";
-		    // 处理跨天时段（22:50-7:00）
-		    if(currentMinutes >= timeToMinutes("22:50") || currentMinutes < timeToMinutes("7:00")) {
-		        current = "睡觉";
-		        const firstLesson = todaySchedule.find(item => item[1].endsWith("节课"));
-		        nextLesson = firstLesson ? firstLesson[1] : "";
-		        return {current, nextLesson};
-		    }
-		    let currentIndex = -1;
-		    // 查找当前时间段
-		    for(let i = 0; i < todaySchedule.length; i++) {
-		        const [start, end] = todaySchedule[i][0].split('-');
-		        const startTime = timeToMinutes(start);
-		        const endTime = timeToMinutes(end);
-		        if(currentMinutes >= startTime && currentMinutes < endTime) {
-		            current = todaySchedule[i][1];
-		            currentIndex = i;
-		            break;
-		        }
-		    }
-		    // 查找下一个"节课"
-		    if(currentIndex >= 0) {
-		        for(let i = currentIndex + 1; i < todaySchedule.length; i++) {
-		            if(todaySchedule[i][1].endsWith("节课")) {
-		                nextLesson = todaySchedule[i][1];
-		                break;
-		            }
-		        }
-		    }
-		    return {current, nextLesson};
-		}
+        function getCurrentSchedule() {
+            const now = new Date();
+            const day = now.getDay();
+            const currentMinutes = now.getHours() * 60 + now.getMinutes();
+            if(day === 0 || day === 6) return {current: "周末", nextLesson: ""};
+            const todaySchedule = schedule.weekday;
+            let current = "";
+            let nextLesson = "";
+            // 处理跨天时段（22:50-7:00）
+            if(currentMinutes >= timeToMinutes("22:50") || currentMinutes < timeToMinutes("7:00")) {
+                current = "睡觉";
+                const firstLesson = todaySchedule.find(item => item[1].endsWith("节课"));
+                nextLesson = firstLesson ? firstLesson[1] : "";
+                return {current, nextLesson};
+            }
+            let currentIndex = -1;
+            // 查找当前时间段
+            for(let i = 0; i < todaySchedule.length; i++) {
+                const [start, end] = todaySchedule[i][0].split('-');
+                const startTime = timeToMinutes(start);
+                const endTime = timeToMinutes(end);
+                if(currentMinutes >= startTime && currentMinutes < endTime) {
+                    current = todaySchedule[i][1];
+                    currentIndex = i;
+                    break;
+                }
+            }
+            // 查找下一个"节课"
+            if(currentIndex >= 0) {
+                for(let i = currentIndex + 1; i < todaySchedule.length; i++) {
+                    if(todaySchedule[i][1].endsWith("节课")) {
+                        nextLesson = todaySchedule[i][1];
+                        break;
+                    }
+                }
+            }
+            return {current, nextLesson};
+        }
 
         // 获取课程名称
         function getCourseName(day, lessonIndex) {
@@ -1325,7 +1359,7 @@
         }
 
         // 更新作息显示
-		function updateScheduleDisplay() {
+        function updateScheduleDisplay() {
             const now = new Date();
             const day = now.getDay();  
             const {current, nextLesson} = getCurrentSchedule();
@@ -1350,26 +1384,26 @@
                 }
             }
             document.getElementById('nextSchedule').textContent   = nextText || "无";
-		    // 课表
-		    if(day >=1 && day <=5) {
-		        const courses = timetable[Object.keys(timetable)[day-1]];
-		        document.getElementById('todayTimetable').innerHTML   = courses.map((c,i)   => 
-		            `<div class="timetable-item">${i+1}&nbsp;${c}</div>`
-		        ).join('');
-		    } else {
-		        document.getElementById('todayTimetable').innerHTML   = 
-		            '<div class="timetable-item">周末无课表</div>';
-		    }
-		}
+            // 课表
+            if(day >=1 && day <=5) {
+                const courses = timetable[Object.keys(timetable)[day-1]];
+                document.getElementById('todayTimetable').innerHTML   = courses.map((c,i)   => 
+                    `<div class="timetable-item">${i+1}&nbsp;${c}</div>`
+                ).join('');
+            } else {
+                document.getElementById('todayTimetable').innerHTML   = 
+                    '<div class="timetable-item">周末无课表</div>';
+            }
+        }
  
         // Part7 金句功能
         const GOLDEN_APIs = [
-		    'https://img.8845.top/yiyan/index.php', 
-		    'https://api.mu-jie.cc/stray-birds/range?type=json', 
-		    'https://v.api.aa1.cn/api/api-wenan-mingrenmingyan/index.php?aa1=json' 
-		];
+            'https://img.8845.top/yiyan/index.php', 
+            'https://api.mu-jie.cc/stray-birds/range?type=json', 
+            'https://v.api.aa1.cn/api/api-wenan-mingrenmingyan/index.php?aa1=json' 
+        ];
 
-		let currentApiIndex = 0;
+        let currentApiIndex = 0;
 
         async function fetchGoldenPhrase() {
             if (Math.random()  < apiProbability / 100) {
@@ -1405,9 +1439,9 @@
         function showLocalPhrase() {
             // 加权选择池
             const weightedPool = [
-                ...localPhrases.high.map(p => ({ p, w: 55 })),   // 高概率区：权重5.5
+                ...localPhrases.high.map(p => ({ p, w: 45 })),   // 高概率区：权重4.5
                 ...localPhrases.medium.map(p => ({ p, w: 35 })), // 中概率区：权重3.5
-                ...localPhrases.low.map(p => ({ p, w: 10 }))     // 低概率区：权重1.0
+                ...localPhrases.low.map(p => ({ p, w: 20 }))     // 低概率区：权重2.0
             ];
             // 计算总权重
             const totalWeight = weightedPool.reduce((sum, item) => sum + item.w, 0);
@@ -1527,16 +1561,16 @@
             requestAnimationFrame(updateClock);
         }
 
-		function fetchAndDisplayImage(url) {
-		    fetch('https://api.cenguigui.cn/api/60s/')
-		        .then(response => response.blob()) 
-		        .then(blob => {
-		            const img = document.getElementById('apiImage'); 
-		            img.src  = URL.createObjectURL(blob); 
-		            img.style.height  = '80vh';
-		        })
-		        .catch(error => console.error(' 图片加载失败:', error));
-		}
+        function fetchAndDisplayImage(url) {
+            fetch('https://api.cenguigui.cn/api/60s/')
+                .then(response => response.blob()) 
+                .then(blob => {
+                    const img = document.getElementById('apiImage'); 
+                    img.src  = URL.createObjectURL(blob); 
+                    img.style.height  = '80vh';
+                })
+                .catch(error => console.error(' 图片加载失败:', error));
+        }
 
         // Part11 金句自动轮播和显示每日60s开关
         // 初始化开关状态
@@ -1608,24 +1642,24 @@
  
         // Part13 初始化 
         function init() {
-		    updateCountdown();
-		    updateClock();
-		    updateTimelineColor();
-		    generateSolarMarkers();
-		    fetchGoldenPhrase();
-		    phraseTimer = setInterval(fetchGoldenPhrase, intervalDuration);
-		    setInterval(updateScheduleDisplay, 1000);
+            updateCountdown();
+            updateClock();
+            updateTimelineColor();
+            generateSolarMarkers();
+            fetchGoldenPhrase();
+            phraseTimer = setInterval(fetchGoldenPhrase, intervalDuration);
+            setInterval(updateScheduleDisplay, 1000);
             fetchWeather();
             setInterval(fetchWeather, 15000);
-		}
+        }
  
         init();
         
-		window.addEventListener('unload',  () => clearInterval(phraseTimer));
-		setInterval(() => {
-		    generateSolarMarkers();
-		    updateCountdown();
-		}, 86400000);
+        window.addEventListener('unload',  () => clearInterval(phraseTimer));
+        setInterval(() => {
+            generateSolarMarkers();
+            updateCountdown();
+        }, 86400000);
     </script>
 </body>
 </html>
