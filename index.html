@@ -722,6 +722,16 @@
             transform: scale(1.05);
             box-shadow: none;
         }
+
+        /* 金句点击效果 */
+        #goldenPhrase {
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        #goldenPhrase:active {
+            transform: scale(0.98);
+        }
     </style>
 </head>
 <body>
@@ -817,11 +827,16 @@
                     <div class="probability-control">
                         <span class="switch-text">金句轮播时间间隔（秒）</span>
                         <div class="range-group">
-                            <input type="range" id="intervalSlider" min="1" max="120" value="15">
-                            <input type="number" id="intervalValue" min="1" max="120" value="15">
+                            <input type="range" id="intervalSlider" min="1" max="60" value="15">
+                            <input type="number" id="intervalValue" min="1" max="60" value="15">
                             <button class="reset-btn" onclick="resetInterval()">重置</button>
                         </div>
                     </div>
+                    <label class="switch">
+                        <span class="switch-text">启用点击刷新金句</span>
+                        <input type="checkbox" id="clickRefreshSwitch">
+                        <span class="slider"></span>
+                    </label>
                 </div>
             </div>
         </div>
@@ -835,6 +850,14 @@
                 <span class="close-btn" id="closeChangelog">&times;</span>
             </div>
             <div class="text-content" id="changelogContent">
+                <strong># 20250315.1 更新</strong>
+
+                功能性更新：
+                    • 新增点击刷新金句功能
+                    • 新增“启用点击刷新金句”开关
+                技术性更新：
+                    • 将index.html中JavaScript部分的“Part0 各种数据”拆分为单独的js文件
+
                 <strong># 20250309.1 更新</strong>
 
                 功能性更新：
@@ -1127,11 +1150,11 @@
         }
  
         function updatePhraseDisplay(text) {
-            const container = document.getElementById('goldenPhrase'); 
-            container.style.opacity  = 0;
+            const container = document.getElementById('goldenPhrase');
+            container.style.opacity = 0;
             setTimeout(() => {
-                container.textContent  = `「 ${text} 」`;
-                container.style.opacity  = 1;
+                container.textContent = `「 ${text} 」`;
+                container.style.opacity = 1;
             }, 500);
         }
  
@@ -1338,8 +1361,21 @@
         window.onload  = function() {
             fetchAndDisplayImage();
         };
+
+        // Part13 点击刷新金句功能
+        document.getElementById('goldenPhrase').addEventListener('click', function() {
+            const clickRefreshEnabled = document.getElementById('clickRefreshSwitch').checked;
+            const autoRotateEnabled = document.getElementById('goldenSwitch').checked;
+            if (clickRefreshEnabled) {
+                fetchGoldenPhrase();
+                if (autoRotateEnabled && phraseTimer) {
+                    clearInterval(phraseTimer);
+                    phraseTimer = setInterval(fetchGoldenPhrase, intervalDuration);
+                }
+            }
+        });
  
-        // Part13 初始化 
+        // Part14 初始化 
         function init() {
 		    updateCountdown();
 		    updateClock();
