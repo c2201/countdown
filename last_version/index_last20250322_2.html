@@ -741,50 +741,6 @@
         #goldenPhrase.no-animation:active {
             transform: none !important;
         }
-
-        /* 金句列表样式 */
-        #phraseList {
-            padding: 15px;
-            overflow-y: auto;
-            height: calc(100% - 50px);
-        }
-
-        .phrase-item {
-            padding: 12px;
-            margin: 8px 0;
-            border-radius: 6px;
-            background: #f8f8f8;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: STZhongSong, cursive;
-            color: #1b5e20;
-        }
-
-        .phrase-item:hover {
-            background: #e8f5e9;
-            transform: translateX(5px);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        /* 选择金句界面金句点击动画 */
-        .phrase-item {
-            transition: all 0.3s ease;
-        }
-
-        .phrase-item:active {
-            transform: scale(0.97);
-            background: #e0f2f1 !important;
-        }
-
-        @keyframes phraseClickWave {
-            0% { box-shadow: 0 0 0 0 rgba(139, 195, 74, 0.3); }
-            100% { box-shadow: 0 0 0 10px rgba(139, 195, 74, 0); }
-        }
-
-        .phrase-click-effect {
-            animation: phraseClickWave 0.4s ease-out;
-            position: relative;
-        }
     </style>
 </head>
 <body>
@@ -848,7 +804,6 @@
         <button id="settingsButton" class="action-button">⚙️ 设置</button>
         <button id="changelogButton" class="action-button">📝 更新日志</button>
         <button id="announcementButton" class="action-button">📢 公告</button>
-        <button id="phraseSelectButton" class="action-button">📜 选择金句</button>
     </div>
 
     <!-- 设置模态框 -->
@@ -909,10 +864,6 @@
                 <span class="close-btn" id="closeChangelog">&times;</span>
             </div>
             <div class="text-content" id="changelogContent">
-                <strong># 20250322.2 更新</strong>
-
-                • 新增“金句选择”功能
-
                 <strong># 20250322.1 更新</strong>
 
                 • 新增“开启金句动画效果”开关
@@ -986,17 +937,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- 金句选择模态框 -->
-    <div class="settings-modal" id="phraseModal">
-        <div class="settings-content">
-            <div class="settings-header">
-                <h3>选择金句</h3>
-                <span class="close-btn" id="closePhrase">&times;</span>
-            </div>
-            <div class="text-content" id="phraseList"></div>
         </div>
     </div>
  
@@ -1481,60 +1421,8 @@
                 }
             }
         });
-
-        // Part14 金句选择功能
-        const phraseModal = document.getElementById('phraseModal');
-        const closePhrase = document.getElementById('closePhrase');
-        const phraseButton = document.getElementById('phraseSelectButton'); 
-
-        // 打开金句选择
-        function populatePhraseList() {
-            const allPhrases = [...localPhrases.high, ...localPhrases.medium, ...localPhrases.low];
-            const phraseList = document.getElementById('phraseList');
-            
-            // 清空现有内容
-            phraseList.innerHTML = '';
-            
-            // 使用文档片段批量添加
-            const fragment = document.createDocumentFragment();
-            
-            allPhrases.forEach(phrase => {
-                const div = document.createElement('div');
-                div.className = 'phrase-item';
-                div.textContent = phrase;
-                
-                // 添加点击事件
-                div.addEventListener('click', function() {
-                    // 添加点击效果
-                    this.classList.add('phrase-click-effect');
-                    
-                    // 移除动画类（用于重复点击）
-                    setTimeout(() => {
-                        this.classList.remove('phrase-click-effect');
-                    }, 400);
-                    
-                    // 更新显示（保留原有动画逻辑）
-                    updatePhraseDisplay(phrase);
-                });
-                
-                fragment.appendChild(div);
-            });
-            
-            phraseList.appendChild(fragment);
-        }
-
-        // 修改打开模态框事件
-        phraseButton.addEventListener('click', () => {
-            populatePhraseList();
-            phraseModal.classList.add('active');
-        });
-
-        // 关闭金句选择
-        closePhrase.addEventListener('click', () => {
-            phraseModal.classList.remove('active');
-        });
  
-        // Part15 初始化 
+        // Part14 初始化 
         function init() {
 		    updateCountdown();
 		    updateClock();
