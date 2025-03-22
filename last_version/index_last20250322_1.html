@@ -732,15 +732,6 @@
         #goldenPhrase:active {
             transform: scale(0.98);
         }
-
-        /* 动画控制样式 */
-        #goldenPhrase.no-animation {
-            transition: none !important;
-        }
-
-        #goldenPhrase.no-animation:active {
-            transform: none !important;
-        }
     </style>
 </head>
 <body>
@@ -846,11 +837,6 @@
                         <input type="checkbox" id="clickRefreshSwitch">
                         <span class="slider"></span>
                     </label>
-                    <label class="switch">
-                        <span class="switch-text">开启金句动画效果</span>
-                        <input type="checkbox" id="animationSwitch" checked>
-                        <span class="slider"></span>
-                    </label>
                 </div>
             </div>
         </div>
@@ -864,10 +850,6 @@
                 <span class="close-btn" id="closeChangelog">&times;</span>
             </div>
             <div class="text-content" id="changelogContent">
-                <strong># 20250322.1 更新</strong>
-
-                • 新增“开启金句动画效果”开关
-
                 <strong># 20250315.1 更新</strong>
 
                 功能性更新：
@@ -1169,29 +1151,12 @@
  
         function updatePhraseDisplay(text) {
             const container = document.getElementById('goldenPhrase');
-            const animationEnabled = document.getElementById('animationSwitch').checked;
-            
-            if (animationEnabled) {
-                container.style.opacity = 0;
-                setTimeout(() => {
-                    container.textContent = `「 ${text} 」`;
-                    container.style.opacity = 1;
-                }, 500);
-            } else {
+            container.style.opacity = 0;
+            setTimeout(() => {
                 container.textContent = `「 ${text} 」`;
                 container.style.opacity = 1;
-            }
+            }, 500);
         }
-
-        // 动画开关事件监听
-        document.getElementById('animationSwitch').addEventListener('change', function() {
-            const goldenPhrase = document.getElementById('goldenPhrase');
-            if (this.checked) {
-                goldenPhrase.classList.remove('no-animation');
-            } else {
-                goldenPhrase.classList.add('no-animation');
-            }
-        });
  
         function showLocalPhrase() {
             // 加权选择池
@@ -1401,20 +1366,8 @@
         document.getElementById('goldenPhrase').addEventListener('click', function() {
             const clickRefreshEnabled = document.getElementById('clickRefreshSwitch').checked;
             const autoRotateEnabled = document.getElementById('goldenSwitch').checked;
-            const animationEnabled = document.getElementById('animationSwitch').checked;
-            
             if (clickRefreshEnabled) {
-                // 当动画关闭时直接显示新内容
-                if (!animationEnabled) {
-                    fetchGoldenPhrase();
-                    return;
-                }
-                // 保留原有缩放动画
-                this.style.transform = 'scale(0.98)';
-                setTimeout(() => {
-                    this.style.transform = 'scale(1)';
-                    fetchGoldenPhrase();
-                }, 300);
+                fetchGoldenPhrase();
                 if (autoRotateEnabled && phraseTimer) {
                     clearInterval(phraseTimer);
                     phraseTimer = setInterval(fetchGoldenPhrase, intervalDuration);
