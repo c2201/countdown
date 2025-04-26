@@ -785,83 +785,6 @@
             animation: phraseClickWave 0.4s ease-out;
             position: relative;
         }
-
-        /* 寻物板 */
-        .editable {
-            cursor: pointer;
-            transition: all 0.3s;
-            padding: 2px 5px;
-            border-radius: 4px;
-            font-family: STZhongsong, serif;
-        }
-
-        .editable:hover {
-            background: #f0f0f0;
-        }
-
-        .edit-input {
-            width: 120px;
-            padding: 5px;
-            border: 2px solid #8bc34a;
-            border-radius: 4px;
-            font-size: 24px;
-            text-align: center;
-            color: red;
-            margin: 0 5px;
-            font-family: STZhongsong, serif;
-        }
-
-        @keyframes gradient-pulse {
-            0% {background-position: 0% 50%;}
-            50% {background-position: 100% 50%;}
-            100% {background-position: 0% 50%;}
-        }
-
-        .add-button {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #8bc34a;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            transition: all 0.3s;
-            z-index: 999;
-        }
-
-        .delete-btn {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            padding: 4px 12px;
-            border-radius: 15px;
-            background: #ff4444;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        #lostAndFoundList .announcement-card {
-            padding: 12px;
-            margin: 8px 10px;
-        }
-
-        #lostAndFoundList .announcement-body {
-            line-height: 1.1;
-        }
-
-        #lostAndFoundList .editable {
-            margin: 1px 0;
-            padding: 2px 4px;
-        }
     </style>
 </head>
 <body>
@@ -926,7 +849,6 @@
         <button id="changelogButton" class="action-button">📝 更新日志</button>
         <button id="announcementButton" class="action-button">📢 公告</button>
         <button id="phraseSelectButton" class="action-button">📜 选择金句</button>
-        <button id="lostAndFoundButton" class="action-button">🔍 寻物</button>
     </div>
 
     <!-- 设置模态框 -->
@@ -987,10 +909,6 @@
                 <span class="close-btn" id="closeChangelog">&times;</span>
             </div>
             <div class="text-content" id="changelogContent">
-                <strong># 20250426.1 更新</strong>
-
-                • 新增“寻物”功能
-
                 <strong># 20250322.2 更新</strong>
 
                 • 新增“金句选择”功能
@@ -1079,39 +997,6 @@
                 <span class="close-btn" id="closePhrase">&times;</span>
             </div>
             <div class="text-content" id="phraseList"></div>
-        </div>
-    </div>
-
-    <!-- 寻物模态框 -->
-    <div class="settings-modal" id="lostAndFoundModal">
-        <div class="settings-content">
-            <div class="settings-header">
-                <h3>寻物</h3>
-                <span class="close-btn" id="closeLostAndFound">&times;</span>
-            </div>
-            <div class="settings-body" style="padding: 0;">
-                <div class="big-title" style="
-                    background: linear-gradient(135deg, #FF0000 0%, #FF6B00 25%, #FFD700 50%, #FF6B00 75%, #FF0000 100%);
-                    -webkit-background-clip: text;
-                    background-clip: text;
-                    -webkit-text-fill-color: transparent;
-                    background-size: 200% 200%;
-                    animation: gradient-pulse 4s ease infinite;
-                    text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 10px rgba(255,107,0,0.5);
-                    font-size: 120px;
-                    font-family: STXingkai, cursive;
-                    letter-spacing: 4px;
-                    width: 100%;
-                    text-align: center;
-                    margin: -20px 0;
-                    padding: 0;
-                    line-height: 1.2;
-                ">寻物</div>
-                
-                <div class="announcement-content" id="lostAndFoundList" style="height: calc(100% - 90px);">
-                    <div class="add-button">+</div>
-                </div>
-            </div>
         </div>
     </div>
  
@@ -1648,85 +1533,8 @@
         closePhrase.addEventListener('click', () => {
             phraseModal.classList.remove('active');
         });
-
-        // Part15 寻物功能
-        const lostAndFoundButton = document.getElementById('lostAndFoundButton');
-        const lostAndFoundModal = document.getElementById('lostAndFoundModal');
-        const closeLostAndFound = document.getElementById('closeLostAndFound');
-
-        // 打开寻物板
-        lostAndFoundButton.addEventListener('click', () => {
-            lostAndFoundModal.classList.add('active');
-        });
-
-        // 关闭寻物板
-        closeLostAndFound.addEventListener('click', () => {
-            lostAndFoundModal.classList.remove('active');
-        });
-
-        // 编辑功能
-        document.getElementById('lostAndFoundList').addEventListener('click', function(e) {
-            const target = e.target;
-            if (target.classList.contains('editable')) {
-                const originalText = target.textContent;
-                const input = document.createElement('input');
-                input.className = 'edit-input';
-                input.value = originalText;
-                input.style.width = target.offsetWidth + 'px';
-                
-                input.addEventListener('blur', function() {
-                    target.textContent = this.value;
-                    target.style.display = 'inline';
-                    input.remove();
-                });
-
-                input.addEventListener('input', function() {
-                    this.style.width = (this.value.length * 20 + 30) + 'px';
-                });
-
-                target.style.display = 'none';
-                target.parentNode.insertBefore(input, target);
-                input.focus();
-            }
-        });
-
-        // 添加卡片功能
-        document.querySelector('.add-button').addEventListener('click', () => {
-            const newCard = document.createElement('div');
-            newCard.className = 'announcement-card';
-            newCard.innerHTML = `
-                <div class="announcement-body" style="position:relative; text-align: center; font-size: 24px; font-family: STZhongsong, serif;">
-                    <span class="editable" data-type="name" style="color: red;">同学</span>&nbsp;的
-                    <span class="editable" data-type="item" style="color: red;">物品</span>
-                    <button class="delete-btn">删除</button>
-                </div>
-            `;
-            document.getElementById('lostAndFoundList').appendChild(newCard);
-        });
-
-        // 删除功能（使用事件委托）
-        document.getElementById('lostAndFoundList').addEventListener('click', function(e) {
-            if (e.target.classList.contains('delete-btn')) {
-                if (e.target.textContent === '删除') {
-                    e.target.textContent = '确认删除';
-                    e.target.style.background = '#d32f2f';
-                } else {
-                    e.target.closest('.announcement-card').remove();
-                }
-            }
-        });
-
-        // 重置删除按钮状态（当点击其他地方时）
-        document.addEventListener('click', (e) => {
-            if (!e.target.classList.contains('delete-btn')) {
-                document.querySelectorAll('.delete-btn').forEach(btn => {
-                    btn.textContent = '删除';
-                    btn.style.background = '#ff4444';
-                });
-            }
-        });
  
-        // PartLast 初始化 
+        // Part15 初始化 
         function init() {
 		    updateCountdown();
 		    updateClock();
