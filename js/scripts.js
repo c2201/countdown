@@ -113,19 +113,19 @@ function getCurrentSchedule() {
     const now = new Date();
     const day = now.getDay();
     const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    // 如果是周末
     if(day === 0 || day === 6) return {current: "周末", nextLesson: ""};
     const todaySchedule = schedule.weekday;
     let current = "";
     let nextLesson = "";
-    // 处理跨天时段（22:50-7:00）
-    if(currentMinutes >= timeToMinutes("22:50") || currentMinutes < timeToMinutes("7:00")) {
-        current = "睡觉";
-        const firstLesson = todaySchedule.find(item => item[1].endsWith("节课"));
-        nextLesson = firstLesson ? firstLesson[1] : "";
-        return {current, nextLesson};
+    // 处理跨天时段（22:20-7:00）
+    if(currentMinutes >= timeToMinutes("22:20") || currentMinutes < timeToMinutes("7:00")) {
+        current = "洗漱睡觉";
+        nextLesson = "无";  // 明确设置为"无"
+        return {current, nextLesson};  // 直接返回，不查找下节课
     }
-    let currentIndex = -1;
     // 查找当前时间段
+    let currentIndex = -1;
     for(let i = 0; i < todaySchedule.length; i++) {
         const [start, end] = todaySchedule[i][0].split('-');
         const startTime = timeToMinutes(start);
@@ -143,6 +143,10 @@ function getCurrentSchedule() {
                 nextLesson = todaySchedule[i][1];
                 break;
             }
+        }
+        // 如果没有找到下节课，则设置为"无"
+        if(!nextLesson) {
+            nextLesson = "无";
         }
     }
     return {current, nextLesson};
