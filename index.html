@@ -7,7 +7,872 @@
     <script src="js/timetable.js"></script>
     <script src="js/schedule.js"></script>
     <script src="js/phrases.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    
+
+
+    <style>
+        /* 底部按钮样式 */
+        .action-buttons {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 10;
+        }
+
+        .action-button {
+            width: auto;
+            padding: 0 20px;
+            height: 40px;
+            border-radius: 20px;
+            background: #8bc34a;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            color: white;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .action-button:hover {
+            transform: scale(1.05);
+        }
+
+        /* 更新日志样式 */
+        .changelog-modal .settings-content {
+            max-width: 600px;
+            height: 75%;
+        }
+
+        .text-content {
+            padding: 15px;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            height: calc(100% - 50px);
+        }
+
+        /* 设置样式 */
+        .settings-button {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #8bc34a;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            transition: transform 0.3s;
+        }
+
+        .settings-button:hover {
+            transform: translateX(-50%) scale(1.1);
+        }
+
+        .settings-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 999;
+        }
+
+        .settings-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .settings-content {
+        background: white;
+        width: 60%;
+        height: 75%;
+        border-radius: 12px;
+        transform: scale(0.8);
+        opacity: 0;
+        transition: all 0.3s;
+        position: relative;
+        padding: 20px;
+        overflow: hidden; 
+        }
+
+        .settings-modal.active .settings-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .settings-header h3 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .settings-body {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            padding: 20px;
+        }
+
+        /* 模态框关闭按钮样式 */
+        .close-btn {
+            font-size: 28px;
+            cursor: pointer;
+            padding: 0 10px;
+            color: #666;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        /* 节气卡片样式 */
+        .solar-card {
+            position: absolute;
+            top: calc(100% + 20px);
+            left: 50%;
+            transform: translateX(-50%);
+            width: 500px;
+            background: rgba(255,255,255,0.96);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .solar-card::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 10px solid transparent;
+            border-bottom-color: rgba(255,255,255,0.96);
+        }
+
+        .solar-card.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .solar-card h3 {
+            text-align: center;
+            margin: 0 0 15px;
+            font-size: 24px;
+            color: #1b5e20;
+            font-family: STZhongsong, serif;
+        }
+
+        .solar-card img {
+            width: 160px;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .solar-card p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #444;
+            margin: 0;
+            font-family: 'Microsoft YaHei';
+            flex-grow: 1;
+            text-align: left;
+            text-indent: 2em;
+        }
+
+        /.solar-term-marker {
+            transition: all 0.3s ease;
+        }
+
+        .solar-card {
+            transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+        }
+
+        /* 时间容器样式 */
+        #currentDateTime {
+            position: absolute;
+            top: 78px;
+            left: 25px;
+            z-index: 5;
+            background: rgba(255,255,255,0.9);
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            min-width: 180px;
+        }
+
+        /* 左上角时间样式 */
+        .time-section {
+            font-family: 'STZh', sans-serif;
+            font-size: 44px;
+            letter-spacing: 0;
+            color: #1b5e20;
+            margin: 8px 0;
+            display: block;
+                width: 100%;
+        }
+
+        /* 左上角日期样式 */
+        .date-section {
+            font-family: 'Microsoft YaHei', serif;
+            font-size: 22px;
+            color: #666;
+            letter-spacing: 0.5px;
+            white-space: nowrap;  /* 防止换行 */
+            display: block;
+            width: 100%;
+        }
+
+        /* 金句样式 */
+        #goldenPhrase {
+            text-align: center;
+            margin: 10px auto;
+            width: 760px;
+            font-size: 26px;
+            color: #1b5e20;
+            min-height: 40px;
+            font-family: STZhongSong, cursive;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            transition: opacity 0.5s;
+            position: relative;
+            top: -95px;
+            margin-bottom: -45px;
+        }
+
+        /* 基础样式 */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(to bottom right, #f5fff5, #e8f5e9);
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            background-color: #333;
+            overflow: hidden;
+            width: 100%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 6;
+        }
+
+        .brand {
+            float: left;
+            color: white;
+            padding: 14px 20px;
+            font-size: 20px;
+            font-weight: bold;
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+
+        .navbar a {
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 18px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        /* 中考倒计时样式 */
+        .small-title {
+            text-align: center;
+            color: #2d2d2d;
+            font-size: 38px;
+            font-family: STZhongsong, serif;
+            margin-top: 50px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .big-title {
+            text-align: center;
+            color: #1b5e20;
+            font-size: 160px;
+            font-family: STKaiti, cursive;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* 时间轴样式 */ 
+        .timeline-container {
+            max-width: 750px;
+            margin: 50px auto;
+            position: relative;
+            height: 120px;
+            overflow: visible;
+        }
+
+        .timeline-progress {
+            height: 8px;
+            background: linear-gradient(
+                to right,
+                #8bc34a 0%,
+                #8bc34a var(--progress-percent),
+                #e0e0e0 var(--progress-percent),
+                #e0e0e0 100%
+            );
+            border-radius: 4px;
+            position: relative;
+            margin-top: 60px;
+        }
+
+        /* 节气标记样式 */
+        .solar-term-marker {
+            position: absolute;
+            top: -45px;
+            width: 70px;
+            text-align: center;
+            transform: translateX(-50%);
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 2;
+        }
+
+        .current-marker {
+            position: absolute;
+            left: 0;
+            top: -10px;
+            width: 3px;
+            height: 30px;
+            background: #ff5722;
+            transform: translateX(-50%);
+            transition: left 0.5s ease-out;
+            box-shadow: 0 2px 4px rgba(255,87,34,0.3);
+        }
+
+        /* 中考日标记样式 */
+        .end-marker {
+            position: absolute;
+            right: -15px;
+            top: -45px;
+            width: 90px;
+            text-align: center;
+            color: #d32f2f;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(211,47,47,0.2);
+            transform: translateX(30%);
+        }
+
+        /* 作息提示样式 */
+        .schedule-container {
+            position: absolute;
+            top: 220px;
+            left: 25px;
+            z-index: 5;
+            background: rgba(255,255,255,0.9);
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            min-width: 190px;
+        }
+
+        .schedule-item {
+            font-family: 'STZhongSong', sans-serif;
+            margin: 8px 0;
+        }
+
+        .schedule-title {
+            display: block;
+            font-size: 20px;
+            color: #1b5e20;
+            font-weight: 600;
+            text-align: left;
+            line-height: 1;
+        }
+
+        .schedule-value {
+            display: block;
+            font-size: 25px;
+            color: #2d2d2d;
+            text-align: center;
+            margin: 4px 0 0;
+            padding: 2px 0;
+            line-height: 1;
+        }
+
+        /* 课表样式 */
+        .timetable {
+            margin-top: 10px;
+            border-top: 1px solid #eee;
+            padding-top: 8px;
+        }
+
+        .timetable-item {
+            font-size: 25px;
+            font-family: STZhongSong, cursive;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        /* 每日60s样式 */
+        .right-image-container {
+            position: fixed;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 5;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .right-image-container img {
+            height: 80vh;
+            object-fit: cover;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* 滑块开关样式 */
+        input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .switch-container {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            margin-top: 20px;
+        }
+
+        .switch {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .slider {
+            position: relative;
+            cursor: pointer;
+            width: 40px;
+            height: 24px;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 24px;
+        }
+
+        .switch-text {
+            font-size: 14px;
+            color: #1b5e20;
+            display: inline-block;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #8bc34a;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(16px);
+        }
+
+        input:checked ~ .switch-text {
+            color: #4CAF50;
+        }
+
+        /* 公告卡片样式 */
+        .announcement-card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin: 15px;
+            border: 1px solid #eee;
+        }
+
+        .announcement-title {
+            font-size: 1.6em;
+            color: #1b5e20;
+            font-weight: 600;
+            margin-bottom: 8px;
+            border-bottom: 2px solid #8bc34a;
+            padding-bottom: 5px;
+            text-align: center;
+        }
+
+        .announcement-time {
+            font-size: 0.95em;
+            color: #666;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .announcement-body {
+            line-height: 1.2;
+            color: #444;
+            font-size: 1.2em;
+        }
+
+        .announcement-body ul {
+            margin: 8px 0;
+            padding-left: 25px;
+        }
+
+        .announcement-body li {
+            margin: 6px 0;
+        }
+
+        .announcement-footnote {
+            font-size: 0.85em;
+            color: #999;
+            margin-top: 15px;
+            border-top: 1px dashed #ddd;
+            padding-top: 10px;
+        }
+
+        .announcement-content {
+            height: calc(100% - 60px);
+            overflow-y: auto;
+            padding: 0 10px;
+        }
+
+        .announcement-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .announcement-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .announcement-content::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+
+        .announcement-content::-webkit-scrollbar-thumb:hover {
+            background: #8bc34a;
+        }
+
+        /* 概率控制样式 */
+        .probability-control {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            margin: 12px 0;
+        }
+
+        .probability-control .switch-text {
+            flex: 1;
+            font-size: 14px;
+            color: #1b5e20;
+        }
+
+        .range-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 40%;
+            justify-content: flex-end;
+        }
+
+        #apiProbability {
+            width: 100%;
+            height: 4px;
+            background: #ddd;
+            border-radius: 2px;
+            -webkit-appearance: none;
+            margin: 0 8px;
+        }
+
+        #apiProbability::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #8bc34a;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            box-shadow: none;
+        }
+
+        #apiProbability::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: #8bc34a;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+        }
+
+        #apiProbabilityValue {
+            width: 50px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        /* 间隔时间控制样式 */
+        #intervalSlider {
+            width: 100%;
+            height: 4px;
+            background: #ddd;
+            border-radius: 2px;
+            -webkit-appearance: none;
+            margin: 0 8px;
+        }
+
+        #intervalSlider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #8bc34a;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            box-shadow: none;
+        }
+
+        #intervalSlider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: #8bc34a;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+        }
+
+        #intervalValue {
+            width: 50px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        /* 重置按钮样式 */
+        .reset-btn {
+            padding: 5px 12px;
+            min-width: 50px;
+            white-space: nowrap;
+            background: #8bc34a;
+            border-radius: 4px;
+            color: white;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .reset-btn:hover {
+            background: #7cb342;
+            transform: scale(1.05);
+            box-shadow: none;
+        }
+
+        /* 金句点击效果 */
+        #goldenPhrase {
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        #goldenPhrase:active {
+            transform: scale(0.98);
+        }
+
+        /* 动画控制样式 */
+        #goldenPhrase.no-animation {
+            transition: none !important;
+        }
+
+        #goldenPhrase.no-animation:active {
+            transform: none !important;
+        }
+
+        /* 金句列表样式 */
+        #phraseList {
+            padding: 15px;
+            overflow-y: auto;
+            height: calc(100% - 50px);
+        }
+
+        .phrase-item {
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 6px;
+            background: #f8f8f8;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: STZhongSong, cursive;
+            color: #1b5e20;
+        }
+
+        .phrase-item:hover {
+            background: #e8f5e9;
+            transform: translateX(5px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        /* 选择金句界面金句点击动画 */
+        .phrase-item {
+            transition: all 0.3s ease;
+        }
+
+        .phrase-item:active {
+            transform: scale(0.97);
+            background: #e0f2f1 !important;
+        }
+
+        @keyframes phraseClickWave {
+            0% { box-shadow: 0 0 0 0 rgba(139, 195, 74, 0.3); }
+            100% { box-shadow: 0 0 0 10px rgba(139, 195, 74, 0); }
+        }
+
+        .phrase-click-effect {
+            animation: phraseClickWave 0.4s ease-out;
+            position: relative;
+        }
+
+        /* 寻物板 */
+        .editable {
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-family: STZhongsong, serif;
+            color: #1E90FF;
+            text-shadow: 0 0 2px rgba(0,0,0,0.2);
+            border-bottom: 2px solid #FFD700; /* 金色下划线 */
+        }
+
+        .editable:hover {
+            background: #f0f0f0;
+        }
+
+        .edit-input {
+            width: 120px;
+            padding: 5px;
+            border: 2px solid #8bc34a;
+            border-radius: 4px;
+            font-size: 28px;
+            text-align: center;
+            color: #1E90FF;
+            margin: 0 5px;
+            font-family: STZhongsong, serif;
+        }
+
+        @keyframes gradient-pulse {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+        }
+
+        .add-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #8bc34a;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            z-index: 999;
+        }
+
+        .delete-btn {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 4px 12px;
+            border-radius: 15px;
+            background: #ff4444;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        #lostAndFoundList .announcement-card {
+            padding: 12px;
+            margin: 8px 10px;
+        }
+
+        #lostAndFoundList .announcement-body {
+            line-height: 1.1;
+        }
+
+        #lostAndFoundList .editable {
+            margin: 1px 0;
+            padding: 2px 4px;
+        }
+    </style>
+
+
+
 </head>
 <body>
     <!-- 导航栏 -->
@@ -132,6 +997,15 @@
                 <span class="close-btn" id="closeChangelog">&times;</span>
             </div>
             <div class="text-content" id="changelogContent">
+                <strong># 20250502.4 更新</strong>
+
+                功能性更新：
+                    • 为金句新增4个API：2个古诗词API、1个唯美语句API、1个名句API，并添加权重
+                    • 将金句显示区域上移45px
+                    • 更改《飞鸟集》语句API的显示格式为“英文（中文）——泰戈尔”
+                技术性更新：
+                    • 又将20250502.1更新中更改的“将css和js代码放入了单独的文件中”改了回来，再次全部塞进index.html
+
                 <strong># 20250502.3 更新</strong>
 
                 • 修复了若干修改课程表、作息表后导致的bug
@@ -276,6 +1150,743 @@
             </div>
         </div>
     </div>
-    <script src="js/scripts.js"></script>
+
+
+
+    <script>
+        // Part1 时间间隔设置
+        let intervalDuration = 15 * 1000;
+        let phraseTimer = null;
+
+        // 滑动条和输入框事件
+        document.getElementById('intervalSlider').addEventListener('input', function(e) {
+            const value = Math.min(120, Math.max(1, parseInt(e.target.value) || 15));
+            intervalDuration = value * 1000;
+            document.getElementById('intervalValue').value = value;
+            // 如果自动轮播开启则立即应用新间隔
+            if (goldenSwitch.checked && phraseTimer) {
+                clearInterval(phraseTimer);
+                phraseTimer = setInterval(fetchGoldenPhrase, intervalDuration);
+            }
+        });
+
+        document.getElementById('intervalValue').addEventListener('input', function(e) {
+            const value = Math.min(120, Math.max(1, parseInt(e.target.value) || 15));
+            intervalDuration = value * 1000;
+            document.getElementById('intervalSlider').value = value;
+        });
+
+        // 重置间隔
+        function resetInterval() {
+            intervalDuration = 15 * 1000;
+            document.getElementById('intervalSlider').value = 15;
+            document.getElementById('intervalValue').value = 15;
+            
+            if (goldenSwitch.checked && phraseTimer) {
+                clearInterval(phraseTimer);
+                phraseTimer = setInterval(fetchGoldenPhrase, intervalDuration);
+            }
+        }
+
+        // Part2 概率控制
+        let apiProbability = 50;
+
+        // 滑动条输入事件监听
+        document.getElementById('apiProbability').addEventListener('input', function(e) {
+            const value = Math.min(100, Math.max(0, parseInt(e.target.value) || 0));
+            apiProbability = value;
+            document.getElementById('apiProbabilityValue').value = value;
+        });
+
+        // 数值输入框事件监听
+        document.getElementById('apiProbabilityValue').addEventListener('input', function(e) {
+            const value = Math.min(100, Math.max(0, parseInt(e.target.value) || 0));
+            apiProbability = value;
+            document.getElementById('apiProbability').value = value;
+        });
+
+        // 重置按钮
+        function resetProbability() {
+            apiProbability = 50;
+            document.getElementById('apiProbability').value = 50;
+            document.getElementById('apiProbabilityValue').value = 50;
+        }
+
+        // Part3 公告板
+        const announcementButton = document.getElementById('announcementButton');
+        const announcementModal = document.getElementById('announcementModal');
+        const closeAnnouncement = document.getElementById('closeAnnouncement');
+
+        // 打开公告
+        announcementButton.addEventListener('click', () => {
+            announcementModal.classList.add('active');
+        });
+
+        // 关闭公告
+        closeAnnouncement.addEventListener('click', () => {
+            announcementModal.classList.remove('active');
+        });
+
+        // Part4 更新日志功能
+        const changelogButton = document.getElementById('changelogButton');
+        const changelogModal = document.getElementById('changelogModal');
+        const closeChangelog = document.getElementById('closeChangelog');
+
+        // 打开更新日志
+        changelogButton.addEventListener('click', () => {
+            changelogModal.classList.add('active');
+        });
+
+        // 关闭更新日志
+        closeChangelog.addEventListener('click', () => {
+            changelogModal.classList.remove('active');
+        });
+
+        // Part5 设置
+        const settingsButton = document.getElementById('settingsButton');
+        const settingsModal = document.getElementById('settingsModal');
+        const closeButton = document.getElementById('closeSettings');
+
+        // 打开设置
+        settingsButton.addEventListener('click', () => {
+            settingsModal.classList.add('active');
+        });
+
+        // 关闭设置
+        closeButton.addEventListener('click', () => {
+            settingsModal.classList.remove('active');
+        });
+
+        // Part6 作息显示功能
+        // 时间转换函数
+        function timeToMinutes(time) {
+            const [h, m] = time.split(':').map(Number);
+            return h * 60 + m;
+        }
+
+        // 获取当前作息
+        function getCurrentSchedule() {
+            const now = new Date();
+            const day = now.getDay();
+            const currentMinutes = now.getHours() * 60 + now.getMinutes();
+            // 如果是周末
+            if(day === 0 || day === 6) return {current: "周末", nextLesson: ""};
+            const todaySchedule = schedule.weekday;
+            let current = "";
+            let nextLesson = "";
+            // 处理跨天时段（22:20-7:00）
+            if(currentMinutes >= timeToMinutes("22:20") || currentMinutes < timeToMinutes("7:00")) {
+                current = "洗漱睡觉";
+                nextLesson = "无";  // 明确设置为"无"
+                return {current, nextLesson};  // 直接返回，不查找下节课
+            }
+            // 查找当前时间段
+            let currentIndex = -1;
+            for(let i = 0; i < todaySchedule.length; i++) {
+                const [start, end] = todaySchedule[i][0].split('-');
+                const startTime = timeToMinutes(start);
+                const endTime = timeToMinutes(end);
+                if(currentMinutes >= startTime && currentMinutes < endTime) {
+                    current = todaySchedule[i][1];
+                    currentIndex = i;
+                    break;
+                }
+            }
+            // 查找下一个"节课"
+            if(currentIndex >= 0) {
+                for(let i = currentIndex + 1; i < todaySchedule.length; i++) {
+                    if(todaySchedule[i][1].endsWith("节课") || todaySchedule[i][1].endsWith("考试")) {
+                        nextLesson = todaySchedule[i][1];
+                        break;
+                    }
+                }
+                // 如果没有找到下节课，则设置为"无"
+                if(!nextLesson) {
+                    nextLesson = "无";
+                }
+            }
+            return {current, nextLesson};
+        }
+
+        // 获取课程名称
+        function getCourseName(day, lessonIndex) {
+            const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+            const timetableDay = timetable[days[day]];
+            return timetableDay ? timetableDay[lessonIndex] : "";
+        }
+
+        // 更新作息显示
+        function updateScheduleDisplay() {
+            const now = new Date();
+            const day = now.getDay();  
+            const {current, nextLesson} = getCurrentSchedule();
+            
+            // 当前作息
+            let currentText = current;
+            if(current.includes(" 课")) {
+                const lessonItems = schedule.weekday.filter(item => 
+                    item[1].endsWith("节课") || item[1].endsWith("考试"));
+                const currentLessonIndex = lessonItems.findIndex(item => item[1] === current);
+                if(currentLessonIndex >=0 && currentLessonIndex <9) {
+                    currentText = getCourseName(day, currentLessonIndex);
+                }
+            }
+            document.getElementById('currentSchedule').textContent = currentText;
+            
+            // 下节课
+            let nextText = nextLesson;
+            if(nextLesson) {
+                const lessonItems = schedule.weekday.filter(item => 
+                    item[1].endsWith("节课") || item[1].endsWith("考试"));
+                const nextLessonIndex = lessonItems.findIndex(item => item[1] === nextLesson);
+                if(nextLessonIndex >=0 && nextLessonIndex <9) {
+                    nextText = getCourseName(day, nextLessonIndex);
+                }
+            }
+            document.getElementById('nextSchedule').textContent = nextText || "无";
+            
+            // 课表
+            if(day >=1 && day <=5) {
+                const courses = timetable[Object.keys(timetable)[day-1]];
+                document.getElementById('todayTimetable').innerHTML = courses.map((c,i) => 
+                    `<div class="timetable-item">${i+1}&nbsp;${c}</div>`
+                ).join('');
+            } else {
+                document.getElementById('todayTimetable').innerHTML = 
+                    '<div class="timetable-item">周末无课表</div>';
+            }
+        }
+
+        // Part7 金句功能
+        const apiConfigs = [
+            {
+                url: 'https://zj.v.api.aa1.cn/api/wenan-shici/?type=json',
+                method: 'GET',
+                weight: 20,
+                maxRetry: 3, // 最大重试次数
+                handler: (data) => {
+                    const text = data.msg || '';
+                    return text.length <= 100 ? text : null;
+                }
+            },
+            {
+                url: 'https://api.songzixian.com/api/daily-poem?dataSource=LOCAL_DAILY_POEM',
+                method: 'GET',
+                weight: 20,
+                maxRetry: 3,
+                handler: (data) => {
+                    if (!data.data) return null;
+                    
+                    // 处理标题格式
+                    let title = data.data.title;
+                    // 去除标题中的空格点号
+                    title = title.replace(/\s*·\s*/g, '·');
+                    // 判断是否需要添加书名号
+                    const hasBookMarks = /^《(.+)》$/.test(title);
+                    const formattedTitle = hasBookMarks ? title : `《${title}》`;
+                    
+                    return `${data.data.quotes}——${data.data.author}${formattedTitle}`;
+                }
+            },
+            {
+                url: 'https://zj.v.api.aa1.cn/api/wenan-wm/?type=json',
+                method: 'GET',
+                weight: 10,
+                maxRetry: 3,
+                handler: (data) => {
+                    const text = data.msg || '';
+                    return text.length <= 100 ? text : null;
+                }
+            },
+            {
+                url: 'https://zj.v.api.aa1.cn/api/wenan-mj/?type=json',
+                method: 'GET',
+                weight: 20,
+                maxRetry: 3,
+                handler: (data) => {
+                    const text = data.msg || '';
+                    return text.length <= 100 ? text : null;
+                }
+            },
+            {
+                url: 'https://api.mu-jie.cc/stray-birds/range?type=json',
+                method: 'GET',
+                weight: 30,
+                maxRetry: 5,
+                handler: (data) => {
+                    const chLength = data.cn?.length || 0;
+                    const enLength = data.en?.length || 0;
+                    // 中文超长直接返回null触发重试
+                    if (chLength > 100) return null;
+                    // 计算总长度：英文按0.5倍计算
+                    const totalLength = (enLength * 0.5) + chLength;
+                    if (totalLength <= 100) {
+                        return `${data.en}（${data.cn}）——泰戈尔`;
+                    }
+                    // 仅显示中文
+                    return `${data.cn}——泰戈尔`;
+                }
+            }
+        ];
+
+        let currentApiIndex = 0;
+
+        async function fetchWithRetry(apiConfig, retryCount = 0) {
+            try {
+                const response = await fetch(apiConfig.url, { method: apiConfig.method });
+                if (!response.ok) throw new Error('HTTP error');
+                
+                const data = await response.json();
+                const processed = apiConfig.handler(data);
+                
+                if (processed !== null) return processed;
+                if (retryCount < apiConfig.maxRetry) {
+                    return fetchWithRetry(apiConfig, retryCount + 1);
+                }
+                throw new Error('超出最大重试次数');
+            } catch (error) {
+                if (retryCount < apiConfig.maxRetry) {
+                    return fetchWithRetry(apiConfig, retryCount + 1);
+                }
+                throw error;
+            }
+        }
+
+        function selectRandomAPI() {
+            const totalWeight = apiConfigs.reduce((sum, api) => sum + api.weight, 0);
+            let random = Math.random() * totalWeight;
+            
+            for (const api of apiConfigs) {
+                if (random < api.weight) {
+                    return api;
+                }
+                random -= api.weight;
+            }
+            return apiConfigs[0];
+        }
+
+        async function fetchGoldenPhrase() {
+            if (Math.random() < apiProbability / 100) {
+                try {
+                    const selectedAPI = selectRandomAPI();
+                    const text = await fetchWithRetry(selectedAPI);
+                    updatePhraseDisplay(text);
+                } catch (error) {
+                    console.warn('金句API获取失败:', error);
+                    showLocalPhrase();
+                }
+            } else {
+                showLocalPhrase();
+            }
+        }
+
+        function updatePhraseDisplay(text) {
+            const container = document.getElementById('goldenPhrase');
+            const animationEnabled = document.getElementById('animationSwitch').checked;
+            
+            if (animationEnabled) {
+                container.style.opacity = 0;
+                setTimeout(() => {
+                    container.textContent = `「 ${text} 」`;
+                    container.style.opacity = 1;
+                }, 500);
+            } else {
+                container.textContent = `「 ${text} 」`;
+                container.style.opacity = 1;
+            }
+        }
+
+        // 动画开关事件监听
+        document.getElementById('animationSwitch').addEventListener('change', function() {
+            const goldenPhrase = document.getElementById('goldenPhrase');
+            if (this.checked) {
+                goldenPhrase.classList.remove('no-animation');
+            } else {
+                goldenPhrase.classList.add('no-animation');
+            }
+        });
+
+        function showLocalPhrase() {
+            // 加权选择池
+            const weightedPool = [
+                ...localPhrases.high.map(p => ({ p, w: 45 })),   // 高概率区：权重4.5
+                ...localPhrases.medium.map(p => ({ p, w: 35 })), // 中概率区：权重3.5
+                ...localPhrases.low.map(p => ({ p, w: 20 }))     // 低概率区：权重2.0
+            ];
+            // 计算总权重
+            const totalWeight = weightedPool.reduce((sum, item) => sum + item.w, 0);
+            // 生成随机数
+            let random = Math.random() * totalWeight;
+            // 遍历选择池寻找命中项
+            for (const item of weightedPool) {
+                if (random < item.w) {
+                    return updatePhraseDisplay(item.p);
+                }
+                random -= item.w;
+            }
+        }
+
+        // Part8 二十四节气时间轴
+        // 生成节气标记 
+        function generateSolarMarkers() {
+            const springStart = solarTerms.find(t  => t.name  === '立春');
+            const startDate = new Date(2025, springStart.month,  springStart.day); 
+            const endDate = new Date(2025, 5, 18);
+            const totalDays = (endDate - startDate) / 86400000;
+            document.querySelectorAll('.solar-term-marker').forEach(m  => m.remove()); 
+            solarTerms.forEach(term  => {
+                const termDate = new Date(2025, term.month,  term.day); 
+                if (termDate < startDate || termDate > endDate) return;
+                const position = ((termDate - startDate) / 86400000 / totalDays) * 100;
+                const isPast = termDate < new Date();
+                const marker = document.createElement('div'); 
+                marker.className  = 'solar-term-marker';
+                marker.style.left  = `${position}%`;
+                marker.innerHTML  = `
+                    <div style="color: ${isPast ? '#666' : term.color}; 
+                        font-weight: ${isPast ? 'normal' : '600'};
+                        text-shadow: ${isPast ? 'none' : '0 2px 4px rgba(0,0,0,0.1)'}">
+                        ${term.name} 
+                    </div>
+                    <div style="font-size:0.9em; color: ${isPast ? '#999' : '#666'};
+                        margin-top: 5px">
+                        ${termDate.getMonth()+1}  月${termDate.getDate()}  日 
+                    </div>
+                `;
+                marker.addEventListener('mouseover',  () => {
+                    if (!isPast) {
+                        marker.style.transform  = 'translateX(-50%) scale(1.1)';
+                        // marker.style.filter  = 'drop-shadow(0 4px 6px rgba(0,0,0,0.15))';
+                    }
+                });
+                marker.addEventListener('mouseout',  () => {
+                    marker.style.transform  = 'translateX(-50%) scale(1)';
+                    marker.style.filter  = 'none';
+                });
+                timeline.appendChild(marker); 
+                // 创建卡片
+                const card = document.createElement('div');
+                card.className = 'solar-card';
+                card.innerHTML = `
+                    <h3>${term.name}</h3>
+                    <img src="${term.image}" alt="${term.name}">
+                    <p>${term.desc}</p>
+                `;
+                marker.appendChild(card);
+                // 点击事件处理
+                marker.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const allCards = document.querySelectorAll('.solar-card');
+                    allCards.forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                });
+            });
+            // 点击其他区域隐藏卡片
+            document.addEventListener('click', () => {
+                document.querySelectorAll('.solar-card').forEach(c => c.classList.remove('active'));
+            });
+        }
+
+        // 时间轴
+        function updateTimelineColor() {
+            const springStart = solarTerms.find(t  => t.name  === '立春');
+            const startDate = new Date(2025, springStart.month,  springStart.day); 
+            const endDate = new Date(2025, 5, 18);
+            const now = new Date();
+            const total = endDate - startDate;
+            const progress = Math.min(1,  Math.max(0,  (now - startDate) / total));
+            timeline.style.setProperty('--progress-percent',  `${progress * 100}%`);
+            requestAnimationFrame(updateTimelineColor);
+        }
+
+        // Part9 中考倒计时
+        function updateCountdown() {
+            const target = new Date(2025, 5, 18);
+            const diff = target - new Date();
+            const days = Math.max(0,  Math.ceil(diff  / 86400000));
+            document.getElementById('daysUntil').textContent  = `${days}天`;
+
+            const now = new Date();
+            const msToNextDay = 86400000 - (now % 86400000);
+            setTimeout(updateCountdown, msToNextDay);
+        }
+
+        // Part10 时钟显示
+        function updateClock() {
+            const date = new Date();
+            const weekDays = ['日','一','二','三','四','五','六'];
+            // 时间部分 
+            const hh = date.getHours().toString().padStart(2,  '0');
+            const mm = date.getMinutes().toString().padStart(2,  '0');
+            const ss = date.getSeconds().toString().padStart(2,  '0');
+            // 日期部分 
+            const yyyy = date.getFullYear(); 
+            const m = (date.getMonth()  + 1).toString().padStart(2, '0');
+            const d = date.getDate().toString().padStart(2,  '0');
+            const week = weekDays[date.getDay()];
+            document.getElementById('currentDateTime').innerHTML  = `
+                <div class="time-section">${hh}:${mm}:${ss}</div>
+                <div class="date-section">${yyyy}/${m}/${d} 周${week}</div>
+            `;
+            requestAnimationFrame(updateClock);
+        }
+
+        function fetchAndDisplayImage(url) {
+            fetch('https://api.cenguigui.cn/api/60s/')
+                .then(response => response.blob()) 
+                .then(blob => {
+                    const img = document.getElementById('apiImage'); 
+                    img.src  = URL.createObjectURL(blob); 
+                    img.style.height  = '80vh';
+                })
+                .catch(error => console.error(' 图片加载失败:', error));
+        }
+
+        // Part11 金句自动轮播和显示每日60s开关
+        // 初始化开关状态
+        const goldenSwitch = document.getElementById('goldenSwitch'); 
+        const imageSwitch = document.getElementById('imageSwitch'); 
+        const apiImage = document.getElementById('apiImage'); 
+
+        // 金句自动轮播开关
+        goldenSwitch.addEventListener('change', function() {
+            if (this.checked) {
+                phraseTimer = setInterval(fetchGoldenPhrase, intervalDuration);
+            } else {
+                clearInterval(phraseTimer);
+                phraseTimer = null;
+            }
+        });
+
+        // 显示每日60s开关
+        imageSwitch.addEventListener('change',  function() {
+            if (this.checked)  {
+                apiImage.style.display  = 'block';
+                fetchAndDisplayImage();
+                setInterval(fetchAndDisplayImage, 86400000);
+            } else {
+                apiImage.style.display  = 'none';
+                clearInterval(imageUpdateInterval);
+            }
+        });
+
+        // 初始化时设置默认状态
+        goldenSwitch.checked  = true; // 默认开启金句自动轮播
+        imageSwitch.checked  = true; // 默认开启每日60s显示
+
+        // Part12 天气
+        function fetchWeather() {
+            fetch('https://v2.api-m.com/api/weather?city=%E5%B2%B3%E9%BA%93%E5%8C%BA')
+                .then(response => {
+                    if (!response.ok) throw new Error('网络响应异常');
+                    return response.json();
+                })
+                .then(data => {
+                if (data.code === 200) {
+                    // 获取当前星期（示例返回格式："周五"）
+                    const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
+                    const currentDay = '周' + weekDays[new Date().getDay()];
+                    // 查找匹配的天气数据
+                    const todayWeather = data.data.data.find(item => item.date === currentDay);
+                    if (todayWeather) {
+                        // 格式化温度显示（7-10℃ → 7~10℃）
+                        const tempRange = todayWeather.temperature.replace('-', '~');
+                        document.getElementById('weatherInfo').textContent = 
+                        `${todayWeather.weather} ${tempRange}`;
+                    } else {
+                        document.getElementById('weatherInfo').textContent = '天气数据异常';
+                    }
+                } else {
+                    throw new Error(data.msg);
+                }
+                })
+            .catch(error => {
+                console.error('天气获取失败:', error);
+                document.getElementById('weatherInfo').textContent = '天气获取失败';
+            });
+        }
+
+        window.onload  = function() {
+            fetchAndDisplayImage();
+        };
+
+        // Part13 点击刷新金句功能
+        document.getElementById('goldenPhrase').addEventListener('click', function() {
+            const clickRefreshEnabled = document.getElementById('clickRefreshSwitch').checked;
+            const autoRotateEnabled = document.getElementById('goldenSwitch').checked;
+            const animationEnabled = document.getElementById('animationSwitch').checked;
+            
+            if (clickRefreshEnabled) {
+                // 当动画关闭时直接显示新内容
+                if (!animationEnabled) {
+                    fetchGoldenPhrase();
+                    return;
+                }
+                // 保留原有缩放动画
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                    fetchGoldenPhrase();
+                }, 300);
+                if (autoRotateEnabled && phraseTimer) {
+                    clearInterval(phraseTimer);
+                    phraseTimer = setInterval(fetchGoldenPhrase, intervalDuration);
+                }
+            }
+        });
+
+        // Part14 金句选择功能
+        const phraseModal = document.getElementById('phraseModal');
+        const closePhrase = document.getElementById('closePhrase');
+        const phraseButton = document.getElementById('phraseSelectButton'); 
+
+        // 打开金句选择
+        function populatePhraseList() {
+            const allPhrases = [...localPhrases.high, ...localPhrases.medium, ...localPhrases.low];
+            const phraseList = document.getElementById('phraseList');
+            
+            // 清空现有内容
+            phraseList.innerHTML = '';
+            
+            // 使用文档片段批量添加
+            const fragment = document.createDocumentFragment();
+            
+            allPhrases.forEach(phrase => {
+                const div = document.createElement('div');
+                div.className = 'phrase-item';
+                div.textContent = phrase;
+                
+                // 添加点击事件
+                div.addEventListener('click', function() {
+                    // 添加点击效果
+                    this.classList.add('phrase-click-effect');
+                    
+                    // 移除动画类（用于重复点击）
+                    setTimeout(() => {
+                        this.classList.remove('phrase-click-effect');
+                    }, 400);
+                    
+                    // 更新显示（保留原有动画逻辑）
+                    updatePhraseDisplay(phrase);
+                });
+                
+                fragment.appendChild(div);
+            });
+            
+            phraseList.appendChild(fragment);
+        }
+
+        // 修改打开模态框事件
+        phraseButton.addEventListener('click', () => {
+            populatePhraseList();
+            phraseModal.classList.add('active');
+        });
+
+        // 关闭金句选择
+        closePhrase.addEventListener('click', () => {
+            phraseModal.classList.remove('active');
+        });
+
+        // Part15 寻物功能
+        const lostAndFoundButton = document.getElementById('lostAndFoundButton');
+        const lostAndFoundModal = document.getElementById('lostAndFoundModal');
+        const closeLostAndFound = document.getElementById('closeLostAndFound');
+
+        // 打开寻物板
+        lostAndFoundButton.addEventListener('click', () => {
+            lostAndFoundModal.classList.add('active');
+        });
+
+        // 关闭寻物板
+        closeLostAndFound.addEventListener('click', () => {
+            lostAndFoundModal.classList.remove('active');
+        });
+
+        // 编辑功能
+        document.getElementById('lostAndFoundList').addEventListener('click', function(e) {
+            const target = e.target;
+            if (target.classList.contains('editable')) {
+                const originalText = target.textContent;
+                const input = document.createElement('input');
+                input.className = 'edit-input';
+                input.value = originalText;
+                input.style.width = target.offsetWidth + 'px';
+                
+                input.addEventListener('blur', function() {
+                    target.textContent = this.value;
+                    target.style.display = 'inline';
+                    input.remove();
+                });
+
+                input.addEventListener('input', function() {
+                    this.style.width = (this.value.length * 20 + 30) + 'px';
+                });
+
+                target.style.display = 'none';
+                target.parentNode.insertBefore(input, target);
+                input.focus();
+            }
+        });
+
+        // 添加卡片功能
+        document.querySelector('.add-button').addEventListener('click', () => {
+            const newCard = document.createElement('div');
+            newCard.className = 'announcement-card';
+            newCard.innerHTML = `
+                <div class="announcement-body" style="position:relative; text-align: center; font-size: 28px; font-family: STZhongsong, serif;">
+                    <span class="editable" data-type="name" style="color: #1E90FF;">同学</span>&nbsp;的
+                    <span class="editable" data-type="item" style="color: #1E90FF;">物品</span>
+                    <button class="delete-btn">删除</button>
+                </div>
+            `;
+            document.getElementById('lostAndFoundList').appendChild(newCard);
+        });
+
+        // 删除功能（使用事件委托）
+        document.getElementById('lostAndFoundList').addEventListener('click', function(e) {
+            if (e.target.classList.contains('delete-btn')) {
+                if (e.target.textContent === '删除') {
+                    e.target.textContent = '确认删除';
+                    e.target.style.background = '#d32f2f';
+                } else {
+                    e.target.closest('.announcement-card').remove();
+                }
+            }
+        });
+
+        // 重置删除按钮状态（当点击其他地方时）
+        document.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('delete-btn')) {
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.textContent = '删除';
+                    btn.style.background = '#ff4444';
+                });
+            }
+        });
+
+        // PartLast 初始化 
+        function init() {
+            updateCountdown();
+            updateClock();
+            updateTimelineColor();
+            generateSolarMarkers();
+            fetchGoldenPhrase();
+            phraseTimer = setInterval(fetchGoldenPhrase, intervalDuration);
+            setInterval(updateScheduleDisplay, 1000);
+            fetchWeather();
+            setInterval(fetchWeather, 15000);
+        }
+
+        init();
+
+        window.addEventListener('unload',  () => clearInterval(phraseTimer));
+        setInterval(() => {
+            generateSolarMarkers();
+            updateCountdown();
+        }, 86400000);
+    </script>
+
+
+
 </body>
 </html>
