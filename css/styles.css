@@ -1,0 +1,857 @@
+/* 底部按钮样式 */
+.action-buttons {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+    z-index: 10;
+}
+
+.action-button {
+    width: auto;
+    padding: 0 20px;
+    height: 40px;
+    border-radius: 20px;
+    background: #8bc34a;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    color: white;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    white-space: nowrap;
+}
+
+.action-button:hover {
+    transform: scale(1.05);
+}
+
+/* 更新日志样式 */
+.changelog-modal .settings-content {
+    max-width: 600px;
+    height: 75%;
+}
+
+.text-content {
+    padding: 15px;
+    white-space: pre-wrap;
+    overflow-y: auto;
+    height: calc(100% - 50px);
+}
+
+/* 设置样式 */
+.settings-button {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #8bc34a;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: white;
+    transition: transform 0.3s;
+}
+
+.settings-button:hover {
+    transform: translateX(-50%) scale(1.1);
+}
+
+.settings-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+    z-index: 999;
+}
+
+.settings-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.settings-content {
+background: white;
+width: 60%;
+height: 75%;
+border-radius: 12px;
+transform: scale(0.8);
+opacity: 0;
+transition: all 0.3s;
+position: relative;
+padding: 20px;
+overflow: hidden; 
+}
+
+.settings-modal.active .settings-content {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.settings-header h3 {
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+}
+
+.settings-body {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 20px;
+}
+
+/* 模态框关闭按钮样式 */
+.close-btn {
+    font-size: 28px;
+    cursor: pointer;
+    padding: 0 10px;
+    color: #666;
+}
+
+.close-btn:hover {
+    color: #333;
+}
+
+/* 节气卡片样式 */
+.solar-card {
+    position: absolute;
+    top: calc(100% + 20px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 500px;
+    background: rgba(255,255,255,0.96);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.solar-card::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 10px solid transparent;
+    border-bottom-color: rgba(255,255,255,0.96);
+}
+
+.solar-card.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.solar-card h3 {
+    text-align: center;
+    margin: 0 0 15px;
+    font-size: 24px;
+    color: #1b5e20;
+    font-family: STZhongsong, serif;
+}
+
+.solar-card img {
+    width: 160px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.solar-card p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #444;
+    margin: 0;
+    font-family: 'Microsoft YaHei';
+    flex-grow: 1;
+    text-align: left;
+    text-indent: 2em;
+}
+
+/.solar-term-marker {
+    transition: all 0.3s ease;
+}
+
+.solar-card {
+    transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+}
+
+/* 时间容器样式 */
+#currentDateTime {
+    position: absolute;
+    top: 78px;
+    left: 25px;
+    z-index: 5;
+    background: rgba(255,255,255,0.9);
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    text-align: center;
+    min-width: 180px;
+}
+
+/* 左上角时间样式 */
+.time-section {
+    font-family: 'STZh', sans-serif;
+    font-size: 44px;
+    letter-spacing: 0;
+    color: #1b5e20;
+    margin: 8px 0;
+    display: block;
+	 	width: 100%;
+}
+
+/* 左上角日期样式 */
+.date-section {
+    font-family: 'Microsoft YaHei', serif;
+    font-size: 22px;
+    color: #666;
+    letter-spacing: 0.5px;
+    white-space: nowrap;  /* 防止换行 */
+    display: block;
+	width: 100%;
+}
+
+/* 金句样式 */
+#goldenPhrase {
+    text-align: center;
+    margin: 10px auto;
+    width: 760px;
+    font-size: 26px;
+    color: #1b5e20;
+    min-height: 40px;
+    font-family: STZhongSong, cursive;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    transition: opacity 0.5s;
+    position: relative;
+    top: -50px; /* 向上移动40像素 */
+}
+
+/* 基础样式 */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(to bottom right, #f5fff5, #e8f5e9);
+}
+
+/* 导航栏样式 */
+.navbar {
+    background-color: #333;
+    overflow: hidden;
+    width: 100%;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    position: relative;
+    z-index: 6;
+}
+
+.brand {
+    float: left;
+    color: white;
+    padding: 14px 20px;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    letter-spacing: 1px;
+}
+
+.navbar a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 18px;
+    text-decoration: none;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+/* 中考倒计时样式 */
+.small-title {
+    text-align: center;
+    color: #2d2d2d;
+    font-size: 38px;
+    font-family: STZhongsong, serif;
+    margin-top: 50px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.big-title {
+    text-align: center;
+    color: #1b5e20;
+    font-size: 160px;
+    font-family: STKaiti, cursive;
+    margin: 20px 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+/* 时间轴样式 */ 
+.timeline-container {
+    max-width: 750px;
+    margin: 50px auto;
+    position: relative;
+    height: 120px;
+    overflow: visible;
+}
+
+.timeline-progress {
+    height: 8px;
+    background: linear-gradient(
+        to right,
+        #8bc34a 0%,
+        #8bc34a var(--progress-percent),
+        #e0e0e0 var(--progress-percent),
+        #e0e0e0 100%
+    );
+    border-radius: 4px;
+    position: relative;
+    margin-top: 60px;
+}
+
+/* 节气标记样式 */
+.solar-term-marker {
+    position: absolute;
+    top: -45px;
+    width: 70px;
+    text-align: center;
+    transform: translateX(-50%);
+    cursor: pointer;
+    transition: all 0.3s;
+    z-index: 2;
+}
+
+.current-marker {
+    position: absolute;
+    left: 0;
+    top: -10px;
+    width: 3px;
+    height: 30px;
+    background: #ff5722;
+    transform: translateX(-50%);
+    transition: left 0.5s ease-out;
+    box-shadow: 0 2px 4px rgba(255,87,34,0.3);
+}
+
+/* 中考日标记样式 */
+.end-marker {
+    position: absolute;
+    right: -15px;
+    top: -45px;
+    width: 90px;
+    text-align: center;
+    color: #d32f2f;
+    font-weight: bold;
+    text-shadow: 0 2px 4px rgba(211,47,47,0.2);
+    transform: translateX(30%);
+}
+
+/* 作息提示样式 */
+.schedule-container {
+    position: absolute;
+    top: 220px;
+    left: 25px;
+    z-index: 5;
+    background: rgba(255,255,255,0.9);
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    min-width: 190px;
+}
+
+.schedule-item {
+    font-family: 'STZhongSong', sans-serif;
+    margin: 8px 0;
+}
+
+.schedule-title {
+    display: block;
+    font-size: 20px;
+    color: #1b5e20;
+    font-weight: 600;
+    text-align: left;
+    line-height: 1;
+}
+
+.schedule-value {
+    display: block;
+    font-size: 25px;
+    color: #2d2d2d;
+    text-align: center;
+    margin: 4px 0 0;
+    padding: 2px 0;
+    line-height: 1;
+}
+
+/* 课表样式 */
+.timetable {
+    margin-top: 10px;
+    border-top: 1px solid #eee;
+    padding-top: 8px;
+}
+
+.timetable-item {
+    font-size: 25px;
+    font-family: STZhongSong, cursive;
+    line-height: 1.4;
+    text-align: center;
+}
+
+/* 每日60s样式 */
+.right-image-container {
+    position: fixed;
+    right: 25px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.right-image-container img {
+    height: 80vh;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+}
+
+/* 滑块开关样式 */
+input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.switch-container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    margin-top: 20px;
+}
+
+.switch {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.slider {
+    position: relative;
+    cursor: pointer;
+    width: 40px;
+    height: 24px;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 24px;
+}
+
+.switch-text {
+    font-size: 14px;
+    color: #1b5e20;
+    display: inline-block;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #8bc34a;
+}
+
+input:checked + .slider:before {
+    transform: translateX(16px);
+}
+
+input:checked ~ .switch-text {
+    color: #4CAF50;
+}
+
+/* 公告卡片样式 */
+.announcement-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin: 15px;
+    border: 1px solid #eee;
+}
+
+.announcement-title {
+    font-size: 1.6em;
+    color: #1b5e20;
+    font-weight: 600;
+    margin-bottom: 8px;
+    border-bottom: 2px solid #8bc34a;
+    padding-bottom: 5px;
+    text-align: center;
+}
+
+.announcement-time {
+    font-size: 0.95em;
+    color: #666;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.announcement-body {
+    line-height: 1.2;
+    color: #444;
+    font-size: 1.2em;
+}
+
+.announcement-body ul {
+    margin: 8px 0;
+    padding-left: 25px;
+}
+
+.announcement-body li {
+    margin: 6px 0;
+}
+
+.announcement-footnote {
+    font-size: 0.85em;
+    color: #999;
+    margin-top: 15px;
+    border-top: 1px dashed #ddd;
+    padding-top: 10px;
+}
+
+.announcement-content {
+    height: calc(100% - 60px);
+    overflow-y: auto;
+    padding: 0 10px;
+}
+
+.announcement-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.announcement-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.announcement-content::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+.announcement-content::-webkit-scrollbar-thumb:hover {
+    background: #8bc34a;
+}
+
+/* 概率控制样式 */
+.probability-control {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    margin: 12px 0;
+}
+
+.probability-control .switch-text {
+    flex: 1;
+    font-size: 14px;
+    color: #1b5e20;
+}
+
+.range-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 40%;
+    justify-content: flex-end;
+}
+
+#apiProbability {
+    width: 100%;
+    height: 4px;
+    background: #ddd;
+    border-radius: 2px;
+    -webkit-appearance: none;
+    margin: 0 8px;
+}
+
+#apiProbability::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #8bc34a;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    box-shadow: none;
+}
+
+#apiProbability::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: #8bc34a;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+}
+
+#apiProbabilityValue {
+    width: 50px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 13px;
+}
+
+/* 间隔时间控制样式 */
+#intervalSlider {
+    width: 100%;
+    height: 4px;
+    background: #ddd;
+    border-radius: 2px;
+    -webkit-appearance: none;
+    margin: 0 8px;
+}
+
+#intervalSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #8bc34a;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    box-shadow: none;
+}
+
+#intervalSlider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: #8bc34a;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+}
+
+#intervalValue {
+    width: 50px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 13px;
+}
+
+/* 重置按钮样式 */
+.reset-btn {
+    padding: 5px 12px;
+    min-width: 50px;
+    white-space: nowrap;
+    background: #8bc34a;
+    border-radius: 4px;
+    color: white;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+}
+
+.reset-btn:hover {
+    background: #7cb342;
+    transform: scale(1.05);
+    box-shadow: none;
+}
+
+/* 金句点击效果 */
+#goldenPhrase {
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+#goldenPhrase:active {
+    transform: scale(0.98);
+}
+
+/* 动画控制样式 */
+#goldenPhrase.no-animation {
+    transition: none !important;
+}
+
+#goldenPhrase.no-animation:active {
+    transform: none !important;
+}
+
+/* 金句列表样式 */
+#phraseList {
+    padding: 15px;
+    overflow-y: auto;
+    height: calc(100% - 50px);
+}
+
+.phrase-item {
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 6px;
+    background: #f8f8f8;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: STZhongSong, cursive;
+    color: #1b5e20;
+}
+
+.phrase-item:hover {
+    background: #e8f5e9;
+    transform: translateX(5px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* 选择金句界面金句点击动画 */
+.phrase-item {
+    transition: all 0.3s ease;
+}
+
+.phrase-item:active {
+    transform: scale(0.97);
+    background: #e0f2f1 !important;
+}
+
+@keyframes phraseClickWave {
+    0% { box-shadow: 0 0 0 0 rgba(139, 195, 74, 0.3); }
+    100% { box-shadow: 0 0 0 10px rgba(139, 195, 74, 0); }
+}
+
+.phrase-click-effect {
+    animation: phraseClickWave 0.4s ease-out;
+    position: relative;
+}
+
+/* 寻物板 */
+.editable {
+    cursor: pointer;
+    transition: all 0.3s;
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-family: STZhongsong, serif;
+    color: #1E90FF;
+    text-shadow: 0 0 2px rgba(0,0,0,0.2);
+    border-bottom: 2px solid #FFD700; /* 金色下划线 */
+}
+
+.editable:hover {
+    background: #f0f0f0;
+}
+
+.edit-input {
+    width: 120px;
+    padding: 5px;
+    border: 2px solid #8bc34a;
+    border-radius: 4px;
+    font-size: 28px;
+    text-align: center;
+    color: #1E90FF;
+    margin: 0 5px;
+    font-family: STZhongsong, serif;
+}
+
+@keyframes gradient-pulse {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+.add-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #8bc34a;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transition: all 0.3s;
+    z-index: 999;
+}
+
+.delete-btn {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 4px 12px;
+    border-radius: 15px;
+    background: #ff4444;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+#lostAndFoundList .announcement-card {
+    padding: 12px;
+    margin: 8px 10px;
+}
+
+#lostAndFoundList .announcement-body {
+    line-height: 1.1;
+}
+
+#lostAndFoundList .editable {
+    margin: 1px 0;
+    padding: 2px 4px;
+}
