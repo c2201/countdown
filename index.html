@@ -999,6 +999,10 @@
             <div class="text-content" id="changelogContent">
                 <strong># 20250502.4 更新</strong>
 
+                • 考虑到周五英语考试只有100分钟，将工作日作息表拆分为周一到周四、周五两个部分，进行特殊处理
+
+                <strong># 20250502.4 更新</strong>
+
                 功能性更新：
                     • 为金句新增4个API：2个古诗词API、1个唯美语句API、1个名句API，并添加权重
                     • 将金句显示区域上移45px
@@ -1271,7 +1275,7 @@
             const currentMinutes = now.getHours() * 60 + now.getMinutes();
             // 如果是周末
             if(day === 0 || day === 6) return {current: "周末", nextLesson: ""};
-            const todaySchedule = schedule.weekday;
+            const todaySchedule = (day === 5) ? schedule.friday : schedule.weekday;
             let current = "";
             let nextLesson = "";
             // 处理跨天时段（22:20-7:00）
