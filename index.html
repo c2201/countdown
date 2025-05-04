@@ -242,7 +242,7 @@
 
         /* 左上角时间样式 */
         .time-section {
-            font-family: 'STZh', sans-serif;
+            font-family: 'Microsoft-Yahei', sans-serif;
             font-size: 44px;
             letter-spacing: 0;
             color: #1b5e20;
@@ -257,7 +257,7 @@
             font-size: 22px;
             color: #666;
             letter-spacing: 0.5px;
-            white-space: nowrap;  /* 防止换行 */
+            white-space: nowrap;
             display: block;
             width: 100%;
         }
@@ -401,7 +401,7 @@
         /* 作息提示样式 */
         .schedule-container {
             position: absolute;
-            top: 220px;
+            top: 225px;
             left: 25px;
             z-index: 5;
             background: rgba(255,255,255,0.9);
@@ -422,7 +422,7 @@
             color: #1b5e20;
             font-weight: 600;
             text-align: left;
-            line-height: 1;
+            line-height: 0.8;
         }
 
         .schedule-value {
@@ -432,7 +432,7 @@
             text-align: center;
             margin: 4px 0 0;
             padding: 2px 0;
-            line-height: 1;
+            line-height: 0.8;
         }
 
         /* 课表样式 */
@@ -445,7 +445,7 @@
         .timetable-item {
             font-size: 25px;
             font-family: STZhongSong, cursive;
-            line-height: 1.4;
+            line-height: 1.2;
             text-align: center;
         }
 
@@ -905,6 +905,10 @@
             <span class="schedule-title">下节课：</span>
             <span class="schedule-value" id="nextSchedule">加载中...</span>
         </div>
+        <div class="schedule-item">
+            <span class="schedule-title" id="countdownName">倒计时：</span>
+            <span class="schedule-value" id="countdownTimer" style="font-size: 28px;">--:--</span>
+        </div>
         <div class="timetable" id="todayTimetable"></div>
     </div>
  
@@ -997,7 +1001,11 @@
                 <span class="close-btn" id="closeChangelog">&times;</span>
             </div>
             <div class="text-content" id="changelogContent">
-                <strong># 20250502.4 更新</strong>
+                <strong># 20250504.2 更新</strong>
+
+                • 新增下课（下考/下晚自习等）倒计时
+
+                <strong># 20250504.1 更新</strong>
 
                 • 考虑到周五英语考试只有100分钟，将工作日作息表拆分为周一到周四、周五两个部分，进行特殊处理
 
@@ -1264,6 +1272,10 @@
         // Part6 作息显示功能
         // 时间转换函数
         function timeToMinutes(time) {
+            if (time instanceof Date) {
+                return time.getHours() * 60 + time.getMinutes();
+            }
+            if(time === "23:59") return 1439;
             const [h, m] = time.split(':').map(Number);
             return h * 60 + m;
         }
@@ -1358,6 +1370,133 @@
             } else {
                 document.getElementById('todayTimetable').innerHTML = 
                     '<div class="timetable-item">周末无课表</div>';
+            }
+        }
+
+        // Part6.1 作息倒计时功能
+        function getNextScheduleInfo() {
+            const now = new Date();
+            const day = now.getDay();
+            const currentMinutes = now.getHours() * 60 + now.getMinutes();
+            const todaySchedule = (day === 5) ? schedule.friday : schedule.weekday;
+            const { current } = getCurrentSchedule();
+
+            if (current === "放学" || day === 0 || day === 6) {
+                return getNextSchoolDayTime(now);
+            }
+
+            if (current === "午休") {
+                const inFirstPart = currentMinutes < timeToMinutes("13:10");
+                return {
+                    endTime: inFirstPart ? "13:10" : "13:40",
+                    label: inFirstPart ? "熄灯" : "起床"
+                };
+            }
+
+            let currentIndex = todaySchedule.findIndex(([timeRange]) => {
+                const [start, end] = timeRange.split('-');
+                return currentMinutes >= timeToMinutes(start) && 
+                       currentMinutes < timeToMinutes(end);
+            });
+
+            if (current === "课间") {
+                const currentRange = todaySchedule[currentIndex][0];
+                if (currentRange === "13:50-14:00") return { endTime: "14:00", label: "课前唱结束" };
+                if (currentRange === "15:30-15:40") return { endTime: "15:40", label: "考前准备" };
+                return { 
+                    endTime: todaySchedule[currentIndex][0].split('-')[1], 
+                    label: "上课" 
+                };
+            }
+
+            const labelMap = {
+                "早餐": "早读开始",
+                "早读": "早读结束",
+                "午餐": "午休静校",
+                "政史背记": "晚自习开始",
+                "考前准备": "考试开始",
+                "考试": "考试结束",
+                "晚餐": "政史背记开始",
+                "洗漱睡觉": "起床"
+            };
+
+            if (current.includes("节课")) {
+                const nextEvent = todaySchedule[currentIndex + 1]?.[1] || "";
+                return {
+                    endTime: todaySchedule[currentIndex][0].split('-')[1],
+                    label: nextEvent.includes("课间") ? "下课" : "休息"
+                };
+            }
+
+            const nextIndex = currentIndex + 1;
+            if (nextIndex < todaySchedule.length) {
+                return {
+                    endTime: todaySchedule[nextIndex][0].split('-')[0],
+                    label: labelMap[current] || todaySchedule[nextIndex][1]
+                };
+            }
+
+            return { endTime: "23:59", label: "新的一天" };
+        }
+
+        function getNextSchoolDayTime(now) {
+            const target = new Date(now);
+            let daysUntilMonday = (1 + 7 - target.getDay()) % 7; 
+            if (target.getDay() === 1 && target.getHours() < 7) daysUntilMonday = 0;
+            target.setDate(target.getDate() + daysUntilMonday);
+            target.setHours(7, 0, 0, 0);
+            return { endTime: target, label: "周一返校" };
+        }
+
+        function updateCountdownDisplay() {
+            const result = getNextScheduleInfo();
+            const now = new Date();
+            let target, label;
+
+            if (result.endTime instanceof Date) {
+                target = result.endTime;
+                label = result.label;
+            } else {
+                label = result.label;
+                const [endHour, endMinute] = result.endTime.split(':').map(Number);
+                target = new Date(now);
+                target.setHours(endHour, endMinute, 0, 0);
+                if (target < now) target.setDate(target.getDate() + 1);
+            }
+
+            let diff = target - now;
+            if (diff < 0) diff = 0;
+            
+            const seconds = Math.floor(diff / 1000);
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            const s = seconds % 60;
+
+            // 关键修改点：使用正确的ID选择器
+            const timerElement = document.getElementById('countdownTimer');
+            const labelElement = document.getElementById('countdownName');
+
+            // 更新显示格式
+            labelElement.textContent = `距离${label}还有：`;
+            
+            if (h > 0) {
+                timerElement.textContent = 
+                    `${h.toString().padStart(2, '0')}:` +
+                    `${m.toString().padStart(2, '0')}:` +
+                    `${s.toString().padStart(2, '0')}`;
+            } else {
+                timerElement.textContent = 
+                    `${m.toString().padStart(2, '0')}:` +
+                    `${s.toString().padStart(2, '0')}`;
+            }
+
+            setTimeout(updateCountdownDisplay, 1000);
+
+            // 周一返校强制刷新逻辑
+            if (diff <= 0 && label === "周一返校") {
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
             }
         }
 
@@ -1879,6 +2018,7 @@
             setInterval(updateScheduleDisplay, 1000);
             fetchWeather();
             setInterval(fetchWeather, 15000);
+            updateCountdownDisplay();
         }
 
         init();
