@@ -1010,6 +1010,10 @@
                 <span class="close-btn" id="closeChangelog">&times;</span>
             </div>
             <div class="text-content" id="changelogContent">
+                <strong># 20250524.2 更新</strong>
+
+                • 在选择金句后重置定时器
+
                 <strong># 20250524.1 更新</strong>
 
                 • 新增“本地金句只展示原创”功能
@@ -1966,35 +1970,25 @@
         function populatePhraseList() {
             const allPhrases = [...localPhrases.high, ...localPhrases.medium, ...localPhrases.low];
             const phraseList = document.getElementById('phraseList');
-            
-            // 清空现有内容
             phraseList.innerHTML = '';
-            
-            // 使用文档片段批量添加
             const fragment = document.createDocumentFragment();
-            
             allPhrases.forEach(phrase => {
                 const div = document.createElement('div');
                 div.className = 'phrase-item';
                 div.textContent = phrase;
-                
-                // 添加点击事件
                 div.addEventListener('click', function() {
-                    // 添加点击效果
                     this.classList.add('phrase-click-effect');
-                    
-                    // 移除动画类（用于重复点击）
                     setTimeout(() => {
                         this.classList.remove('phrase-click-effect');
                     }, 400);
-                    
-                    // 更新显示（保留原有动画逻辑）
                     updatePhraseDisplay(phrase);
+                    if (goldenSwitch.checked) {
+                        clearInterval(phraseTimer);
+                        phraseTimer = setInterval(fetchGoldenPhrase, intervalDuration);
+                    }
                 });
-                
                 fragment.appendChild(div);
             });
-            
             phraseList.appendChild(fragment);
         }
 
