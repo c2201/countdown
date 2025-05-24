@@ -105,16 +105,18 @@
         }
 
         .settings-content {
-        background: white;
-        width: 60%;
-        height: 75%;
-        border-radius: 12px;
-        transform: scale(0.8);
-        opacity: 0;
-        transition: all 0.3s;
-        position: relative;
-        padding: 20px;
-        overflow: hidden; 
+            background: white;
+            width: 60%;
+            height: 75%;
+            border-radius: 12px;
+            transform: scale(0.8);
+            opacity: 0;
+            transition: all 0.3s;
+            position: relative;
+            padding: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         .settings-modal.active .settings-content {
@@ -142,6 +144,8 @@
             flex-direction: column;
             gap: 30px;
             padding: 20px;
+            overflow-y: auto;
+            height: calc(100% - 60px);
         }
 
         /* 模态框关闭按钮样式 */
@@ -988,6 +992,11 @@
                         <input type="checkbox" id="animationSwitch" checked>
                         <span class="slider"></span>
                     </label>
+                    <label class="switch">
+                        <span class="switch-text">本地金句只展示原创</span>
+                        <input type="checkbox" id="originalSwitch">
+                        <span class="slider"></span>
+                    </label>
                 </div>
             </div>
         </div>
@@ -1001,6 +1010,11 @@
                 <span class="close-btn" id="closeChangelog">&times;</span>
             </div>
             <div class="text-content" id="changelogContent">
+                <strong># 20250524.1 更新</strong>
+
+                • 新增“本地金句只展示原创”功能
+                • 设置界面支持滚动
+
                 <strong># 20250504.2 更新</strong>
 
                 • 新增下课（下考/下晚自习等）倒计时
@@ -1649,23 +1663,88 @@
             }
         });
 
+        let lastPhrase = null;
+
         function showLocalPhrase() {
-            // 加权选择池
-            const weightedPool = [
-                ...localPhrases.high.map(p => ({ p, w: 45 })),   // 高概率区：权重4.5
-                ...localPhrases.medium.map(p => ({ p, w: 35 })), // 中概率区：权重3.5
-                ...localPhrases.low.map(p => ({ p, w: 20 }))     // 低概率区：权重2.0
-            ];
-            // 计算总权重
-            const totalWeight = weightedPool.reduce((sum, item) => sum + item.w, 0);
-            // 生成随机数
-            let random = Math.random() * totalWeight;
-            // 遍历选择池寻找命中项
-            for (const item of weightedPool) {
-                if (random < item.w) {
-                    return updatePhraseDisplay(item.p);
+            const showOriginalOnly = document.getElementById('originalSwitch').checked;
+
+            const filterOriginal = arr => showOriginalOnly ? 
+                arr.filter(p => p.trim().endsWith('🌟')) : 
+                arr;
+
+            const filtered = {
+                high: filterOriginal(localPhrases.high),
+                medium: filterOriginal(localPhrases.medium),
+                low: filterOriginal(localPhrases.low)
+            };
+
+            if (showOriginalOnly) {
+                const allOriginal = [
+                    ...filtered.high,
+                    ...filtered.medium,
+                    ...filtered.low
+                ].filter(p => p !== lastPhrase);
+
+
+                if (allOriginal.length === 0) {
+                    const fallbackList = [
+                        ...filtered.high,
+                        ...filtered.medium,
+                        ...filtered.low
+                    ];
+                    if (fallbackList.length === 0) {
+                        return updatePhraseDisplay("🎯 没有原创金句");
+                    }
+                    const selected = fallbackList[Math.floor(Math.random() * fallbackList.length)];
+                    lastPhrase = selected;
+                    return updatePhraseDisplay(selected);
                 }
-                random -= item.w;
+
+                const selected = allOriginal[Math.floor(Math.random() * allOriginal.length)];
+                lastPhrase = selected;
+                return updatePhraseDisplay(selected);
+            } else {
+                const weights = {
+                    high: filtered.high.length ? 45 : 0,
+                    medium: filtered.medium.length ? 35 : 0,
+                    low: filtered.low.length ? 20 : 0
+                };
+
+                const totalWeight = weights.high + weights.medium + weights.low;
+                if(totalWeight === 0) return updatePhraseDisplay("🎯 没有找到金句");
+
+                const buildPool = (list, weight) => {
+                    if(!weight || !list.length) return [];
+                    
+                    const validList = list.filter(p => p !== lastPhrase);
+                    const finalList = validList.length > 0 ? validList : list;
+                    
+                    return finalList.map(p => ({
+                        p,
+                        w: weight / finalList.length
+                    }));
+                };
+
+                const pool = [
+                    ...buildPool(filtered.high, weights.high),
+                    ...buildPool(filtered.medium, weights.medium),
+                    ...buildPool(filtered.low, weights.low)
+                ];
+
+                let random = Math.random() * totalWeight;
+                let accumulated = 0;
+                let selectedPhrase = pool[0]?.p || "🎲 金句加载中...";
+                
+                for(const item of pool) {
+                    accumulated += item.w;
+                    if(random <= accumulated) {
+                        selectedPhrase = item.p;
+                        break;
+                    }
+                }
+
+                lastPhrase = selectedPhrase;
+                return updatePhraseDisplay(selectedPhrase);
             }
         }
 
