@@ -323,6 +323,11 @@
             transition: all 0.3s;
         }
 
+        .navbar a:hover {
+            background: #ddd;
+            color: black;
+        }
+
         /* 中考倒计时样式 */
         .small-title {
             text-align: center;
@@ -337,7 +342,7 @@
             text-align: center;
             color: #1b5e20;
             font-size: 160px;
-            font-family: STKaiti, cursive;
+            font-family: STKaiti;
             margin: 20px 0;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
@@ -885,7 +890,7 @@
             <div class="brand">C2201</div>
             <a href="https://c2201.github.io/">首页</a>
             <a href="https://c2201.github.io/countdown/">新&nbsp;·&nbsp;二十四节气中考倒计时</a>
-            <a href="https://c2201.github.io/wheel/">转盘</a>
+            <!-- <a href="https://c2201.github.io/wheel/">转盘</a> -->
         </nav>
     </header>
  
@@ -1010,6 +1015,10 @@
                 <span class="close-btn" id="closeChangelog">&times;</span>
             </div>
             <div class="text-content" id="changelogContent">
+                <strong># 20250524.4 更新</strong>
+
+                • 恢复导航栏的悬停效果
+
                 <strong># 20250524.3 更新</strong>
 
                 • 更改部分金句的权重
@@ -1527,7 +1536,7 @@
             {
                 url: 'https://zj.v.api.aa1.cn/api/wenan-shici/?type=json',
                 method: 'GET',
-                weight: 20,
+                weight: 15,
                 maxRetry: 3, // 最大重试次数
                 handler: (data) => {
                     const text = data.msg || '';
@@ -1537,7 +1546,7 @@
             {
                 url: 'https://api.songzixian.com/api/daily-poem?dataSource=LOCAL_DAILY_POEM',
                 method: 'GET',
-                weight: 20,
+                weight: 15,
                 maxRetry: 3,
                 handler: (data) => {
                     if (!data.data) return null;
@@ -1556,7 +1565,7 @@
             {
                 url: 'https://zj.v.api.aa1.cn/api/wenan-wm/?type=json',
                 method: 'GET',
-                weight: 10,
+                weight: 20,
                 maxRetry: 3,
                 handler: (data) => {
                     const text = data.msg || '';
@@ -1566,7 +1575,7 @@
             {
                 url: 'https://zj.v.api.aa1.cn/api/wenan-mj/?type=json',
                 method: 'GET',
-                weight: 20,
+                weight: 30,
                 maxRetry: 3,
                 handler: (data) => {
                     const text = data.msg || '';
@@ -1576,7 +1585,7 @@
             {
                 url: 'https://api.mu-jie.cc/stray-birds/range?type=json',
                 method: 'GET',
-                weight: 30,
+                weight: 20,
                 maxRetry: 5,
                 handler: (data) => {
                     const chLength = data.cn?.length || 0;
