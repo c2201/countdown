@@ -1015,12 +1015,6 @@
                 <span class="close-btn" id="closeChangelog">&times;</span>
             </div>
             <div class="text-content" id="changelogContent">
-                <strong># 20250531.1 更新</strong>
-
-                • 金句支持换行
-                • 选择金句后立刻关闭模态框
-                • 通知功能（开发中，暂不可见）
-
                 <strong># 20250524.4 更新</strong>
 
                 • 恢复导航栏的悬停效果
@@ -1143,7 +1137,7 @@
                         C2201倒计时网站底部金句轮播内容<strong>开始征稿了</strong>！选上的作品可以放在网站上<strong>轮播展示</strong>！
                         <ul>
                             <li><strong>参与条件：</strong>是个人都能参加</li>
-                            <li><strong>时间：</strong>即日起至2025年5月31日（活动已结束）</li>
+                            <li><strong>时间：</strong>即日起至毕业</li>
                             <li><strong>征稿内容：</strong><strong>励志文字</strong>、优美<strong>作文素材</strong>、<strong>诗歌（含现代诗）</strong>或<strong>整活</strong>（<strong>不能八卦</strong>）等（特别地，既可以原创，也可以投你在其他地方看到的很好的句子上来，但是要<strong>标明出处</strong>；若是原创句子可选择展示时是否显示署名）（一个句子展示的概率：励志文字 = 优美作文素材 > 整活，可根据具体情况调整，特别地，若原创句子写的<strong>过于精妙</strong>，可以<strong>提高展示概率</strong>）</li>
                             <li><strong>字数要求：</strong>1~80字（包含标点）</li>
                             <li><strong>提交格式：</strong>你的名字+句子内容+是否原创（+若非原创，标明出处）</li>
@@ -1195,29 +1189,6 @@
                 
                 <div class="announcement-content" id="lostAndFoundList" style="height: calc(100% - 90px);">
                     <div class="add-button">+</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 通知模态框 -->
-    <div class="settings-modal" id="notificationModal">
-        <div class="settings-content">
-            <div class="settings-header">
-                <h3>通知</h3>
-                <span class="close-btn" id="closeNotification">&times;</span>
-            </div>
-            <div class="notification-container">
-                <div id="notificationContent">
-                </div>
-                <div class="notification-footer">
-                    <button class="add-notification-btn" id="addNotificationBtn">+ 添加通知</button>
-                    <div class="font-size-control">
-                        <span class="font-size-label">字体大小:</span>
-                        <input type="range" id="fontSizeSlider" min="12" max="96" value="16">
-                        <input type="number" id="fontSizeValue" min="12" max="96" value="16">
-                        <span>px</span>
-                    </div>
                 </div>
             </div>
         </div>
@@ -1686,15 +1657,15 @@
         function updatePhraseDisplay(text) {
             const container = document.getElementById('goldenPhrase');
             const animationEnabled = document.getElementById('animationSwitch').checked;
-            const formattedText = text.replace(/\n/g, '<br>');
+            
             if (animationEnabled) {
                 container.style.opacity = 0;
                 setTimeout(() => {
-                    container.innerHTML = `「 ${formattedText} 」`;
+                    container.textContent = `「 ${text} 」`;
                     container.style.opacity = 1;
                 }, 500);
             } else {
-                container.innerHTML = `「 ${formattedText} 」`;
+                container.textContent = `「 ${text} 」`;
                 container.style.opacity = 1;
             }
         }
@@ -2017,16 +1988,13 @@
             allPhrases.forEach(phrase => {
                 const div = document.createElement('div');
                 div.className = 'phrase-item';
-                div.innerHTML = phrase.replace(/\n/g, '<br>');
+                div.textContent = phrase;
                 div.addEventListener('click', function() {
                     this.classList.add('phrase-click-effect');
                     setTimeout(() => {
                         this.classList.remove('phrase-click-effect');
                     }, 400);
                     updatePhraseDisplay(phrase);
-                    setTimeout(() => {
-                        phraseModal.classList.remove('active');
-                    }, 200);
                     if (goldenSwitch.checked) {
                         clearInterval(phraseTimer);
                         phraseTimer = setInterval(fetchGoldenPhrase, intervalDuration);
