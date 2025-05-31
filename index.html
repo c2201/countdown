@@ -1060,6 +1060,37 @@
         .settings-content {
             transition: all 0.3s ease;
         }
+
+        /* 统一的滑动条样式 */
+        #fontSizeSlider, #lostAndFoundFontSizeSlider {
+            width: 150px;
+            height: 4px;
+            background: #ddd;
+            border-radius: 2px;
+            -webkit-appearance: none;
+            margin: 0 8px;
+        }
+        
+        #fontSizeSlider::-webkit-slider-thumb, 
+        #lostAndFoundFontSizeSlider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #8bc34a;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+        
+        #fontSizeSlider::-moz-range-thumb, 
+        #lostAndFoundFontSizeSlider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: #8bc34a;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+        }
     </style>
 
 
@@ -1198,6 +1229,11 @@
                 <span class="close-btn" id="closeChangelog">&times;</span>
             </div>
             <div class="text-content" id="changelogContent">
+                <strong># 20250531.3 更新</strong>
+
+                • 寻物板支持调整字体大小
+                （代码敲到6月1日凌晨1:39，累死我了~）
+
                 <strong># 20250531.2 更新</strong>
 
                 • 通知板开发完毕
@@ -1366,7 +1402,7 @@
                     <span class="close-btn" id="closeLostAndFound">&times;</span>
                 </div>
             </div>
-            <div class="settings-body" style="padding: 0;">
+            <div class="notification-container" style="display: flex; flex-direction: column; height: 100%;">
                 <div class="big-title" style="
                     background: linear-gradient(135deg, #FF0000 0%, #FF6B00 25%, #FFD700 50%, #FF6B00 75%, #FF0000 100%);
                     -webkit-background-clip: text;
@@ -1380,13 +1416,22 @@
                     letter-spacing: 4px;
                     width: 100%;
                     text-align: center;
-                    margin: -8px 0;
+                    margin: -8px 0 0;
                     padding: 0;
                     line-height: 1.2;
                 ">寻物</div>
                 
-                <div class="announcement-content" id="lostAndFoundList" style="height: calc(100% - 90px);">
+                <div class="announcement-content" id="lostAndFoundList" style="flex: 1; overflow-y: auto; padding: 10px;">
                     <div class="add-button">+</div>
+                </div>
+                
+                <div class="notification-footer" style="position: sticky; bottom: 0; background: white; z-index: 10; padding: 10px 15px; border-top: 1px solid #eee;">
+                    <div class="font-size-control">
+                        <span class="font-size-label">字体大小:</span>
+                        <input type="range" id="lostAndFoundFontSizeSlider" min="12" max="120" value="28">
+                        <input type="number" id="lostAndFoundFontSizeValue" min="12" max="120" value="28">
+                        <span>px</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -2290,13 +2335,20 @@
             const newCard = document.createElement('div');
             newCard.className = 'announcement-card';
             newCard.innerHTML = `
-                <div class="announcement-body" style="position:relative; text-align: center; font-size: 28px; font-family: STZhongsong, serif;">
-                    <span class="editable" data-type="name" style="color: #1E90FF;">同学</span>&nbsp;的
+                <div class="announcement-body" style="position:relative; text-align: center; font-family: STZhongsong, serif;">
+                    <span class="editable" data-type="name" style="color: #1E90FF;">同学</span>
+                    <span class="static-text">的</span> <!-- 移除了颜色样式，使用默认黑色 -->
                     <span class="editable" data-type="item" style="color: #1E90FF;">物品</span>
                     <button class="delete-btn">删除</button>
                 </div>
             `;
             document.getElementById('lostAndFoundList').appendChild(newCard);
+            
+            // 立即应用当前字体大小
+            const editables = newCard.querySelectorAll('.editable, .static-text');
+            editables.forEach(item => {
+                item.style.fontSize = `${lostAndFoundFontSize}px`;
+            });
         });
 
         // 删除功能（使用事件委托）
@@ -2320,6 +2372,52 @@
                 });
             }
         });
+
+        let lostAndFoundFontSize = 28;
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化通知板
+            renderNotifications();
+            
+            // 初始化寻物板字体大小控制
+            const lostAndFoundFontSizeSlider = document.getElementById('lostAndFoundFontSizeSlider');
+            const lostAndFoundFontSizeValue = document.getElementById('lostAndFoundFontSizeValue');
+            
+            if (lostAndFoundFontSizeSlider && lostAndFoundFontSizeValue) {
+                // 滑块事件
+                lostAndFoundFontSizeSlider.addEventListener('input', function() {
+                    const size = parseInt(this.value);
+                    updateLostAndFoundFontSize(size);
+                });
+
+                // 输入框事件
+                lostAndFoundFontSizeValue.addEventListener('input', function() {
+                    let value = parseInt(this.value) || 28;
+                    if (value < 12) value = 12;
+                    if (value > 120) value = 120;
+                    updateLostAndFoundFontSize(value);
+                });
+                
+                // 初始化字体大小
+                updateLostAndFoundFontSize(28);
+            }
+        });
+
+        // 更新寻物板字体大小的函数
+        function updateLostAndFoundFontSize(size) {
+            lostAndFoundFontSize = size;
+            if (document.getElementById('lostAndFoundFontSizeSlider')) {
+                document.getElementById('lostAndFoundFontSizeSlider').value = size;
+            }
+            if (document.getElementById('lostAndFoundFontSizeValue')) {
+                document.getElementById('lostAndFoundFontSizeValue').value = size;
+            }
+            
+            // 应用字体大小到所有寻物条目
+            const items = document.querySelectorAll('#lostAndFoundList .editable, #lostAndFoundList .static-text');
+            items.forEach(item => {
+                item.style.fontSize = `${size}px`;
+            });
+        }
 
         // Part16 通知功能
         const notificationButton = document.getElementById('notificationButton');
