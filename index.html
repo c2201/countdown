@@ -840,15 +840,42 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: #8bc34a;
+            background: linear-gradient(135deg, #8bc34a, #7cb342);
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            transition: all 0.3s;
+            /* 添加阴影效果 */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), 
+                        0 0 0 2px rgba(255, 255, 255, 0.8) inset;
+            transition: all 0.3s ease;
             z-index: 999;
+            font-size: 24px;
+            font-weight: bold;
+            animation: button-pulse 2s infinite;
+        }
+
+        /* 悬停效果 - 放大和增强阴影 */
+        .add-button:hover {
+            transform: scale(1.15);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3),
+                        0 0 0 2px rgba(255, 255, 255, 0.9) inset;
+        }
+
+        /* 点击动画 - 缩小效果 */
+        .add-button:active {
+            transform: scale(0.85);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2),
+                        0 0 0 3px rgba(255, 255, 255, 0.8) inset;
+            background: linear-gradient(135deg, #7cb342, #689f38);
+        }
+
+        /* 添加按钮的发光动画 */
+        @keyframes button-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(139, 195, 74, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(139, 195, 74, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(139, 195, 74, 0); }
         }
 
         .delete-btn {
@@ -1229,10 +1256,14 @@
                 <span class="close-btn" id="closeChangelog">&times;</span>
             </div>
             <div class="text-content" id="changelogContent">
+                <strong># 20250531.4 更新</strong>
+
+                • 美化寻物板添加按钮
+                （代码敲到6月1日凌晨1:39，累死我了~）
+
                 <strong># 20250531.3 更新</strong>
 
                 • 寻物板支持调整字体大小
-                （代码敲到6月1日凌晨1:39，累死我了~）
 
                 <strong># 20250531.2 更新</strong>
 
