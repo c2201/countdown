@@ -878,6 +878,188 @@
             margin: 1px 0;
             padding: 2px 4px;
         }
+
+        /* 通知样式 */
+        .notification-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            font-family: STZhongsong, serif;
+        }
+        
+        #notificationContent {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            transition: font-size 0.3s ease;
+            max-height: calc(100% - 70px);
+        }
+        
+        .notification-item {
+            position: relative;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #f8f8f8;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-height: 40px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            font-family: inherit;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .notification-item:hover {
+            background: #e8f5e9;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+        }
+        
+        .notification-editable {
+            width: 100%;
+            min-height: 60px;
+            padding: 10px;
+            border: 2px solid #8bc34a;
+            border-radius: 4px;
+            font-size: inherit;
+            box-sizing: border-box;
+            font-family: inherit;
+            resize: vertical;
+            line-height: 1.5;
+        }
+        
+        .notification-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-top: 1px solid #eee;
+            margin-top: 10px;
+            position: sticky;
+            bottom: 0;
+            background: white;
+            z-index: 10;
+            flex-shrink: 0;
+        }
+        
+        .font-size-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .font-size-label {
+            font-size: 14px;
+            color: #1b5e20;
+            font-family: STZhongsong, serif;
+        }
+        
+        #fontSizeSlider {
+            width: 150px;
+            height: 4px;
+            background: #ddd;
+            border-radius: 2px;
+            -webkit-appearance: none;
+        }
+        
+        #fontSizeSlider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #8bc34a;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+        
+        #fontSizeSlider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: #8bc34a;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+        }
+        
+        #fontSizeValue {
+            width: 50px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 13px;
+            font-family: inherit;
+        }
+        
+        .add-notification-btn {
+            padding: 8px 15px;
+            background: #8bc34a;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: STZhongsong, serif;
+            font-size: 15px;
+        }
+        
+        .add-notification-btn:hover {
+            background: #7cb342;
+            transform: scale(1.05);
+        }
+        
+        .delete-notification-btn {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 4px 12px;
+            border-radius: 15px;
+            background: #ff4444;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: STZhongsong, serif;
+            font-size: 14px;
+        }
+        
+        .empty-notification {
+            text-align: center;
+            padding: 30px;
+            color: #999;
+            font-style: italic;
+        }
+
+        /* 最大化按钮样式 */
+        .maximize-btn {
+            cursor: pointer;
+            font-size: 24px;
+            padding: 0 10px;
+            color: #666;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 100;
+        }
+
+        .maximize-btn:hover {
+            color: #333;
+            transform: scale(1.1);
+        }
+
+        /* 全屏模态框样式 */
+        .settings-modal.fullscreen .settings-content {
+            width: 100%;
+            height: 100%;
+            max-width: none;
+            max-height: none;
+            border-radius: 0;
+        }
+
+        /* 平滑过渡动画 */
+        .settings-content {
+            transition: all 0.3s ease;
+        }
     </style>
 
 
@@ -950,6 +1132,7 @@
         <button id="announcementButton" class="action-button">📢 公告</button>
         <button id="phraseSelectButton" class="action-button">📜 选择金句</button>
         <button id="lostAndFoundButton" class="action-button">🔍 寻物</button>
+        <button id="notificationButton" class="action-button">🔔 通知</button>
     </div>
 
     <!-- 设置模态框 -->
@@ -1015,6 +1198,12 @@
                 <span class="close-btn" id="closeChangelog">&times;</span>
             </div>
             <div class="text-content" id="changelogContent">
+                <strong># 20250531.2 更新</strong>
+
+                • 通知板开发完毕
+                • 添加模态框全屏功能（仅限寻物、通知板）
+                • 将寻物板的“寻物”大字标题下移12px
+
                 <strong># 20250531.1 更新</strong>
 
                 • 金句支持换行
@@ -1172,7 +1361,10 @@
         <div class="settings-content">
             <div class="settings-header">
                 <h3>寻物</h3>
-                <span class="close-btn" id="closeLostAndFound">&times;</span>
+                <div style="display: flex; align-items: center;">
+                    <span class="maximize-btn" id="maximizeLostAndFound">⛶</span>
+                    <span class="close-btn" id="closeLostAndFound">&times;</span>
+                </div>
             </div>
             <div class="settings-body" style="padding: 0;">
                 <div class="big-title" style="
@@ -1188,7 +1380,7 @@
                     letter-spacing: 4px;
                     width: 100%;
                     text-align: center;
-                    margin: -20px 0;
+                    margin: -8px 0;
                     padding: 0;
                     line-height: 1.2;
                 ">寻物</div>
@@ -1205,17 +1397,21 @@
         <div class="settings-content">
             <div class="settings-header">
                 <h3>通知</h3>
-                <span class="close-btn" id="closeNotification">&times;</span>
+                <div style="display: flex; align-items: center;">
+                    <span class="maximize-btn" id="maximizeNotification">⛶</span>
+                    <span class="close-btn" id="closeNotification">&times;</span>
+                </div>
             </div>
             <div class="notification-container">
                 <div id="notificationContent">
+                    <div class="empty-notification">暂无通知，点击下方按钮添加</div>
                 </div>
                 <div class="notification-footer">
                     <button class="add-notification-btn" id="addNotificationBtn">+ 添加通知</button>
                     <div class="font-size-control">
                         <span class="font-size-label">字体大小:</span>
-                        <input type="range" id="fontSizeSlider" min="12" max="96" value="16">
-                        <input type="number" id="fontSizeValue" min="12" max="96" value="16">
+                        <input type="range" id="fontSizeSlider" min="12" max="120" value="16">
+                        <input type="number" id="fontSizeValue" min="12" max="120" value="16">
                         <span>px</span>
                     </div>
                 </div>
@@ -2123,6 +2319,220 @@
                     btn.style.background = '#ff4444';
                 });
             }
+        });
+
+        // Part16 通知功能
+        const notificationButton = document.getElementById('notificationButton');
+        const notificationModal = document.getElementById('notificationModal');
+        const closeNotification = document.getElementById('closeNotification');
+        const notificationContent = document.getElementById('notificationContent');
+        const addNotificationBtn = document.getElementById('addNotificationBtn');
+        const fontSizeSlider = document.getElementById('fontSizeSlider');
+        const fontSizeValue = document.getElementById('fontSizeValue');
+        
+        // 通知数据 - 初始为空数组
+        let notifications = [];
+        
+        // 打开通知模态框
+        notificationButton.addEventListener('click', () => {
+            notificationModal.classList.add('active');
+            renderNotifications();
+        });
+        
+        // 关闭通知模态框
+        closeNotification.addEventListener('click', () => {
+            notificationModal.classList.remove('active');
+        });
+        
+        // 动态调整textarea高度
+        function adjustTextareaHeight(textarea) {
+            // 设置最小高度为100px
+            const minHeight = 100;
+            textarea.style.height = 'auto';
+            const height = Math.max(minHeight, textarea.scrollHeight);
+            textarea.style.height = height + 'px';
+        }
+        
+        // 渲染通知
+        function renderNotifications() {
+            notificationContent.innerHTML = '';
+            
+            if (notifications.length === 0) {
+                notificationContent.innerHTML = '<div class="empty-notification">暂无通知，点击下方按钮添加</div>';
+                return;
+            }
+            
+            const currentFontSize = notificationContent.style.fontSize || '16px';
+            
+            notifications.forEach((text, index) => {
+                const item = document.createElement('div');
+                item.className = 'notification-item';
+                item.dataset.index = index;
+                const formattedText = text.replace(/\n/g, '<br>');
+                item.innerHTML = formattedText;
+                item.style.fontSize = currentFontSize;
+                
+                // 添加删除按钮
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'delete-notification-btn';
+                deleteBtn.textContent = '删除';
+                deleteBtn.dataset.index = index;
+                item.appendChild(deleteBtn);
+                
+                // 删除按钮事件 - 修复事件冒泡问题
+                deleteBtn.addEventListener('click', function(e) {
+                    e.stopPropagation(); // 阻止事件冒泡
+                    const index = this.dataset.index;
+                    
+                    if (this.textContent === '删除') {
+                        this.textContent = '确认删除';
+                        this.style.background = '#d32f2f';
+                    } else {
+                        notifications.splice(index, 1);
+                        renderNotifications();
+                    }
+                });
+                
+                // 点击通知进入编辑模式
+                item.addEventListener('click', function(e) {
+                    // 如果点击的是删除按钮则不进入编辑
+                    if (e.target.classList.contains('delete-notification-btn')) return;
+                    
+                    const index = this.dataset.index;
+                    const textarea = document.createElement('textarea');
+                    textarea.className = 'notification-editable';
+                    textarea.value = notifications[index];
+                    textarea.style.fontSize = currentFontSize;
+                    
+                    // 初始高度调整
+                    adjustTextareaHeight(textarea);
+                    
+                    this.innerHTML = '';
+                    this.appendChild(textarea);
+                    textarea.focus();
+                    
+                    // 输入时动态调整高度
+                    textarea.addEventListener('input', function() {
+                        adjustTextareaHeight(this);
+                    });
+                    
+                    // 修复：添加对Enter键的处理
+                    textarea.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            // 在光标位置插入换行符
+                            const start = this.selectionStart;
+                            const end = this.selectionEnd;
+                            this.value = this.value.substring(0, start) + '\n' + this.value.substring(end);
+                            this.selectionStart = this.selectionEnd = start + 1;
+                            adjustTextareaHeight(this);
+                        }
+                    });
+                    
+                    textarea.addEventListener('blur', function() {
+                        notifications[index] = this.value;
+                        renderNotifications();
+                    });
+                });
+                
+                notificationContent.appendChild(item);
+            });
+        }
+        
+        // 添加新通知
+        addNotificationBtn.addEventListener('click', () => {
+            notifications.push("新通知 - 点击编辑内容");
+            renderNotifications();
+            
+            // 滚动到底部
+            notificationContent.scrollTop = notificationContent.scrollHeight;
+        });
+        
+        // 字体大小控制
+        fontSizeSlider.addEventListener('input', function() {
+            const size = this.value + 'px';
+            notificationContent.style.fontSize = size;
+            fontSizeValue.value = this.value;
+            renderNotifications();
+        });
+        
+        fontSizeValue.addEventListener('input', function() {
+            let value = parseInt(this.value) || 16;
+            if (value < 12) value = 12;
+            if (value > 120) value = 120;
+            
+            notificationContent.style.fontSize = value + 'px';
+            fontSizeSlider.value = value;
+            this.value = value;
+            renderNotifications();
+        });
+
+        // 点击模态框外部时重置所有删除按钮
+        document.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('delete-notification-btn')) {
+                document.querySelectorAll('.delete-notification-btn').forEach(btn => {
+                    btn.textContent = '删除';
+                    btn.style.background = '#ff4444';
+                });
+            }
+        });
+
+        // 初始化通知
+        document.addEventListener('DOMContentLoaded', () => {
+            renderNotifications();
+        });
+
+        // Part17 窗口最大化
+        // 通知模态框最大化功能
+        const maximizeNotification = document.getElementById('maximizeNotification');
+        maximizeNotification.addEventListener('click', function() {
+            const modal = document.getElementById('notificationModal');
+            const content = modal.querySelector('.settings-content');
+            
+            if (modal.classList.contains('fullscreen')) {
+                modal.classList.remove('fullscreen');
+                this.textContent = '⛶';
+            } else {
+                modal.classList.add('fullscreen');
+                this.textContent = '🗗';
+            }
+        });
+
+        // 寻物模态框最大化功能
+        const maximizeLostAndFound = document.getElementById('maximizeLostAndFound');
+        maximizeLostAndFound.addEventListener('click', function() {
+            const modal = document.getElementById('lostAndFoundModal');
+            const content = modal.querySelector('.settings-content');
+            
+            if (modal.classList.contains('fullscreen')) {
+                modal.classList.remove('fullscreen');
+                this.textContent = '⛶';
+            } else {
+                modal.classList.add('fullscreen');
+                this.textContent = '🗗';
+            }
+        });
+
+        // 关闭模态框时重置全屏状态
+        function resetFullscreen(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal.classList.contains('fullscreen')) {
+                modal.classList.remove('fullscreen');
+                const maximizeBtn = modal.querySelector('.maximize-btn');
+                if (maximizeBtn) maximizeBtn.textContent = '⛶';
+            }
+        }
+
+        // 在关闭通知模态框时调用重置
+        closeNotification.addEventListener('click', () => {
+            resetFullscreen('notificationModal');
+            notificationModal.classList.remove('active');
+        });
+
+        // 在关闭寻物模态框时调用重置
+        closeLostAndFound.addEventListener('click', () => {
+            resetFullscreen('lostAndFoundModal');
+            lostAndFoundModal.classList.remove('active');
         });
 
         // PartLast 初始化 
