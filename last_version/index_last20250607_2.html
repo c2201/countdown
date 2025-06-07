@@ -13,10 +13,9 @@
     <style>
         @font-face {
             font-family: 'Ximai';
-            src: url('fonts/字制区喜脉喜欢体.ttf') format('truetype');
+            src: url('/fonts/字制区喜脉喜欢体.ttf') format('truetype');
             font-weight: normal;
             font-style: normal;
-            font-display: block;
         }
 
         /* 底部按钮样式 */
@@ -1132,390 +1131,380 @@
 
 </head>
 <body>
-    <div id="loadingOverlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 9999; display: flex; justify-content: center; align-items: center;">
-        <div style="font-size: 24px; color: #1b5e20;">正在加载字体，请稍候...</div>
+    <!-- 导航栏 -->
+    <header>
+        <nav class="navbar">
+            <div class="brand">C2201</div>
+            <a href="https://c2201.github.io/">首页</a>
+            <a href="https://c2201.github.io/countdown/">新&nbsp;·&nbsp;二十四节气中考倒计时</a>
+            <!-- <a href="https://c2201.github.io/wheel/">转盘</a> -->
+        </nav>
+    </header>
+ 
+    <!-- 时钟 -->
+    <div id="currentDateTime">
+        <div class="time-section"></div>
+        <div class="date-section"></div>
     </div>
 
-    <div id="pageContent" style="display: none;">
-        <!-- 导航栏 -->
-        <header>
-            <nav class="navbar">
-                <div class="brand">C2201</div>
-                <a href="https://c2201.github.io/">首页</a>
-                <a href="https://c2201.github.io/countdown/">新&nbsp;·&nbsp;二十四节气中考倒计时</a>
-                <!-- <a href="https://c2201.github.io/wheel/">转盘</a> -->
-            </nav>
-        </header>
-     
-        <!-- 时钟 -->
-        <div id="currentDateTime">
-            <div class="time-section"></div>
-            <div class="date-section"></div>
+    <!-- 作息提示容器 -->
+    <div id="scheduleContainer" class="schedule-container">
+        <div class="schedule-item">
+            <span class="schedule-title">天气：</span>
+            <span class="schedule-value" id="weatherInfo">加载中...</span>
         </div>
-
-        <!-- 作息提示容器 -->
-        <div id="scheduleContainer" class="schedule-container">
-            <div class="schedule-item">
-                <span class="schedule-title">天气：</span>
-                <span class="schedule-value" id="weatherInfo">加载中...</span>
-            </div>
-            <div class="schedule-item">
-                <span class="schedule-title">当前：</span>
-                <span class="schedule-value" id="currentSchedule">加载中...</span>
-            </div>
-            <div class="schedule-item">
-                <span class="schedule-title">下节课：</span>
-                <span class="schedule-value" id="nextSchedule">加载中...</span>
-            </div>
-            <div class="schedule-item">
-                <span class="schedule-title" id="countdownName">倒计时：</span>
-                <span class="schedule-value" id="countdownTimer" style="font-size: 28px;">--:--</span>
-            </div>
-            <div class="timetable" id="todayTimetable"></div>
+        <div class="schedule-item">
+            <span class="schedule-title">当前：</span>
+            <span class="schedule-value" id="currentSchedule">加载中...</span>
         </div>
-     
-        <!-- 中考倒计时 -->
-        <div class="small-title">距离2025年中考仅剩</div>
-        <div id="daysUntil" class="big-title"></div>
-     
-        <!-- 时间轴 -->
-        <div class="timeline-container">
-            <div class="timeline-progress" id="timeline">
-                <div class="end-marker">
-                    <div style="white-space: nowrap;">中考日</div>
-                    <div style="font-size:0.9em; margin-top:3px">6月18日</div>
-                </div>
+        <div class="schedule-item">
+            <span class="schedule-title">下节课：</span>
+            <span class="schedule-value" id="nextSchedule">加载中...</span>
+        </div>
+        <div class="schedule-item">
+            <span class="schedule-title" id="countdownName">倒计时：</span>
+            <span class="schedule-value" id="countdownTimer" style="font-size: 28px;">--:--</span>
+        </div>
+        <div class="timetable" id="todayTimetable"></div>
+    </div>
+ 
+    <!-- 中考倒计时 -->
+    <div class="small-title">距离2025年中考仅剩</div>
+    <div id="daysUntil" class="big-title"></div>
+ 
+    <!-- 时间轴 -->
+    <div class="timeline-container">
+        <div class="timeline-progress" id="timeline">
+            <div class="end-marker">
+                <div style="white-space: nowrap;">中考日</div>
+                <div style="font-size:0.9em; margin-top:3px">6月18日</div>
             </div>
         </div>
-     
-        <!-- 金句 -->
-        <div id="goldenPhrase"></div>
+    </div>
+ 
+    <!-- 金句 -->
+    <div id="goldenPhrase"></div>
 
-        <!-- 每日60s -->
-        <div class="right-image-container">
-            <img id="apiImage" src="" alt="每日60s">
-        </div>
+    <!-- 每日60s -->
+    <div class="right-image-container">
+        <img id="apiImage" src="" alt="每日60s">
+    </div>
 
-        <!-- 底部按钮 -->
-        <div class="action-buttons">
-            <button id="settingsButton" class="action-button">⚙️ 设置</button>
-            <button id="changelogButton" class="action-button">📝 更新日志</button>
-            <button id="announcementButton" class="action-button">📢 公告</button>
-            <button id="phraseSelectButton" class="action-button">📜 选择金句</button>
-            <button id="lostAndFoundButton" class="action-button">🔍 寻物</button>
-            <button id="notificationButton" class="action-button">🔔 通知</button>
-        </div>
+    <!-- 底部按钮 -->
+    <div class="action-buttons">
+        <button id="settingsButton" class="action-button">⚙️ 设置</button>
+        <button id="changelogButton" class="action-button">📝 更新日志</button>
+        <button id="announcementButton" class="action-button">📢 公告</button>
+        <button id="phraseSelectButton" class="action-button">📜 选择金句</button>
+        <button id="lostAndFoundButton" class="action-button">🔍 寻物</button>
+        <button id="notificationButton" class="action-button">🔔 通知</button>
+    </div>
 
-        <!-- 设置模态框 -->
-        <div class="settings-modal" id="settingsModal">
-            <div class="settings-content">
-                <div class="settings-header">
-                    <h3>设置</h3>
-                    <span class="close-btn" id="closeSettings">&times;</span>
-                </div>
-                <div class="settings-body">
-                    <div class="switch-container">
-                        <label class="switch">
-                            <span class="switch-text">金句自动轮播</span>
-                            <input type="checkbox" id="goldenSwitch" checked>
-                            <span class="slider"></span>
-                        </label>
-                        <label class="switch">
-                            <span class="switch-text">显示每日60s</span>
-                            <input type="checkbox" id="imageSwitch">
-                            <span class="slider"></span>
-                        </label>
-                        <div class="probability-control">
-                            <span class="switch-text">联网获取金句的概率(%)</span>
-                            <div class="range-group">
-                                <input type="range" id="apiProbability" min="0" max="100" value="50">
-                                <input type="number" id="apiProbabilityValue" min="0" max="100" value="50">
-                                <button class="reset-btn" onclick="resetProbability()">重置</button>
-                            </div>
-                        </div>
-                        <div class="probability-control">
-                            <span class="switch-text">金句轮播时间间隔（秒）</span>
-                            <div class="range-group">
-                                <input type="range" id="intervalSlider" min="1" max="60" value="15">
-                                <input type="number" id="intervalValue" min="1" max="60" value="15">
-                                <button class="reset-btn" onclick="resetInterval()">重置</button>
-                            </div>
-                        </div>
-                        <label class="switch">
-                            <span class="switch-text">启用点击刷新金句</span>
-                            <input type="checkbox" id="clickRefreshSwitch">
-                            <span class="slider"></span>
-                        </label>
-                        <label class="switch">
-                            <span class="switch-text">开启金句动画效果</span>
-                            <input type="checkbox" id="animationSwitch" checked>
-                            <span class="slider"></span>
-                        </label>
-                        <label class="switch">
-                            <span class="switch-text">本地金句只展示原创</span>
-                            <input type="checkbox" id="originalSwitch">
-                            <span class="slider"></span>
-                        </label>
-                        <label class="switch">
-                            <span class="switch-text">自动刷新页面</span>
-                            <input type="checkbox" id="autoRefreshSwitch" checked>
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                </div>
+    <!-- 设置模态框 -->
+    <div class="settings-modal" id="settingsModal">
+        <div class="settings-content">
+            <div class="settings-header">
+                <h3>设置</h3>
+                <span class="close-btn" id="closeSettings">&times;</span>
             </div>
-        </div>
-
-        <!-- 更新日志模态框 -->
-        <div class="settings-modal" id="changelogModal">
-            <div class="settings-content">
-                <div class="settings-header">
-                    <h3>更新日志</h3>
-                    <span class="close-btn" id="closeChangelog">&times;</span>
-                </div>
-                <div class="text-content" id="changelogContent">
-                    <strong># 20250607.2 更新</strong>
-
-                    • 增加彩蛋（2025.6.20 10:40后触发）
-
-                    <strong># 20250607.1 更新</strong>
-
-                    • 增加每隔15min自动刷新页面功能
-                    • 缩小设置界面设置项间距
-
-                    <strong># 20250531.4 更新</strong>
-
-                    • 美化寻物板添加按钮
-
-                    <strong># 20250531.3 更新</strong>
-
-                    • 寻物板支持调整字体大小
-
-                    <strong># 20250531.2 更新</strong>
-
-                    • 通知板开发完毕
-                    • 添加模态框全屏功能（仅限寻物、通知板）
-                    • 将寻物板的“寻物”大字标题下移12px
-
-                    <strong># 20250531.1 更新</strong>
-
-                    • 金句支持换行
-                    • 选择金句后立刻关闭模态框
-                    • 通知功能（开发中，暂不可见）
-
-                    <strong># 20250524.4 更新</strong>
-
-                    • 恢复导航栏的悬停效果
-
-                    <strong># 20250524.3 更新</strong>
-
-                    • 更改部分金句的权重
-
-                    <strong># 20250524.2 更新</strong>
-
-                    • 在选择金句后重置定时器
-
-                    <strong># 20250524.1 更新</strong>
-
-                    • 新增“本地金句只展示原创”功能
-                    • 设置界面支持滚动
-
-                    <strong># 20250504.2 更新</strong>
-
-                    • 新增下课（下考/下晚自习等）倒计时
-
-                    <strong># 20250504.1 更新</strong>
-
-                    • 考虑到周五英语考试只有100分钟，将工作日作息表拆分为周一到周四、周五两个部分，进行特殊处理
-
-                    <strong># 20250502.4 更新</strong>
-
-                    功能性更新：
-                        • 为金句新增4个API：2个古诗词API、1个唯美语句API、1个名句API，并添加权重
-                        • 将金句显示区域上移45px
-                        • 更改《飞鸟集》语句API的显示格式为“英文（中文）——泰戈尔”
-                    技术性更新：
-                        • 又将20250502.1更新中更改的“将css和js代码放入了单独的文件中”改了回来，再次全部塞进index.html
-
-                    <strong># 20250502.3 更新</strong>
-
-                    • 修复了若干修改课程表、作息表后导致的bug
-
-                    <strong># 20250502.2 更新</strong>
-
-                    • 修改了部分金句的展示概率
-
-                    <strong># 20250502.1 更新</strong>
-
-                    功能性更新：
-                        • 修改了课程表和作息表
-                        • 将寻物板中的名字和物品改为蓝色，并将字号调大为28px（原24px），且在下方添加金色下划线
-                    技术性更新：
-                        • 修改了获取、展示课程表、作息表相关逻辑
-                        • 将css和js代码放入了单独的文件中
-
-                    <strong># 20250426.1 更新</strong>
-
-                    • 新增“寻物”功能
-
-                    <strong># 20250322.2 更新</strong>
-
-                    • 新增“金句选择”功能
-
-                    <strong># 20250322.1 更新</strong>
-
-                    • 新增“开启金句动画效果”开关
-
-                    <strong># 20250315.1 更新</strong>
-
-                    功能性更新：
-                        • 新增点击刷新金句功能
-                        • 新增“启用点击刷新金句”开关
-                    技术性更新：
-                        • 将index.html中JavaScript部分的“Part0 各种数据”拆分为单独的js文件
-
-                    <strong># 20250309.1 更新</strong>
-
-                    功能性更新：
-                        • 调大金句和左侧作息显示、课程表的字体
-                    技术性更新：
-                        • 更新日志内容不再从文件读取，而是直接添加在index.html中
-
-                    <strong># 20250301.3 更新</strong>
-                    
-                    • 修复已知问题，提升系统稳定性
-                    
-                    <strong># 20250301.2 更新</strong>
-                    
-                    功能性更新：
-                        • 新增"金句轮播时间间隔"设置
-                        • 新增"联网获取金句的概率"设置
-                        • 给金句添加了出处显示
-                        • 将所有本地金句库中的金句分为3个等级，分别对应不同的展示概率
-                    技术性更新：
-                        • 公告板内容不再从文件读取，而是直接添加在index.html中
-                    
-                    <strong># 20250301.1 更新</strong>
-                    
-                    • 更新了公告板
-                    
-                    <strong># 20250224.2 更新</strong>
-                    
-                    • 更新了更新日志
-                    
-                    <strong># 20250224.1 更新</strong>
-                    
-                    • 更新了设置中心
-                </div>
-            </div>
-        </div>
-
-        <!-- 公告板模态框 -->
-        <div class="settings-modal" id="announcementModal">
-            <div class="settings-content">
-                <div class="settings-header" style="padding-bottom: 8px;">
-                    <h3 style="font-size: 1.2em;">公告</h3>
-                    <span class="close-btn" id="closeAnnouncement">&times;</span>
-                </div>
-                <div class="announcement-content">
-                    <div class="announcement-card">
-                        <div class="announcement-title">📢 倒计时网站征稿活动开始啦！</div>
-                        <div class="announcement-time">2025.3.1</div>
-                        <div class="announcement-body">
-                            C2201倒计时网站底部金句轮播内容<strong>开始征稿了</strong>！选上的作品可以放在网站上<strong>轮播展示</strong>！
-                            <ul>
-                                <li><strong>参与条件：</strong>是个人都能参加</li>
-                                <li><strong>时间：</strong>即日起至2025年5月31日（活动已结束）</li>
-                                <li><strong>征稿内容：</strong><strong>励志文字</strong>、优美<strong>作文素材</strong>、<strong>诗歌（含现代诗）</strong>或<strong>整活</strong>（<strong>不能八卦</strong>）等（特别地，既可以原创，也可以投你在其他地方看到的很好的句子上来，但是要<strong>标明出处</strong>；若是原创句子可选择展示时是否显示署名）（一个句子展示的概率：励志文字 = 优美作文素材 > 整活，可根据具体情况调整，特别地，若原创句子写的<strong>过于精妙</strong>，可以<strong>提高展示概率</strong>）</li>
-                                <li><strong>字数要求：</strong>1~80字（包含标点）</li>
-                                <li><strong>提交格式：</strong>你的名字+句子内容+是否原创（+若非原创，标明出处）</li>
-                                <li><strong>提交方式：</strong>写在便利贴上交给TQC</li>
-                            </ul>
-                            <p class="announcement-footnote">最终解释权归TQC所有</p>
+            <div class="settings-body">
+                <div class="switch-container">
+                    <label class="switch">
+                        <span class="switch-text">金句自动轮播</span>
+                        <input type="checkbox" id="goldenSwitch" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <label class="switch">
+                        <span class="switch-text">显示每日60s</span>
+                        <input type="checkbox" id="imageSwitch">
+                        <span class="slider"></span>
+                    </label>
+                    <div class="probability-control">
+                        <span class="switch-text">联网获取金句的概率(%)</span>
+                        <div class="range-group">
+                            <input type="range" id="apiProbability" min="0" max="100" value="50">
+                            <input type="number" id="apiProbabilityValue" min="0" max="100" value="50">
+                            <button class="reset-btn" onclick="resetProbability()">重置</button>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 金句选择模态框 -->
-        <div class="settings-modal" id="phraseModal">
-            <div class="settings-content">
-                <div class="settings-header">
-                    <h3>选择金句</h3>
-                    <span class="close-btn" id="closePhrase">&times;</span>
-                </div>
-                <div class="text-content" id="phraseList"></div>
-            </div>
-        </div>
-
-        <!-- 寻物模态框 -->
-        <div class="settings-modal" id="lostAndFoundModal">
-            <div class="settings-content">
-                <div class="settings-header">
-                    <h3>寻物</h3>
-                    <div style="display: flex; align-items: center;">
-                        <span class="maximize-btn" id="maximizeLostAndFound">⛶</span>
-                        <span class="close-btn" id="closeLostAndFound">&times;</span>
-                    </div>
-                </div>
-                <div class="notification-container" style="display: flex; flex-direction: column; height: 100%;">
-                    <div class="big-title" style="
-                        background: linear-gradient(135deg, #FF0000 0%, #FF6B00 25%, #FFD700 50%, #FF6B00 75%, #FF0000 100%);
-                        -webkit-background-clip: text;
-                        background-clip: text;
-                        -webkit-text-fill-color: transparent;
-                        background-size: 200% 200%;
-                        animation: gradient-pulse 4s ease infinite;
-                        text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 10px rgba(255,107,0,0.5);
-                        font-size: 120px;
-                        font-family: STXingkai, cursive;
-                        letter-spacing: 4px;
-                        width: 100%;
-                        text-align: center;
-                        margin: -8px 0 0;
-                        padding: 0;
-                        line-height: 1.2;
-                    ">寻物</div>
-                    
-                    <div class="announcement-content" id="lostAndFoundList" style="flex: 1; overflow-y: auto; padding: 10px;">
-                        <div class="add-button">+</div>
-                    </div>
-                    
-                    <div class="notification-footer" style="position: sticky; bottom: 0; background: white; z-index: 10; padding: 10px 15px; border-top: 1px solid #eee;">
-                        <div class="font-size-control">
-                            <span class="font-size-label">字体大小:</span>
-                            <input type="range" id="lostAndFoundFontSizeSlider" min="12" max="120" value="28">
-                            <input type="number" id="lostAndFoundFontSizeValue" min="12" max="120" value="28">
-                            <span>px</span>
+                    <div class="probability-control">
+                        <span class="switch-text">金句轮播时间间隔（秒）</span>
+                        <div class="range-group">
+                            <input type="range" id="intervalSlider" min="1" max="60" value="15">
+                            <input type="number" id="intervalValue" min="1" max="60" value="15">
+                            <button class="reset-btn" onclick="resetInterval()">重置</button>
                         </div>
                     </div>
+                    <label class="switch">
+                        <span class="switch-text">启用点击刷新金句</span>
+                        <input type="checkbox" id="clickRefreshSwitch">
+                        <span class="slider"></span>
+                    </label>
+                    <label class="switch">
+                        <span class="switch-text">开启金句动画效果</span>
+                        <input type="checkbox" id="animationSwitch" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <label class="switch">
+                        <span class="switch-text">本地金句只展示原创</span>
+                        <input type="checkbox" id="originalSwitch">
+                        <span class="slider"></span>
+                    </label>
+                    <label class="switch">
+                        <span class="switch-text">自动刷新页面</span>
+                        <input type="checkbox" id="autoRefreshSwitch" checked>
+                        <span class="slider"></span>
+                    </label>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- 通知模态框 -->
-        <div class="settings-modal" id="notificationModal">
-            <div class="settings-content">
-                <div class="settings-header">
-                    <h3>通知</h3>
-                    <div style="display: flex; align-items: center;">
-                        <span class="maximize-btn" id="maximizeNotification">⛶</span>
-                        <span class="close-btn" id="closeNotification">&times;</span>
+    <!-- 更新日志模态框 -->
+    <div class="settings-modal" id="changelogModal">
+        <div class="settings-content">
+            <div class="settings-header">
+                <h3>更新日志</h3>
+                <span class="close-btn" id="closeChangelog">&times;</span>
+            </div>
+            <div class="text-content" id="changelogContent">
+                <strong># 20250607.1 更新</strong>
+
+                • 增加每隔15min自动刷新页面功能
+                • 缩小设置界面设置项间距
+
+                <strong># 20250531.4 更新</strong>
+
+                • 美化寻物板添加按钮
+
+                <strong># 20250531.3 更新</strong>
+
+                • 寻物板支持调整字体大小
+
+                <strong># 20250531.2 更新</strong>
+
+                • 通知板开发完毕
+                • 添加模态框全屏功能（仅限寻物、通知板）
+                • 将寻物板的“寻物”大字标题下移12px
+
+                <strong># 20250531.1 更新</strong>
+
+                • 金句支持换行
+                • 选择金句后立刻关闭模态框
+                • 通知功能（开发中，暂不可见）
+
+                <strong># 20250524.4 更新</strong>
+
+                • 恢复导航栏的悬停效果
+
+                <strong># 20250524.3 更新</strong>
+
+                • 更改部分金句的权重
+
+                <strong># 20250524.2 更新</strong>
+
+                • 在选择金句后重置定时器
+
+                <strong># 20250524.1 更新</strong>
+
+                • 新增“本地金句只展示原创”功能
+                • 设置界面支持滚动
+
+                <strong># 20250504.2 更新</strong>
+
+                • 新增下课（下考/下晚自习等）倒计时
+
+                <strong># 20250504.1 更新</strong>
+
+                • 考虑到周五英语考试只有100分钟，将工作日作息表拆分为周一到周四、周五两个部分，进行特殊处理
+
+                <strong># 20250502.4 更新</strong>
+
+                功能性更新：
+                    • 为金句新增4个API：2个古诗词API、1个唯美语句API、1个名句API，并添加权重
+                    • 将金句显示区域上移45px
+                    • 更改《飞鸟集》语句API的显示格式为“英文（中文）——泰戈尔”
+                技术性更新：
+                    • 又将20250502.1更新中更改的“将css和js代码放入了单独的文件中”改了回来，再次全部塞进index.html
+
+                <strong># 20250502.3 更新</strong>
+
+                • 修复了若干修改课程表、作息表后导致的bug
+
+                <strong># 20250502.2 更新</strong>
+
+                • 修改了部分金句的展示概率
+
+                <strong># 20250502.1 更新</strong>
+
+                功能性更新：
+                    • 修改了课程表和作息表
+                    • 将寻物板中的名字和物品改为蓝色，并将字号调大为28px（原24px），且在下方添加金色下划线
+                技术性更新：
+                    • 修改了获取、展示课程表、作息表相关逻辑
+                    • 将css和js代码放入了单独的文件中
+
+                <strong># 20250426.1 更新</strong>
+
+                • 新增“寻物”功能
+
+                <strong># 20250322.2 更新</strong>
+
+                • 新增“金句选择”功能
+
+                <strong># 20250322.1 更新</strong>
+
+                • 新增“开启金句动画效果”开关
+
+                <strong># 20250315.1 更新</strong>
+
+                功能性更新：
+                    • 新增点击刷新金句功能
+                    • 新增“启用点击刷新金句”开关
+                技术性更新：
+                    • 将index.html中JavaScript部分的“Part0 各种数据”拆分为单独的js文件
+
+                <strong># 20250309.1 更新</strong>
+
+                功能性更新：
+                    • 调大金句和左侧作息显示、课程表的字体
+                技术性更新：
+                    • 更新日志内容不再从文件读取，而是直接添加在index.html中
+
+                <strong># 20250301.3 更新</strong>
+                
+                • 修复已知问题，提升系统稳定性
+                
+                <strong># 20250301.2 更新</strong>
+                
+                功能性更新：
+                    • 新增"金句轮播时间间隔"设置
+                    • 新增"联网获取金句的概率"设置
+                    • 给金句添加了出处显示
+                    • 将所有本地金句库中的金句分为3个等级，分别对应不同的展示概率
+                技术性更新：
+                    • 公告板内容不再从文件读取，而是直接添加在index.html中
+                
+                <strong># 20250301.1 更新</strong>
+                
+                • 更新了公告板
+                
+                <strong># 20250224.2 更新</strong>
+                
+                • 更新了更新日志
+                
+                <strong># 20250224.1 更新</strong>
+                
+                • 更新了设置中心
+            </div>
+        </div>
+    </div>
+
+    <!-- 公告板模态框 -->
+    <div class="settings-modal" id="announcementModal">
+        <div class="settings-content">
+            <div class="settings-header" style="padding-bottom: 8px;">
+                <h3 style="font-size: 1.2em;">公告</h3>
+                <span class="close-btn" id="closeAnnouncement">&times;</span>
+            </div>
+            <div class="announcement-content">
+                <div class="announcement-card">
+                    <div class="announcement-title">📢 倒计时网站征稿活动开始啦！</div>
+                    <div class="announcement-time">2025.3.1</div>
+                    <div class="announcement-body">
+                        C2201倒计时网站底部金句轮播内容<strong>开始征稿了</strong>！选上的作品可以放在网站上<strong>轮播展示</strong>！
+                        <ul>
+                            <li><strong>参与条件：</strong>是个人都能参加</li>
+                            <li><strong>时间：</strong>即日起至2025年5月31日（活动已结束）</li>
+                            <li><strong>征稿内容：</strong><strong>励志文字</strong>、优美<strong>作文素材</strong>、<strong>诗歌（含现代诗）</strong>或<strong>整活</strong>（<strong>不能八卦</strong>）等（特别地，既可以原创，也可以投你在其他地方看到的很好的句子上来，但是要<strong>标明出处</strong>；若是原创句子可选择展示时是否显示署名）（一个句子展示的概率：励志文字 = 优美作文素材 > 整活，可根据具体情况调整，特别地，若原创句子写的<strong>过于精妙</strong>，可以<strong>提高展示概率</strong>）</li>
+                            <li><strong>字数要求：</strong>1~80字（包含标点）</li>
+                            <li><strong>提交格式：</strong>你的名字+句子内容+是否原创（+若非原创，标明出处）</li>
+                            <li><strong>提交方式：</strong>写在便利贴上交给TQC</li>
+                        </ul>
+                        <p class="announcement-footnote">最终解释权归TQC所有</p>
                     </div>
                 </div>
-                <div class="notification-container">
-                    <div id="notificationContent">
-                        <div class="empty-notification">暂无通知，点击下方按钮添加</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 金句选择模态框 -->
+    <div class="settings-modal" id="phraseModal">
+        <div class="settings-content">
+            <div class="settings-header">
+                <h3>选择金句</h3>
+                <span class="close-btn" id="closePhrase">&times;</span>
+            </div>
+            <div class="text-content" id="phraseList"></div>
+        </div>
+    </div>
+
+    <!-- 寻物模态框 -->
+    <div class="settings-modal" id="lostAndFoundModal">
+        <div class="settings-content">
+            <div class="settings-header">
+                <h3>寻物</h3>
+                <div style="display: flex; align-items: center;">
+                    <span class="maximize-btn" id="maximizeLostAndFound">⛶</span>
+                    <span class="close-btn" id="closeLostAndFound">&times;</span>
+                </div>
+            </div>
+            <div class="notification-container" style="display: flex; flex-direction: column; height: 100%;">
+                <div class="big-title" style="
+                    background: linear-gradient(135deg, #FF0000 0%, #FF6B00 25%, #FFD700 50%, #FF6B00 75%, #FF0000 100%);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-size: 200% 200%;
+                    animation: gradient-pulse 4s ease infinite;
+                    text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 10px rgba(255,107,0,0.5);
+                    font-size: 120px;
+                    font-family: STXingkai, cursive;
+                    letter-spacing: 4px;
+                    width: 100%;
+                    text-align: center;
+                    margin: -8px 0 0;
+                    padding: 0;
+                    line-height: 1.2;
+                ">寻物</div>
+                
+                <div class="announcement-content" id="lostAndFoundList" style="flex: 1; overflow-y: auto; padding: 10px;">
+                    <div class="add-button">+</div>
+                </div>
+                
+                <div class="notification-footer" style="position: sticky; bottom: 0; background: white; z-index: 10; padding: 10px 15px; border-top: 1px solid #eee;">
+                    <div class="font-size-control">
+                        <span class="font-size-label">字体大小:</span>
+                        <input type="range" id="lostAndFoundFontSizeSlider" min="12" max="120" value="28">
+                        <input type="number" id="lostAndFoundFontSizeValue" min="12" max="120" value="28">
+                        <span>px</span>
                     </div>
-                    <div class="notification-footer">
-                        <button class="add-notification-btn" id="addNotificationBtn">+ 添加通知</button>
-                        <div class="font-size-control">
-                            <span class="font-size-label">字体大小:</span>
-                            <input type="range" id="fontSizeSlider" min="12" max="120" value="16">
-                            <input type="number" id="fontSizeValue" min="12" max="120" value="16">
-                            <span>px</span>
-                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 通知模态框 -->
+    <div class="settings-modal" id="notificationModal">
+        <div class="settings-content">
+            <div class="settings-header">
+                <h3>通知</h3>
+                <div style="display: flex; align-items: center;">
+                    <span class="maximize-btn" id="maximizeNotification">⛶</span>
+                    <span class="close-btn" id="closeNotification">&times;</span>
+                </div>
+            </div>
+            <div class="notification-container">
+                <div id="notificationContent">
+                    <div class="empty-notification">暂无通知，点击下方按钮添加</div>
+                </div>
+                <div class="notification-footer">
+                    <button class="add-notification-btn" id="addNotificationBtn">+ 添加通知</button>
+                    <div class="font-size-control">
+                        <span class="font-size-label">字体大小:</span>
+                        <input type="range" id="fontSizeSlider" min="12" max="120" value="16">
+                        <input type="number" id="fontSizeValue" min="12" max="120" value="16">
+                        <span>px</span>
                     </div>
                 </div>
             </div>
@@ -2742,63 +2731,16 @@
 
         // PartLast 初始化 
         function init() {
+            updateCountdown();
             updateClock();
             updateTimelineColor();
             generateSolarMarkers();
+            fetchGoldenPhrase();
+            phraseTimer = setInterval(fetchGoldenPhrase, intervalDuration);
+            setInterval(updateScheduleDisplay, 1000);
             fetchWeather();
             setInterval(fetchWeather, 15000);
-            // 检查是否已经毕业
-            if (isGraduated()) {
-                const font = new FontFace('Ximai', 'url(fonts/字制区喜脉喜欢体.ttf)');
-                font.load().then(()  => {
-                    // 字体加载完成后显示页面 
-                    document.getElementById('pageContent').style.display  = 'block';
-                    document.getElementById('loadingOverlay').style.display  = 'none';
-                    showGraduationState();
-                }).catch(err => {
-                    console.error(' 字体加载失败:', err);
-                    // 字体加载失败也显示页面，但使用备用字体 
-                    document.getElementById('pageContent').style.display  = 'block';
-                    document.getElementById('loadingOverlay').style.display  = 'none';
-                });
-            } else {
-                updateCountdown();
-                fetchGoldenPhrase();
-                phraseTimer = setInterval(fetchGoldenPhrase, intervalDuration);
-                setInterval(updateScheduleDisplay, 1000);
-                updateCountdownDisplay();
-            }
-        }
-
-        // 检查是否已经毕业的函数
-        function isGraduated() {
-            const graduationDate = new Date(2025, 5, 20, 10, 40); // 2025年6月20日10:40
-            return new Date() >= graduationDate;
-        }
-
-        // 显示毕业状态的函数
-        function showGraduationState() {
-            // 修改标题 
-            document.querySelector('.small-title').textContent  = '三载春秋，与光同行；一路奔赴，皆是星辰！';
-            document.getElementById('daysUntil').textContent  = '我们毕业啦';
-            document.getElementById('daysUntil').style.fontFamily  = 'Ximai'; // 添加Ximai字体 
-            document.getElementById('daysUntil').style.fontSize  = '180px'; // 增大字号 
-
-            // 修改作息显示 
-            document.getElementById('currentSchedule').textContent  = '毕业';
-            document.getElementById('nextSchedule').textContent  = '无';
-            document.getElementById('countdownName').textContent  = '下一次重逢：';
-            document.getElementById('countdownTimer').textContent  = '繁花盛开时';
-            document.getElementById('countdownTimer').style.fontSize  = '25px'; // 修改字号为25px 
-            document.getElementById('todayTimetable').innerHTML  = '<div class="timetable-item">毕业快乐！</div>';
-
-            // 修改金句显示并停止轮播 
-            clearInterval(phraseTimer);
-            document.getElementById('goldenPhrase').innerHTML  = '「 🎓愿我们的未来，如六月的栀子花开，洁白芬芳；似七月的星河长明，璀璨无垠！ 」';
-            document.getElementById('goldenSwitch').checked  = false;
-
-            // 更新时钟 
-            updateClock();
+            updateCountdownDisplay();
         }
 
         init();
