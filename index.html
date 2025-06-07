@@ -11,6 +11,13 @@
 
 
     <style>
+        @font-face {
+            font-family: 'Ximai';
+            src: url('/fonts/字制区喜脉喜欢体.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
         /* 底部按钮样式 */
         .action-buttons {
             position: fixed;
@@ -142,7 +149,7 @@
         .settings-body {
             display: flex;
             flex-direction: column;
-            gap: 30px;
+            gap: 10px;
             padding: 20px;
             overflow-y: auto;
             height: calc(100% - 60px);
@@ -490,7 +497,7 @@
         .switch-container {
             display: flex;
             flex-direction: column;
-            gap: 40px;
+            gap: 20px;
             margin-top: 20px;
         }
 
@@ -1243,6 +1250,11 @@
                         <input type="checkbox" id="originalSwitch">
                         <span class="slider"></span>
                     </label>
+                    <label class="switch">
+                        <span class="switch-text">自动刷新页面</span>
+                        <input type="checkbox" id="autoRefreshSwitch" checked>
+                        <span class="slider"></span>
+                    </label>
                 </div>
             </div>
         </div>
@@ -1256,10 +1268,14 @@
                 <span class="close-btn" id="closeChangelog">&times;</span>
             </div>
             <div class="text-content" id="changelogContent">
+                <strong># 20250607.1 更新</strong>
+
+                • 增加每隔15min自动刷新页面功能
+                • 缩小设置界面设置项间距
+
                 <strong># 20250531.4 更新</strong>
 
                 • 美化寻物板添加按钮
-                （代码敲到6月1日凌晨1:39，累死我了~）
 
                 <strong># 20250531.3 更新</strong>
 
@@ -2662,6 +2678,55 @@
         closeLostAndFound.addEventListener('click', () => {
             resetFullscreen('lostAndFoundModal');
             lostAndFoundModal.classList.remove('active');
+        });
+
+        // Part18 自动刷新
+        // 获取自动刷新开关元素
+        const autoRefreshSwitch = document.getElementById('autoRefreshSwitch');
+        let refreshTimer = null; // 刷新定时器
+        const REFRESH_INTERVAL = 15 * 60 * 1000; // 15分钟（毫秒）
+
+        // 启动自动刷新
+        function startAutoRefresh() {
+            // 清除现有定时器
+            if (refreshTimer) clearTimeout(refreshTimer);
+            
+            // 设置新定时器
+            refreshTimer = setTimeout(() => {
+                location.reload();
+            }, REFRESH_INTERVAL);
+        }
+
+        // 停止自动刷新
+        function stopAutoRefresh() {
+            if (refreshTimer) {
+                clearTimeout(refreshTimer);
+                refreshTimer = null;
+            }
+        }
+
+        // 监听开关变化
+        autoRefreshSwitch.addEventListener('change', function() {
+            if (this.checked) {
+                startAutoRefresh();
+            } else {
+                stopAutoRefresh();
+            }
+        });
+
+        // 页面加载时默认开启自动刷新
+        window.addEventListener('DOMContentLoaded', () => {
+            // 默认开启开关
+            autoRefreshSwitch.checked = true;
+            // 启动自动刷新
+            startAutoRefresh();
+        });
+
+        // 在页面卸载时清除定时器
+        window.addEventListener('beforeunload', () => {
+            if (refreshTimer) {
+                clearTimeout(refreshTimer);
+            }
         });
 
         // PartLast 初始化 
