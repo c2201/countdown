@@ -13,7 +13,7 @@
     <style>
         @font-face {
             font-family: 'Ximai';
-            src: url('/fonts/字制区喜脉喜欢体.ttf') format('truetype');
+            src: url('fonts/字制区喜脉喜欢体.ttf') format('truetype');
             font-weight: normal;
             font-style: normal;
         }
@@ -2731,16 +2731,52 @@
 
         // PartLast 初始化 
         function init() {
-            updateCountdown();
             updateClock();
             updateTimelineColor();
             generateSolarMarkers();
-            fetchGoldenPhrase();
-            phraseTimer = setInterval(fetchGoldenPhrase, intervalDuration);
-            setInterval(updateScheduleDisplay, 1000);
             fetchWeather();
             setInterval(fetchWeather, 15000);
-            updateCountdownDisplay();
+            // 检查是否已经毕业
+            if (isGraduated()) {
+                showGraduationState();
+            } else {
+                updateCountdown();
+                fetchGoldenPhrase();
+                phraseTimer = setInterval(fetchGoldenPhrase, intervalDuration);
+                setInterval(updateScheduleDisplay, 1000);
+                updateCountdownDisplay();
+            }
+        }
+
+        // 检查是否已经毕业的函数
+        function isGraduated() {
+            const graduationDate = new Date(2025, 5, 20, 10, 40); // 2025年6月20日10:40
+            return new Date() >= graduationDate;
+        }
+
+        // 显示毕业状态的函数
+        function showGraduationState() {
+            // 修改标题 
+            document.querySelector('.small-title').textContent  = '三载春秋，与光同行；一路奔赴，皆是星辰！';
+            document.getElementById('daysUntil').textContent  = '我们毕业啦';
+            document.getElementById('daysUntil').style.fontFamily  = 'Ximai'; // 添加Ximai字体 
+            document.getElementById('daysUntil').style.fontSize  = '180px'; // 增大字号 
+
+            // 修改作息显示 
+            document.getElementById('currentSchedule').textContent  = '毕业';
+            document.getElementById('nextSchedule').textContent  = '无';
+            document.getElementById('countdownName').textContent  = '下一次重逢：';
+            document.getElementById('countdownTimer').textContent  = '繁花盛开时';
+            document.getElementById('countdownTimer').style.fontSize  = '25px'; // 修改字号为25px 
+            document.getElementById('todayTimetable').innerHTML  = '<div class="timetable-item">毕业快乐！</div>';
+
+            // 修改金句显示并停止轮播 
+            clearInterval(phraseTimer);
+            document.getElementById('goldenPhrase').innerHTML  = '「 🎓愿我们的未来，如六月的栀子花开，洁白芬芳；似七月的星河长明，璀璨无垠！ 」';
+            document.getElementById('goldenSwitch').checked  = false;
+
+            // 更新时钟 
+            updateClock();
         }
 
         init();
