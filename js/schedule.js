@@ -1,4 +1,4 @@
-const schedule_last = {
+const schedule = {
     weekday: [
         ["7:00-7:30", "早餐"],
         ["7:30-7:50", "早读"],
@@ -109,7 +109,7 @@ const schedule2 = {
     ]
 };
 
-const schedule = {
+const schedule_last = {
     weekday: [
         ["7:00-7:30", "早餐"],
         ["7:30-7:50", "早读"],
